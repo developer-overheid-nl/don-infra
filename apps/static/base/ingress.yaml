@@ -4,6 +4,7 @@ metadata:
   name: ing
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: tn-don-static-don-static-mw-cors@kubernetescrd
 spec:
   rules:
     - host: set-in-overlay
