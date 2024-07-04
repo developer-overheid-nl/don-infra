@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dpl
+spec:
+  template:
+    spec:
+      containers:
+        - name: static
+          image: static
+          ports:
+            - name: http
+              containerPort: 80
