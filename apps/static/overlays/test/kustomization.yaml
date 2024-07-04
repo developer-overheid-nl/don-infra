@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: tn-don-static
+namePrefix: don-static-
+
+resources:
+  - ../../base
+
+images:
+  - name: static
+    newName: ghcr.io/developer-overheid-nl/don-static
+    newTag: 08df8630e31bf46a2dafb8da89f8c8e113835606
+
+patches:
+  - target:
+      kind: Ingress
+      name: don-static-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: static.don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: static.don.apps.digilab.network
