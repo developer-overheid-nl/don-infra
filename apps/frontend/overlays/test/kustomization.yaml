@@ -3,3 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+namespace: tn-don-frontend
+namePrefix: don-frontend-
+
+commonLabels:
+  app: frontend
