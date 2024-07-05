@@ -4,6 +4,12 @@ kind: Kustomization
 resources:
   - ../../base
 
+namespace: tn-don-static
+namePrefix: don-static-
+
+commonLabels:
+  app: static
+
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-static
