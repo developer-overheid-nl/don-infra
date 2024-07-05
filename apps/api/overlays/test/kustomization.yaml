@@ -3,3 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+namespace: tn-don-api
+namePrefix: don-api-
+
+commonLabels:
+  app: api
