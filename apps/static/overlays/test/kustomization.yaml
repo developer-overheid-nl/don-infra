@@ -18,7 +18,7 @@ images:
 patches:
   - target:
       kind: Ingress
-      name: don-static-ing
+      name: ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
