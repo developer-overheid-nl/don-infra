@@ -3,3 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
+
+namespace: tn-don-community
+namePrefix: don-community-
+
+commonLabels:
+  app: community
