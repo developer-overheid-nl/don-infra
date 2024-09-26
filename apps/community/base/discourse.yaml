@@ -18,8 +18,7 @@ spec:
       version: 14.1.6
       sourceRef:
         kind: HelmRepository
-        name: don-community-repo-bitnami
-        namespace: tn-don-community
+        name: repo-bitnami
   values:
     ingress:
       enabled: true
