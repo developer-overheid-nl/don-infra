@@ -3,9 +3,19 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - secret.yaml
 
 namespace: tn-don-community
 namePrefix: don-community-
 
 commonLabels:
   app: community
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: pgadmin
+    patch: |
+      - op: replace
+        path: /spec/values/ingress/host
+        value: community.don.apps.digilab.network
