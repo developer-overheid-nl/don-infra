@@ -20,11 +20,3 @@ spec:
         kind: HelmRepository
         name: don-community-repo-runix
         namespace: tn-don-community
-  values:
-    ingress:
-      enabled: true
-      hostname: set-in-overlay
-      path: /pgadmin
-      tls: true
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
