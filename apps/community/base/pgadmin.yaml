@@ -15,10 +15,11 @@ spec:
   chart:
     spec:
       chart: pgadmin4
+      version: 1.29.0
       sourceRef:
         kind: HelmRepository
         name: don-community-repo-runix
-      version: 1.29.0
+        namespace: tn-don-community
   values:
     ingress:
       enabled: true
