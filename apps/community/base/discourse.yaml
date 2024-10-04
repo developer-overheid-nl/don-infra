@@ -43,3 +43,7 @@ spec:
       database: don_discourse
       user: don_discourse
       existingSecret: don-community-discourse-db
+    persistence:
+      accessModes:
+        - ReadWriteMany
+      size: 20Gi
