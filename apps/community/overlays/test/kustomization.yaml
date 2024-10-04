@@ -24,5 +24,8 @@ patches:
         path: /spec/values/ingress/hostname
         value: community.don.apps.digilab.network
       - op: replace
+        path: /spec/values/image/debug
+        value: true
+      - op: replace
         path: /spec/values/externalDatabase/host
         value: rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com
