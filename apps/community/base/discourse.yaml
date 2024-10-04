@@ -23,6 +23,8 @@ spec:
     host: set-in-overlay
     siteName: Developer Overheid
     replicaCount: 1
+    image:
+      debug: false
     ingress:
       enabled: true
       hostname: set-in-overlay
