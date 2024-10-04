@@ -28,8 +28,8 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
     auth:
-      email: developer.overheid@geonovum.nl
       username: admin
+      email: developer.overheid@geonovum.nl
       existingSecret: don-community-discourse-admin
     postgresql:
       enabled: false
