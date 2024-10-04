@@ -20,6 +20,8 @@ spec:
         kind: HelmRepository
         name: don-community-repo-bitnami
   values:
+    host: set-in-overlay
+    siteName: Developer Overheid
     replicaCount: 1
     ingress:
       enabled: true

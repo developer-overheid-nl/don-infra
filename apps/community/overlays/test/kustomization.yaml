@@ -18,6 +18,9 @@ patches:
       name: discourse
     patch: |
       - op: replace
+        path: /spec/values/host
+        value: community.don.apps.digilab.network
+      - op: replace
         path: /spec/values/ingress/hostname
         value: community.don.apps.digilab.network
       - op: replace
