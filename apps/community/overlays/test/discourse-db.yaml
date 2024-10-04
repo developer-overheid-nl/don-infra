@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: discourse-db
+data:
+  password: ENC[AES256_GCM,data:s33/6DyjZofhLZozSZ6oAwK9OzI5x/7jUL9Zjg==,iv:7vTB3lphOttcIIO2A493oGRmHXMnRIgHjrQ/l7VdCPU=,tag:EpcXVwUNSWYTig71Guh50A==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age122ph8qunemp7hz9hughd3nx65dlef4dcqu79c6psyn8se377w5hq486cdw
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBLK2pkbmdtN3grRVk0Uklh
+        MEhrOWllZk45UWEydm45Y0E2WWVvcmhQUWh3Cmg3b1ZETTRQMkl6YlliWTdXTVND
+        ZmRHcW81amp0bEw1Z2dyZklaa1FUQVkKLS0tIG5ZZUlZdE1DRVJPUzZnS3JVSmdT
+        NzVYendkaTJOMVR1NFdYcGVwYzJHTGMK8fX5VUM3zVAE0b4NyhFR5QhGljzhTGzK
+        haj50MN0RZWEHs0bcZdsmnL1EYwiV/nODQxmLwfyerh6CeQrgHF1Iw==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2024-10-04T09:50:28Z"
+  mac: ENC[AES256_GCM,data:QY4aq55UlT0e9r1wYaSbIZwiqgAcYXrks8vfYRU7fBv88nDHvmiXqB8hNf8Ipsjq1ykL83iU8O47cC1sYORI42LWJs7/GM/Q8SVn5Oou15sv4QcGyb0+djmi0zyJoRyQ/wQwEEEDeVhGEdeq/sGNFZd13OhWrrGJGfthamkLZOM=,iv:6LkR/aP+rQgPSayuCXuymCAKCkMWW4f5YEWnSNoJirs=,tag:VfOsp5br3NhQkrTYETrLqQ==,type:str]
+  pgp: []
+  encrypted_regex: ^(data|stringData)$
+  version: 3.9.0

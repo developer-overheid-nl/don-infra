@@ -3,7 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - secret.yaml
+  - discourse-admin.yaml
+  - discourse-db.yaml
 
 namespace: tn-don-community
 namePrefix: don-community-
