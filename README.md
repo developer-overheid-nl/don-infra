@@ -11,6 +11,16 @@ The project is divided into multiple applications:
 - [frontend](./apps/frontend/)
 - [static](./apps/static/)
 
+## Connect to Postgres DB
+
+Connect to the Kubernetes cluster and start a port-forward for the pgAdmin service:
+
+```bash
+kubectl port-forward svc/don-community-pgadmin-pgadmin4 8888:80 -n tn-don-community
+```
+
+Open the pgAdmin UI: http://localhost:8888 (sign in with: `chart@domain.com` / `SuperSecret`)
+
 ## SOPS public keys
 
 All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-onboarding/#secret-encryption), using the following public keys:

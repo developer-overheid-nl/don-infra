@@ -10,3 +10,15 @@ namePrefix: don-community-
 
 commonLabels:
   app: community
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: discourse
+    patch: |
+      - op: replace
+        path: /spec/values/ingress/hostname
+        value: community.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/externalDatabase/host
+        value: rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com

@@ -15,20 +15,22 @@ spec:
   chart:
     spec:
       chart: discourse
-      version: 14.1.6
+      version: 15.0.0
       sourceRef:
         kind: HelmRepository
         name: repo-bitnami
   values:
     ingress:
       enabled: true
+      hostname: set-in-overlay
+      tls: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
     postgresql:
       enabled: false
     externalDatabase:
-      host: rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com
-      database: don
-      user: don-community-dml
-      postgresUser: don-community-adm
-      existingSecret: don-community-pg-secret
+      host: set-in-overlay
+      database: don_discourse
+      user: don_discourse_dml
+      postgresUser: don_discourse
+      existingSecret: don-community-pg-discourse
