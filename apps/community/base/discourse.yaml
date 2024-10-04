@@ -34,3 +34,4 @@ spec:
       user: don_discourse_dml
       postgresUser: don_discourse
       existingSecret: don-community-pg-discourse
+      create: false
