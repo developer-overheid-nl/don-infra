@@ -22,7 +22,7 @@ spec:
   values:
     host: set-in-overlay
     siteName: Developer Overheid
-    replicaCount: 1
+    replicaCount: 2
     image:
       debug: false
     ingress:
