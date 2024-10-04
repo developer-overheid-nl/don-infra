@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: discourse-admin
+data:
+  email: ENC[AES256_GCM,data:yNp3hecRG709qQezclN7xcDnsyrUtEbHScvWfGVNGqmOB6QIeZW2mw==,iv:8Zym4ucc7icFysYOS/AVakc8Rd5+EIAbzYYPYuVitOQ=,tag:FgWSt/4rZrgVgUiD2XhZLg==,type:str]
+  password: ENC[AES256_GCM,data:gch1eIKYzhgdlw0bI71iJNZve3M=,iv:a+rpaljCg1ZAoOgs9QZJqNXC8Np7NNHX6ejYQbhwDJU=,tag:h1wiF0Ev5x5rt7OMgV6kOA==,type:str]
+  username: ENC[AES256_GCM,data:djplBfCchBY=,iv:tyxwJuQLRqmkyms2JryGaCvF1B4ydKrxmfQBM0+Hp/0=,tag:mDkINIZkoLhatT8FWGrRPw==,type:str]
+sops:
+  kms: []
+  gcp_kms: []
+  azure_kv: []
+  hc_vault: []
+  age:
+    - recipient: age122ph8qunemp7hz9hughd3nx65dlef4dcqu79c6psyn8se377w5hq486cdw
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4T2tKaWM3UjNGVXlnd3VG
+        aXo5QWFpUDlXRTJRNmZBdHJnemszSlk2SHg4Ck9SMWZVd0VubnhnNExVKyt5VkRw
+        MDZlTXNNYlpFcW5LUjdZaXlJMngyNW8KLS0tIFpneTlEN2syYzlPbmg5NU9rMzd0
+        V09FZkFiK1VjcmovRFBoZVhMYW5jMjgKDoidDxFkJwft81GW9LP2qQySihNlTNzS
+        QPAvYBnmz3r4JI/cglpjzsdGkhvdla2UMvYEpj2gKH8AUTQ1QP9fwQ==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2024-10-04T09:55:17Z"
+  mac: ENC[AES256_GCM,data:BRu+YEy1n/yJSRoJbz4IMH+p8m5XnLGIpTrGvQ7BKDR35xhVb7rEqywl5oviJ2AgrzOmF13HPucMEximiykBCCkOMyhT1WWLrcwv01QIrHpBbW1E3OHdsM4coxgAcP6mxXoInd9k8qg5bOa5iW/Hn1rk1BRuV5yQZIqE/o600aU=,iv:YBQYsn3oWkvAv4VbPwhLj9X2NDdLWbFwNMnrCgBmjyg=,tag:ERLPj+mz2TLFCT8eSCeU5A==,type:str]
+  pgp: []
+  encrypted_regex: ^(data|stringData)$
+  version: 3.9.0

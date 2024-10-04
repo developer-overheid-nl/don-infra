@@ -27,6 +27,8 @@ spec:
       tls: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
+    auth:
+      existingSecret: don-community-discourse-admin
     postgresql:
       enabled: false
     externalDatabase:
@@ -34,4 +36,4 @@ spec:
       host: set-in-overlay
       database: don_discourse
       user: don_discourse
-      existingSecret: don-community-pg-discourse
+      existingSecret: don-community-discourse-db
