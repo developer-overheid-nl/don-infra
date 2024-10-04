@@ -6,6 +6,15 @@ spec:
   interval: 5m
   url: https://charts.bitnami.com/bitnami
 ---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: file-discourse
+provisioner: file.csi.azure.com
+allowVolumeExpansion: true
+parameters:
+  skuName: Standard_LRS
+---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -44,6 +53,7 @@ spec:
       user: don_discourse
       existingSecret: don-community-discourse-db
     persistence:
+      storageClass: don-community-file-discourse
       accessModes:
         - ReadWriteMany
       size: 20Gi
