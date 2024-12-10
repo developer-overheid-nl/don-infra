@@ -9,3 +9,20 @@ namePrefix: don-frontend-
 
 commonLabels:
   app: frontend
+
+images:
+  - name: static
+    newName: ghcr.io/developer-overheid-nl/don-fieldlab-padv
+    newTag: 435b554d2a80a2d26069cea82c7d096caa14d321
+
+patches:
+  - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: don.apps.digilab.network
