@@ -13,7 +13,7 @@ commonLabels:
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-fieldlab-padv
-    newTag: 3be373fa66c30ede99e3af9e8d859e9db5a5bae9
+    newTag: 6e4648ac6a2546191918d9ac5b896ab41ba1c4ef
 
 patches:
   - target:
