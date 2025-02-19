@@ -15,11 +15,11 @@ metadata:
       }
 
       location /api/v0 {
-        return 301 $scheme://apis.developer.overheid.nl/api/v0;
+        return 301 $scheme://apis.$host/api/v0;
       }
 
       location ~ ^/apis(/.*)?$ {
-        return 301 $scheme://apis.developer.overheid.nl/apis$1;
+        return 301 $scheme://apis.$host/apis$1;
       }
 spec:
   ingressClassName: nginx
