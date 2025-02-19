@@ -21,6 +21,10 @@ metadata:
       location ~ ^/apis(/.*)?$ {
         return 301 $scheme://apis.$host/apis$1;
       }
+
+      location ~ ^/static(/.*)?$ {
+        return 301 $scheme://apis.$host/static$1;
+      }
 spec:
   ingressClassName: nginx
   rules:
