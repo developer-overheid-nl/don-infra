@@ -22,6 +22,10 @@ metadata:
         return 301 $scheme://apis.$host/apis$1;
       }
 
+      location ~ ^/repositories(/.*)?$ {
+        return 301 $scheme://oss.$host/repositories$1;
+      }
+
       location ~ ^/static(/.*)?$ {
         return 301 $scheme://apis.$host/static$1;
       }
