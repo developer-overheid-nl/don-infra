@@ -5,6 +5,10 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location /.well-known/security.txt {
+        return 301 https://www.ncsc.nl/.well-known/security.txt;
+      }
 spec:
   ingressClassName: nginx
   rules:
