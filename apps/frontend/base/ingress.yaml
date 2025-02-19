@@ -9,6 +9,10 @@ metadata:
       location /.well-known/security.txt {
         return 301 https://www.ncsc.nl/.well-known/security.txt;
       }
+
+      location ~ ^/apis/(.*)$ {
+        return 301 $scheme://apis.developer.overheid.nl/$1;
+      }
 spec:
   ingressClassName: nginx
   rules:
