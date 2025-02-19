@@ -6,16 +6,16 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/server-snippet: |
+      location /kennisplatform-apis {
+        return 301 /communities/kennisplatform-apis
+      }
+
       location /.well-known/security.txt {
         return 301 $scheme://www.ncsc.nl/.well-known/security.txt;
       }
 
       location /api/v0 {
         return 301 $scheme://apis.developer.overheid.nl/api/v0
-      }
-
-      location /kennisplatform-apis {
-        return 301 $scheme://developer.overheid.nl/communities/kennisplatform-apis
       }
 
       location ~ ^/apis(/.*)?$ {
