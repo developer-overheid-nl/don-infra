@@ -13,7 +13,7 @@ commonLabels:
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-site
-    newTag: cc920561c33ef18f1d010ad9a380e8578b7c0f0a
+    newTag: bb3beb4fb378e6fe822c504d79e5bc97504166de
 
 patches:
   - target:
@@ -22,7 +22,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: don.core.digilab.network
+        value: developer.overheid.nl
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: don.core.digilab.network
+        value: developer.overheid.nl
