@@ -9,6 +9,7 @@ The project is divided into multiple applications:
 - [api](./apps/api/)
 - [community](./apps/community/)
 - [frontend](./apps/frontend/)
+- [search](./apps/search/)
 - [static](./apps/static/)
 
 ## Connect to Postgres DB
