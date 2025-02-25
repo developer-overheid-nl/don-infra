@@ -35,4 +35,4 @@ patches:
         path: /spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_CORS_DOMAINS
-          value: "don.apps.digilab.network"
+          value: "*"
