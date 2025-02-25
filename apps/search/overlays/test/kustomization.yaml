@@ -27,12 +27,12 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: search.don.apps.digilab.network
-  - target:
-      kind: Deployment
-      name: dpl
-    patch: |
-      - op: add
-        path: /spec/template/spec/containers/0/env/-
-        value:
-          name: TYPESENSE_CORS_DOMAINS
-          value: "*"
+  # - target:
+  #     kind: Deployment
+  #     name: dpl
+  #   patch: |
+  #     - op: add
+  #       path: /spec/template/spec/containers/0/env/-
+  #       value:
+  #         name: TYPESENSE_CORS_DOMAINS
+  #         value: "don.apps.digilab.network"
