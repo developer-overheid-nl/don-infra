@@ -24,7 +24,7 @@ spec:
             - name: TYPESENSE_DATA_DIR
               value: "/data"
             - name: TYPESENSE_ENABLE_CORS
-              value: "true"
+              value: "*"
           ports:
             - name: http
               containerPort: 8108
