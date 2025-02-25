@@ -3,9 +3,36 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - api-key.yaml
 
 namespace: tn-don-search
 namePrefix: don-search-
 
 commonLabels:
   app: search
+
+images:
+  - name: typesense
+    newName: typesense/typesense
+    newTag: "28.0"
+
+patches:
+  - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: search.don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: search.don.apps.digilab.network
+  - target:
+      kind: Deployment
+      name: dpl
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: TYPESENSE_CORS_DOMAINS
+          value: "don.apps.digilab.network"
