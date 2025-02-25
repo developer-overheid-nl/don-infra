@@ -3,7 +3,7 @@ kind: Secret
 metadata:
   name: api-key
 data:
-  value: ENC[AES256_GCM,data:H/q1RHgBHmTFEFdi12+7N0p/Wk0PnFZhKg==,iv:28L97ebZ6A3IEA5c4byNQtGWg/dB+v1eRfkPm8Zbcjs=,tag:WQJPaVHhW86G0z5C1PvtAA==,type:str]
+  value: ENC[AES256_GCM,data:wU+93Z6vYZrgV/ER8DI2U1PdX6gpLnCybNqpr0+XIhfTwTPy,iv:phvDJgCOlLrAVYdJVjgbaY6TQrwKfY+LnUuDEp7Wx98=,tag:05NQiHpzbQw09e5jFGg0Vg==,type:str]
 sops:
   kms: []
   gcp_kms: []
@@ -13,14 +13,14 @@ sops:
     - recipient: age1vg75nw5vk2vndzzud8sdvc5w9wtjz0ztejxrsuyg3dzjlpj9n5es94kzzn
       enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlSGhROUVkSmJjWmlWSmV1
-        dWZYekFvWTdZVW41TmZ5cVJOZWlNaGxTRlhJCnFBS2FQUVBJTUVTb0JOMlB5UTUx
-        ckxVWXYza1JpbEkyZ1lHQlc1Sm9wRHcKLS0tIGdDWTYxTVFOaUN4c210Tzc3QUJs
-        Rjl6ZDZDT0RReHRaUGRIalJvcXQycGcKNswgJIqSflPX9HRMEHnYvin/R4QRHxo+
-        GdAGNl8mc4o2UcN8qUyi+Rk9T6ViHaoklozc5GceXDUPt3VM3Cm4Ow==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6UVVRdmdKT3lZU2pMcnhL
+        RVhrd3NlQy9HVkFWUXVVNmxmM0hrdmRxd1N3Ck04c3BGQUZua1VEdDlsbnNYTnFy
+        OW5wSWtCZEFiZnF6U3ZtWU5QMDUvN3MKLS0tIHQxak45KzVwd2ZMZHk5dDBqbkN0
+        VThickpMYXVlUjRGRzRhTEZvalVCYkEKZuWg8GAel+ozxTd9vohoJV7GZByIDxyO
+        LTetzQUC7vx5kTFlNLNv66/uOer25iCJCpmnDOxQbMue+CIcmWDIGA==
         -----END AGE ENCRYPTED FILE-----
-  lastmodified: "2025-02-25T09:15:07Z"
-  mac: ENC[AES256_GCM,data:VSnNYer1PGF5+/Bdk0cIx809uXIgcWeNaJp5yKyurUpOXOy5J/p40UWoLA2+C0PhGok0OXB0/4Y9bXUSObSfoALp8G3p+HWWSCSnmPLb6fL5Fn0ncaFCnSUzeGqDU5Uehw+i04OOV2Nho2aFxG3r2snALKfqQpZz9i8KTg/Ld8c=,iv:T23XRP69N+9U6OIOQ06GIdRvxzsQ2elMrJDrn73TRDY=,tag:7p5PaNFLNEFE8ybwdAjqeA==,type:str]
+  lastmodified: "2025-02-25T09:21:27Z"
+  mac: ENC[AES256_GCM,data:dgUGk//mrWiDQb4mKwMxWNWUWlB3F+o4LEl8QceP8LbCOcmOkUeSiT6+kGBM/ti/7S7J+6yCEIMkjF15chAdMgf2qlTkXieEFykPmn76TdpTPJ/vANT1TcH8riVHsLvLzqBwQvfFZYs6U8iJegIen6WGd+mHXkkHtdSPHX4dVrQ=,iv:oCN9+e07GrSpKoe1Cgf+9Frzbo2ObprMQcwAgjBsDT8=,tag:99UAlBh0u2Ra3wOnHf1gmg==,type:str]
   pgp: []
   encrypted_regex: ^(data|stringData)$
   version: 3.9.0
