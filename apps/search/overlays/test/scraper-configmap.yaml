@@ -10,8 +10,8 @@ data:
         "https://don.apps.digilab.network/kennisbank/",
         "https://don.apps.digilab.network/communities/",
         "https://don.apps.digilab.network/blog/",
-        "https://apis.don.apps.digilab.network/apis",
-        "https://oss.don.apps.digilab.network/repositories"
+        "https://apis.developer.overheid.nl/apis",
+        "https://oss.developer.overheid.nl/repositories"
       ],
       "batch_size": 5,
       "selectors": {
