@@ -13,7 +13,6 @@ data:
         "https://apis.developer.overheid.nl/apis",
         "https://oss.developer.overheid.nl/repositories"
       ],
-      "batch_size": 5,
       "selectors": {
         "lvl0": {
           "selector": ".navbar__link--active",
@@ -53,7 +52,6 @@ data:
         "https://don.apps.digilab.network/contact",
         "https://don.apps.digilab.network/toegankelijkheid"
       ],
-      "nb_hits": 10,
       "link_selectors": [
         {
           "selector": ".card .card__left a.card__link",
