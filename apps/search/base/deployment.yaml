@@ -32,12 +32,12 @@ spec:
             limits:
               memory: 4Gi
               cpu: 2
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: http
-            initialDelaySeconds: 60
-            periodSeconds: 30
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #   initialDelaySeconds: 60
+          #   periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /health
