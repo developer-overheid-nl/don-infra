@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: scraper
+spec:
+  schedule: "35 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: docsearch-scraper
+              image: docsearch-scraper
+              env:
+                - name: TYPESENSE_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-key
+                      key: value
+                - name: TYPESENSE_PROTOCOL
+                  value: "https"
+                - name: TYPESENSE_PORT
+                  value: "443"
+                - name: CONFIG
+                  valueFrom:
+                    configMapKeyRef:
+                      name: scraper
+                      key: config.json
+          restartPolicy: OnFailure

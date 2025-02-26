@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scraper
+data:
+  config.json: |-
+    {
+      "index_name": "developer_overheid",
+      "start_urls": [
+        "https://don.apps.digilab.network/kennisbank/",
+        "https://don.apps.digilab.network/communities/",
+        "https://don.apps.digilab.network/blog/",
+        "https://apis.don.apps.digilab.network/apis",
+        "https://oss.don.apps.digilab.network/repositories"
+      ],
+      "batch_size": 5,
+      "selectors": {
+        "lvl0": {
+          "selector": ".navbar__link--active",
+          "global": true,
+          "default_value": "Documentation"
+        },
+        "lvl1": "h1.page-title, .theme-doc-markdown h1, .docItemContainer h1",
+        "lvl2": "h2, .theme-doc-markdown h2, .docItemContainer h2",
+        "lvl3": "h3, .theme-doc-markdown h3, .docItemContainer h3",
+        "lvl4": "h4, .theme-doc-markdown h4, .docItemContainer h4",
+        "lvl5": "h5, .theme-doc-markdown h5, .docItemContainer h5",
+        "text": "p, .theme-doc-markdown p, .theme-doc-markdown li"
+      },
+      "selectors_exclude": [".hash-link"],
+      "custom_settings": {
+        "attributesForFaceting": [
+          "language",
+          "version",
+          "tags",
+          "authors",
+          "docusaurus_tag"
+        ]
+      },
+      "docusaurus_tag": {
+        "selector": "meta[name='docusaurus_tag']",
+        "global": true,
+        "default_value": "default"
+      },
+      "language": {
+        "selector": "html",
+        "global": true,
+        "attribute": "lang",
+        "default_value": "nl"
+      },
+      "stop_urls": [
+        "https://don.apps.digilab.network/privacy",
+        "https://don.apps.digilab.network/contact",
+        "https://don.apps.digilab.network/toegankelijkheid"
+      ],
+      "nb_hits": 10,
+      "link_selectors": [
+        {
+          "selector": ".card .card__left a.card__link",
+          "type": "url"
+        },
+        {
+          "selector": ".card a[href*='/apis/']",
+          "type": "url"
+        },
+        {
+          "selector": ".card a[href*='/repositories/']",
+          "type": "url"
+        }
+      ]
+    }
