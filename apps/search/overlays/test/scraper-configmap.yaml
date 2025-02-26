@@ -26,8 +26,8 @@ data:
         "lvl5": "h5, .theme-doc-markdown h5, .docItemContainer h5",
         "text": "p, .theme-doc-markdown p, .theme-doc-markdown li"
       },
-      aggregateContent: true,
-      recordVersion: "v3",
+      "aggregateContent": true,
+      "recordVersion": "v3",
       "selectors_exclude": [".hash-link"],
       "custom_settings": {
         "attributesForFaceting": [
