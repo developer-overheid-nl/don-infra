@@ -16,8 +16,11 @@ patches:
       name: discourse
     patch: |
       - op: replace
-        path: /spec/rules/0/host
+        path: /spec/values/replicaCount
+        value: 1
+      - op: replace
+        path: /spec/values/host
         value: api.don.apps.digilab.network
       - op: replace
-        path: /spec/tls/0/hosts/0
+        path: /spec/values/ingress/hostname
         value: api.don.apps.digilab.network
