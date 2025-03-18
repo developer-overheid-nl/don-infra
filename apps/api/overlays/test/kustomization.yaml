@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - apisix-config.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
@@ -11,15 +10,10 @@ namePrefix: don-api-
 commonLabels:
   app: api
 
-images:
-  - name: apisix
-    newName: apache/apisix
-    newTag: "3.11.0-debian"
-
 patches:
   - target:
-      kind: Ingress
-      name: ing
+      kind: HelmRelease
+      name: discourse
     patch: |
       - op: replace
         path: /spec/rules/0/host
