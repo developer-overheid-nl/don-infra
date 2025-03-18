@@ -3,9 +3,27 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - apisix-config.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
 
 commonLabels:
   app: api
+
+images:
+  - name: apisix
+    newName: apache/apisix
+    newTag: "3.11.0-debian"
+
+patches:
+  - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: api.don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: api.don.apps.digilab.network
