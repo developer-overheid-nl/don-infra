@@ -25,3 +25,6 @@ patches:
       - op: replace
         path: /spec/values/ingress/hostname
         value: api.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/hostname
+        value: api-admin.don.apps.digilab.network

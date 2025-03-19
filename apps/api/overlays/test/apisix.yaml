@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
-    apisix-admin: ENC[AES256_GCM,data:IM5mJX+L/nUzmQutzXjl/Jdi3A8dAyF2KTJ2oSX0lTOoz+LOZzfoEfgpG/2cnWlz9OtVeKZbOaQ=,iv:/XMEhDyxwP3WcNG8X13xjALdj8nKJwpFS95ky4i3YOg=,tag:P32Xsdy6A6IV9oJtvMvpGg==,type:str]
-    etcd-admin: ENC[AES256_GCM,data:orrFiE+wr/evyPDR/XtTPPfio04jcIG5Y8KeTZRxzZzi4Hz4YOntF8S+He72KSWcqGLYGQJA5aw=,iv:pGxnBEy2GwN09z8UQSyot7BgCn8Nx0zDQEFD+05CVX4=,tag:jsLe6pg7EFhoPDc8tzwALA==,type:str]
+    admin: ENC[AES256_GCM,data:IM5mJX+L/nUzmQutzXjl/Jdi3A8dAyF2KTJ2oSX0lTOoz+LOZzfoEfgpG/2cnWlz9OtVeKZbOaQ=,iv:/XMEhDyxwP3WcNG8X13xjALdj8nKJwpFS95ky4i3YOg=,tag:P32Xsdy6A6IV9oJtvMvpGg==,type:str]
+    viewer: ENC[AES256_GCM,data:orrFiE+wr/evyPDR/XtTPPfio04jcIG5Y8KeTZRxzZzi4Hz4YOntF8S+He72KSWcqGLYGQJA5aw=,iv:pGxnBEy2GwN09z8UQSyot7BgCn8Nx0zDQEFD+05CVX4=,tag:jsLe6pg7EFhoPDc8tzwALA==,type:str]
 kind: Secret
 metadata:
     name: apisix
