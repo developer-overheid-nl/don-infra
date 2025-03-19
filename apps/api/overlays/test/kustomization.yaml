@@ -14,7 +14,7 @@ commonLabels:
 patches:
   - target:
       kind: HelmRelease
-      name: discourse
+      name: apisix
     patch: |
       - op: replace
         path: /spec/values/replicaCount
