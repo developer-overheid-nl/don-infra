@@ -27,7 +27,8 @@ spec:
         cert-manager.io/cluster-issuer: letsencrypt-prod
       hosts:
         - host: set-in-overlay
-          paths: []
+          paths:
+            - /
       tls:
         - hosts:
             - set-in-overlay
@@ -44,7 +45,8 @@ spec:
             cert-manager.io/cluster-issuer: letsencrypt-prod
           hosts:
             - host: set-in-overlay
-              paths: []
+              paths:
+                - /
           tls:
             - hosts:
                 - set-in-overlay
