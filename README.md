@@ -45,7 +45,7 @@ All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-o
 Create a template file for a secret:
 
 ```bash
-kubectl -n default create secret generic <SECRET> \
+kubectl create secret generic <SECRET> \
 --from-literal=<KEY>=<VALUE> \
 --dry-run=client \
 -o yaml > <SECRET>.yaml
