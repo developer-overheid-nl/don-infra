@@ -20,7 +20,6 @@ spec:
         kind: HelmRepository
         name: don-api-repo-apisix
   values:
-    host: set-in-overlay
     replicaCount: 1
     ingress:
       enabled: true
