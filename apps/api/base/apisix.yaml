@@ -32,7 +32,7 @@ spec:
       tls:
         - hosts:
             - set-in-overlay
-      secretName: api-admin-tls
+      secretName: api-tls
 
     apisix:
       admin:
