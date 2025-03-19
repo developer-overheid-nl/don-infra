@@ -15,50 +15,28 @@ spec:
   chart:
     spec:
       chart: apisix
-      version: 2.9.0
+      version: 2.10.0
       sourceRef:
         kind: HelmRepository
         name: don-api-repo-apisix
   values:
     host: set-in-overlay
     replicaCount: 1
-
-    gateway:
-      type: LoadBalancer
-      http:
-        enabled: true
-        servicePort: 9080
-      https:
-        enabled: true
-        servicePort: 9443
     ingress:
-      ingress:
-        enabled: true
-        hostname: set-in-overlay
-        tls: true
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-prod
-
-    admin:
-      admin_key:
-        - name: "admin"
-          key:
-            valueFrom:
-              secretKeyRef:
-                name: apisix
-                key: apisix-admin
-          role: admin
-
-    etcd:
       enabled: true
-      replicaCount: 1
-      persistence:
-        enabled: true
-        size: 10Gi
-      auth:
-        rootPassword:
-          valueFrom:
-            secretKeyRef:
-              name: apisix
-              key: etcd-admin
+      hostname: set-in-overlay
+      tls: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
 
+    apisix:
+      admin:
+        credentials:
+          secretName: don-api-apisix
+        enabled: true
+        ingress:
+          enabled: true
+          hostname: set-in-overlay
+          tls: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod
