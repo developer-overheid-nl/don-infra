@@ -42,7 +42,11 @@ spec:
     admin:
       admin_key:
         - name: "admin"
-          key: "$(apisix-admin)"
+          key:
+            valueFrom:
+              secretKeyRef:
+                name: apisix
+                key: apisix-admin
           role: admin
 
     etcd:
@@ -54,4 +58,9 @@ spec:
       auth:
         rbac:
           enabled: true
-        rootPassword: "$(etcd-admin)"
+        rootPassword:
+          valueFrom:
+            secretKeyRef:
+              name: apisix
+              key: etcd-admin
+
