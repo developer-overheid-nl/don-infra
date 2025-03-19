@@ -56,8 +56,6 @@ spec:
         enabled: true
         size: 10Gi
       auth:
-        rbac:
-          enabled: true
         rootPassword:
           valueFrom:
             secretKeyRef:
