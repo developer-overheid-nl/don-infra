@@ -1,0 +1,27 @@
+apiVersion: v1
+data:
+    apisix-admin: ENC[AES256_GCM,data:IM5mJX+L/nUzmQutzXjl/Jdi3A8dAyF2KTJ2oSX0lTOoz+LOZzfoEfgpG/2cnWlz9OtVeKZbOaQ=,iv:/XMEhDyxwP3WcNG8X13xjALdj8nKJwpFS95ky4i3YOg=,tag:P32Xsdy6A6IV9oJtvMvpGg==,type:str]
+    etcd-admin: ENC[AES256_GCM,data:orrFiE+wr/evyPDR/XtTPPfio04jcIG5Y8KeTZRxzZzi4Hz4YOntF8S+He72KSWcqGLYGQJA5aw=,iv:pGxnBEy2GwN09z8UQSyot7BgCn8Nx0zDQEFD+05CVX4=,tag:jsLe6pg7EFhoPDc8tzwALA==,type:str]
+kind: Secret
+metadata:
+    name: apisix
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age17uzpswwz9g0frdfy7md5kvlvkcw6pkd9k3k2cad6mfe0zdvcm9pscyzd7v
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPQkV6VEw1MnlDTmQzLzFY
+            aUJndi9sbERac2xLa0JXdXQ1aitsamZLQzBBClhUVGJYb21vUTJsZmcwdEU5Rnh2
+            NzRFc3ZET1NlRjJzRVNuRElncWxTZGsKLS0tIGNLUkR5S1FTL3lUQmxoZjRUcFJ5
+            My9mNG9iK2QzOHVSeitycFFrR1RKUGMKwRqGc/ki5gAsf7xvN01CIf5EkUG4dI9m
+            20o2WW/x7udiCIDb7Uabpz4EM7MbnIPFYCxPKCnSnzlgaG4LtUrjEQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-03-19T09:59:44Z"
+    mac: ENC[AES256_GCM,data:sG6X3tNhzjicuQQ8A/Fc4DvHB7ob7vp8UCTX4aVnL8G1sep68UbvdavRBMYHgmAqG7mN32wYVCaH+lADb3WsONfpy/H0jU7HPvk+5nXSCKHzQ+8tq0LYxtyDLtc9f9HDBKptXUeRdcLSlsl5BnNNnFB/fL/QFUR/9ip7FIUWjR4=,iv:MUbFWgjfsGH/umcJ/dzgV4KH9VIwAvQ6GmegXvbDhBs=,tag:a3AfD+bMVapufvjh9ipLJQ==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.4
