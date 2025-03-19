@@ -23,10 +23,15 @@ spec:
     replicaCount: 1
     ingress:
       enabled: true
-      hostname: set-in-overlay
-      tls: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
+      hosts:
+        - host: set-in-overlay
+          paths: []
+      tls:
+        - hosts:
+            - set-in-overlay
+      secretName: api-tls
 
     apisix:
       admin:
@@ -35,7 +40,12 @@ spec:
         enabled: true
         ingress:
           enabled: true
-          hostname: set-in-overlay
-          tls: true
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-prod
+          hosts:
+            - host: set-in-overlay
+              paths: []
+          tls:
+            - hosts:
+                - set-in-overlay
+          secretName: api-tls
