@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
   - apisix.yaml
-  - deployment.yaml
-  - ingress.yaml
-  - service.yaml
+  - api-register-dpl.yaml
+  - api-register-ing.yaml
+  - api-register-serv.yaml
