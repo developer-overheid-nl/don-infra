@@ -19,7 +19,7 @@ images:
 patches:
   - target:
       kind: Ingress
-      name: ing
+      name: api-register-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
