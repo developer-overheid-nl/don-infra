@@ -11,6 +11,11 @@ namePrefix: don-api-
 commonLabels:
   app: api
 
+images:
+  - name: backend
+    newName: ghcr.io/developer-overheid-nl/don-api
+    newTag: latest
+
 patches:
   - target:
       kind: HelmRelease
