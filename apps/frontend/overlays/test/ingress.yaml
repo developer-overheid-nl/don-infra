@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+
+resources:
+  - ../../base
+
+metadata:
+  name: ing
+  annotations:
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Content-Security-Policy-Report-Only: default-src 'self'; font-src 'self'; img-src 'self' data: developer.overheid.nl apis.developer.overheid.nl www.geonovum.nl github.com avatars.githubusercontent.com social.overheid.nl hostux.social; script-src 'self' gc.zgo.at/count.js 'sha256-O8zYuOjyuzUZDv3fub7DKfAs5TEd1dG+fz+hCSCFmQA=' 'sha256-pBkmluod9Ko4GzDfbWgKM/wxzujFXUdGVOePkwOQT+c='; style-src 'self' 'unsafe-hashes' 'unsafe-inline'; frame-src player.vimeo.com;";
+      more_set_headers "Cross-Origin-Opener-Policy: same-origin";
+      more_set_headers "Cross-Origin-Resource-Policy: same-site";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-Frame-Options: DENY";
