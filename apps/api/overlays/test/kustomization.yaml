@@ -12,7 +12,7 @@ commonLabels:
   app: api
 
 images:
-  - name: backend
+  - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
     newTag: latest
 
