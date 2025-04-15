@@ -13,8 +13,8 @@ spec:
   template:
     spec:
       containers:
-        - name: static
-          image: static
+        - name: don-api-register
+          image: don-api-register
           ports:
             - name: http
               containerPort: 1337
