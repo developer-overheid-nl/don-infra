@@ -16,7 +16,7 @@ spec:
               service:
                 name: api-register-svc
                 port:
-                  number: 80
+                  number: 1337
   tls:
     - hosts:
         - set-in-overlay
