@@ -15,6 +15,32 @@ spec:
       containers:
         - name: don-api-register
           image: don-api-register
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_PASSWORD
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_HOSTNAME
+            - name: DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_DBNAME
+            - name: DB_SCHEMA
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_SCHEMA
           ports:
             - name: http
               containerPort: 1337
