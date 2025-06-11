@@ -15,7 +15,7 @@ commonLabels:
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
-    newTag: 1a40c3cf869a6d4df26c1b5e801e28f78a25a46a
+    newTag: b962faa8ca052f2cf7186dd602c0dd9c64521de4
 
 patches:
   - target:
