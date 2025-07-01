@@ -9,3 +9,15 @@ namePrefix: don-auth-
 
 commonLabels:
   app: auth
+
+patches:
+  - target:
+      kind: Ingress
+      name: keycloak-ingress
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: auth.don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: auth.don.apps.digilab.network
