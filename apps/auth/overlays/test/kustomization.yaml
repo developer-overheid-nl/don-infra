@@ -10,6 +10,11 @@ namePrefix: don-auth-
 commonLabels:
   app: auth
 
+images:
+  - name: keycloak
+    newName: quay.io/keycloak/keycloak
+    newTag: "26.2"
+
 patches:
   - target:
       kind: Ingress

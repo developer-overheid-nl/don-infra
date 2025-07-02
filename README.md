@@ -7,6 +7,7 @@ This repository contains all Kubernetes manifests for [developer.overheid.nl](ht
 The project is divided into multiple applications:
 
 - [api](./apps/api/)
+- [auth](./apps/auth/)
 - [community](./apps/community/)
 - [frontend](./apps/frontend/)
 - [search](./apps/search/)
