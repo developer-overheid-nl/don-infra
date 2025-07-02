@@ -51,3 +51,16 @@ spec:
             - hosts:
                 - set-in-overlay
               secretName: api-admin-tls
+
+    podAnnotations: {}
+    podLabels: {}
+
+    extraVolumes:
+      - name: apisix-custom-plugins
+        configMap:
+          name: apisix-custom-plugins
+
+    extraVolumeMounts:
+      - name: apisix-custom-plugins
+        mountPath: /usr/local/apisix/apisix/plugins/keycloak-api-key-auth.lua
+        subPath: keycloak-api-key-auth.lua

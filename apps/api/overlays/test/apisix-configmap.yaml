@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apisix-custom-plugins
+data:
+  keycloak-api-key-auth.lua: |
+    local core = require("apisix.core")
+    local http = require("resty.http")
+    local plugin_name = "keycloak-api-key-auth"
+    local schema = {
+        type = "object",
+        properties = {
+            validation_url = { type = "string" },
+            header = { type = "string", default = "x-api-key" },
+            cache_ttl = { type = "integer", default = 300 }
+        },
+        required = { "validation_url" }
+    }
+    local plugin = {
+        version = 0.1,
+        priority = 2500,
+        name = plugin_name,
+        schema = schema
+    }
+    local cache = core.lrucache.new({ ttl = 300, count = 1000 })
+    function plugin.check_schema(conf)
+        return core.schema.check(schema, conf)
+    end
+    function plugin.access(conf, ctx)
+        local api_key = core.request.header(ctx, conf.header)
+        if not api_key then
+            return 401, { message = "Missing API key" }
+        end
+        local key_valid = cache(api_key, conf.cache_ttl, function()
+            local httpc = http.new()
+            local res, err = httpc:request_uri(conf.validation_url, {
+                method = "GET",
+                headers = { ["Authorization"] = "Bearer " .. api_key },
+                ssl_verify = false
+            })
+            if not res then
+                core.log.error("Keycloak validation failed: ", err)
+                return false
+            end
+            return res.status == 200
+        end)
+        if not key_valid then
+            return 401, { message = "Invalid API key" }
+        end
+    end
+    return plugin
