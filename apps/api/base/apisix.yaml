@@ -38,10 +38,11 @@ spec:
       extra_lua_path: "/opt/?.lua"
       plugins:
         - keycloak-api-key-auth
-
+      deployment:
+        admin:
+          allow_admin:
+            - all
       admin:
-        allow_admin: # http://nginx.org/en/docs/http/ngx_http_access_module.html#allow
-          - all
         credentials:
           secretName: don-api-apisix
         enabled: true
