@@ -39,7 +39,7 @@ spec:
       plugins:
         - keycloak-api-key-auth
       admin:
-        allow_admin:
+        allow:
           - 0.0.0.0/0
         credentials:
           secretName: don-api-apisix
