@@ -38,11 +38,9 @@ spec:
       extra_lua_path: "/opt/?.lua"
       plugins:
         - keycloak-api-key-auth
-      deployment:
-        admin:
-          allow_admin:
-            - 0.0.0.0/0
       admin:
+        allow_admin:
+          - 0.0.0.0/0
         credentials:
           secretName: don-api-apisix
         enabled: true
