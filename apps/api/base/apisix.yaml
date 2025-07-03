@@ -68,4 +68,4 @@ spec:
     extraVolumes:
       - name: custom-lua-plugins
         configMap:
-          name: apisix-custom-plugins
+          name: don-api-apisix-custom-plugins
