@@ -7,9 +7,9 @@ data:
     local core = require("apisix.core")
     local http = require("resty.http")
     local cjson = require("cjson")
-    
+
     local plugin_name = "keycloak-api-key-auth"
-    
+
     local schema = {
         type = "object",
         properties = {
@@ -22,47 +22,44 @@ data:
         },
         required = { "token_url", "admin_api_url", "client_id", "client_secret" }
     }
-    
+
     local plugin = {
         version = 0.3,
         priority = 2500,
         name = plugin_name,
         schema = schema
     }
-    
-    local lrucache = core.lrucache.new({
-        ttl = conf.cache_ttl or 300,
-        count = 1000
-    })
-    
+
+    local cache = core.lrucache.new({ ttl = 300, count = 1000 })
+
     local function get_admin_token(conf)
         core.log.info("Getting admin token from: ", conf.token_url)
         local httpc = http.new()
         local res, err = httpc:request_uri(conf.token_url, {
             method = "POST",
             body = "grant_type=client_credentials&client_id=" .. conf.client_id ..
-                    "&client_secret=" .. conf.client_secret,
+              "&client_secret=" .. conf.client_secret,
             headers = {
                 ["Content-Type"] = "application/x-www-form-urlencoded",
             },
             ssl_verify = false,
         })
-        
+
         if not res then
             core.log.error("Failed to get admin token: ", err)
             return nil
         end
-        
+
         if res.status ~= 200 then
             core.log.error("Admin token request failed with status: ", res.status, ", body: ", res.body)
             return nil
         end
-        
+
         local data = cjson.decode(res.body)
         core.log.info("Received admin token")
         return data.access_token
     end
-    
+
     local function client_exists(conf, token, client_id)
         local url = conf.admin_api_url .. "/" .. client_id
         core.log.info("Checking if client exists at: ", url)
@@ -74,36 +71,36 @@ data:
             },
             ssl_verify = false
         })
-        
+
         if not res then
             core.log.error("Keycloak query error: ", err)
             return false
         end
-        
+
         if res.status ~= 200 then
             core.log.warn("Keycloak client lookup failed: ", res.status, ", body: ", res.body)
             return false
         end
-        
+
         local data = cjson.decode(res.body)
         local found = data and data.clientId ~= nil
         core.log.info("Client ID ", client_id, " exists: ", found)
         return found
     end
-    
+
     function plugin.check_schema(conf)
         return core.schema.check(schema, conf)
     end
-    
+
     function plugin.access(conf, ctx)
         local client_id = core.request.header(ctx, conf.header)
         core.log.info("Authenticating request using header: ", conf.header, ", value: ", client_id)
-        
+
         if not client_id then
             core.log.warn("Missing API key in header: ", conf.header)
             return 401, { message = "Missing API key" }
         end
-        
+
         local ok = cache(client_id, conf.cache_ttl, function()
             local token = get_admin_token(conf)
             if not token then
@@ -112,7 +109,7 @@ data:
             end
             return client_exists(conf, token, client_id)
         end)
-        
+
         if ok then
             core.log.info("Client ID ", client_id, " is authorized")
             return
@@ -121,5 +118,5 @@ data:
             return 401, { message = "Invalid API key" }
         end
     end
-    
+
     return plugin
