@@ -61,7 +61,6 @@ spec:
 
     podAnnotations: {}
     podLabels: {}
-
     extraVolumeMounts:
       - name: custom-lua-plugins
         mountPath: /opt
