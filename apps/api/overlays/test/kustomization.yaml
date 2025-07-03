@@ -5,6 +5,7 @@ resources:
   - ../../base
   - apisix.yaml
   - api-db.yaml
+  - apisix-configmap.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-

@@ -35,7 +35,12 @@ spec:
           secretName: api-tls
 
     apisix:
+      extra_lua_path: "/opt/?.lua"
+      plugins:
+        - keycloak-api-key-auth
       admin:
+        allow:
+          - 0.0.0.0/0
         credentials:
           secretName: don-api-apisix
         enabled: true
@@ -55,12 +60,12 @@ spec:
     podAnnotations: {}
     podLabels: {}
 
+    extraVolumeMounts:
+      - name: custom-lua-plugins
+        mountPath: /opt
+        readOnly: true
+
     extraVolumes:
-      - name: apisix-custom-plugins
+      - name: custom-lua-plugins
         configMap:
           name: apisix-custom-plugins
-
-    extraVolumeMounts:
-      - name: apisix-custom-plugins
-        mountPath: /usr/local/apisix/apisix/plugins/keycloak-api-key-auth.lua
-        subPath: keycloak-api-key-auth.lua
