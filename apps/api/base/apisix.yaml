@@ -35,6 +35,9 @@ spec:
           secretName: api-tls
 
     apisix:
+      extra_lua_path: "/opt/?.lua"
+      plugins:
+        - keycloak-api-key-auth
       admin:
         credentials:
           secretName: don-api-apisix
