@@ -46,8 +46,6 @@ spec:
               mounts:
                 - key: "keycloak-api-key-auth.lua"
                   path: "/opt/apisix/plugins/keycloak-api-key-auth.lua"
-      plugins:
-        - keycloak-api-key-auth
       admin:
         allow:
           ipList:
