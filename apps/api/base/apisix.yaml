@@ -40,7 +40,8 @@ spec:
         - keycloak-api-key-auth
       admin:
         allow:
-          - 0.0.0.0/0
+          ipList:
+            - 0.0.0.0/0
         credentials:
           secretName: don-api-apisix
         enabled: true
