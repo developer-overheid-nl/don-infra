@@ -70,12 +70,3 @@ spec:
 
     podAnnotations: {}
     podLabels: {}
-    extraVolumeMounts:
-      - name: custom-lua-plugins
-        mountPath: /opt/apisix/plugins
-        readOnly: true
-
-    extraVolumes:
-      - name: custom-lua-plugins
-        configMap:
-          name: don-api-apisix-custom-plugins
