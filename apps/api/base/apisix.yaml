@@ -35,9 +35,17 @@ spec:
           secretName: api-tls
 
     apisix:
-      lua_module_hook:
-        enable: true
-        user_module_path: "/opt/apisix/plugins/?.lua"
+      customPlugins:
+        enabled: true
+        luaPath: "/opt/apisix/plugins/?.lua"
+        plugins:
+          - name: "keycloak-api-key-auth"
+            attrs: { }
+            configMap:
+              name: "don-api-apisix-custom-plugins"
+              mounts:
+                - key: "keycloak-api-key-auth.lua"
+                  path: "/opt/apisix/plugins/keycloak-api-key-auth.lua"
       plugins:
         - keycloak-api-key-auth
       admin:
