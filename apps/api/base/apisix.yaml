@@ -35,6 +35,7 @@ spec:
           secretName: api-tls
 
     apisix:
+      plugins: []
       customPlugins:
         enabled: true
         luaPath: "/opt/apisix/plugins/?.lua"
@@ -46,7 +47,6 @@ spec:
               mounts:
                 - key: "keycloak-api-key-auth.lua"
                   path: "/opt/apisix/plugins/keycloak-api-key-auth.lua"
-      plugins: []
       admin:
         allow:
           ipList:
