@@ -22,13 +22,6 @@ patches:
   - target:
       kind: Ingress
       name: api-register-ingress
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: api-register.don.apps.digilab.network
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: api-register.don.apps.digilab.network
   - target:
       kind: HelmRelease
       name: apisix
