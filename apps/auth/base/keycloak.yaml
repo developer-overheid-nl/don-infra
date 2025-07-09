@@ -37,14 +37,15 @@ spec:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
-      hostname: set-in-overlay
-      tls: true
-      secrets: auth.tls
-      extraTls:
+      hosts:
+        - host: set-in-overlay
+          paths:
+            - /
+      tls:
         - hosts:
-            - set-in-overlay
-    service:
-      type: ClusterIP
+            - set-in-overlays
+          secretName: auth-tls
+
     podAnnotations: {}
     podLabels: {}
 #    extraStartupArgs: "--import-realm"
