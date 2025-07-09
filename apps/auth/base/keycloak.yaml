@@ -41,10 +41,10 @@ spec:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
-      hostname: set-in-overlay
+      hostname: auth.don.apps.digilab.network
       extraTls:
         - hosts:
-            - set-in-overlay
+            - auth.don.apps.digilab.network
           secretName: auth-tls
     service:
       type: ClusterIP
