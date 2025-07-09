@@ -37,7 +37,7 @@ spec:
     apisix:
       customPlugins:
         enabled: true
-        luaPath: "/opt/apisix/plugins/?.lua"
+        luaPath: "/opt/apisix/plugins/?.lua;"
         plugins:
           - name: "keycloak-api-key-auth"
             attrs: { }
