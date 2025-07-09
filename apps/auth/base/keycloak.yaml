@@ -1,5 +1,5 @@
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+kind: HelmRepository
 metadata:
   name: repo-keycloak
 spec:
@@ -18,7 +18,7 @@ spec:
       chart: keycloak
       version: 24.7.5
       sourceRef:
-        kind: OCIRepository
+        kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
     replicaCount: 1
@@ -52,7 +52,7 @@ spec:
     extraVolumes:
       - name: realm-config
         configMap:
-          name: keycloak-realm-config
+          name: don-auth-keycloak-realm-config
     extraVolumeMounts:
       - name: realm-config
         mountPath: /opt/bitnami/keycloak/data/import
