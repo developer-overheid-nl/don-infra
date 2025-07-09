@@ -22,7 +22,6 @@ patches:
   - target:
       kind: Ingress
       name: api-register-ingress
-    patch: []
   - target:
       kind: HelmRelease
       name: apisix
