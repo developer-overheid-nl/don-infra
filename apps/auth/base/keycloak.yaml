@@ -47,13 +47,13 @@ spec:
       type: ClusterIP
     podAnnotations: {}
     podLabels: {}
-    extraStartupArgs: "--import-realm"
-
-    extraVolumes:
-      - name: realm-config
-        configMap:
-          name: don-auth-keycloak-realm-config
-    extraVolumeMounts:
-      - name: realm-config
-        mountPath: /opt/bitnami/keycloak/data/import
-        readOnly: true
+#    extraStartupArgs: "--import-realm"
+#
+#    extraVolumes:
+#      - name: realm-config
+#        configMap:
+#          name: don-auth-keycloak-realm-config
+#    extraVolumeMounts:
+#      - name: realm-config
+#        mountPath: /opt/bitnami/keycloak/data/import
+#        readOnly: true
