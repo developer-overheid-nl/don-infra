@@ -1,0 +1,58 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: repo-keycloak
+spec:
+  interval: 5m
+  url: oci://registry-1.docker.io/bitnamicharts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keycloak
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: keycloak
+      version: 24.7.5
+      sourceRef:
+        kind: HelmRepository
+        name: don-api-repo-keycloak
+  values:
+    replicaCount: 1
+    auth:
+      adminUser:
+        valueFrom:
+          secretKeyRef:
+            name: keycloak-secret
+            key: admin-user
+      adminPassword:
+        valueFrom:
+          secretKeyRef:
+            name: keycloak-secret
+            key: admin-password
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+      hostname: set-in-overlay
+      tls: true
+      extraTls:
+        - hosts:
+            - set-in-overlay
+          secretName: auth-tls
+    service:
+      type: ClusterIP
+    podAnnotations: {}
+    podLabels: {}
+    extraStartupArgs: "--import-realm"
+
+    extraVolumes:
+      - name: realm-config
+        configMap:
+          name: keycloak-realm-config
+    extraVolumeMounts:
+      - name: realm-config
+        mountPath: /opt/bitnami/keycloak/data/import
+        readOnly: true

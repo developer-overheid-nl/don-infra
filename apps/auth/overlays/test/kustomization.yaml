@@ -3,7 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - keycloak.yaml
+  - keycloak-secret.yaml
+  - keycloak-realm-config.yaml
 
 namespace: tn-don-auth
 namePrefix: don-auth-
@@ -14,7 +15,7 @@ commonLabels:
 images:
   - name: keycloak
     newName: quay.io/keycloak/keycloak
-    newTag: "26.2"
+    newTag: "26.3"
 
 patches:
   - target:
@@ -22,8 +23,8 @@ patches:
       name: keycloak-ingress
     patch: |
       - op: replace
-        path: /spec/rules/0/host
+        path: /spec/values/ingress/hostname
         value: auth.don.apps.digilab.network
       - op: replace
-        path: /spec/tls/0/hosts/0
+        path: /spec/values/ingress/extraTls/0/hosts/0
         value: auth.don.apps.digilab.network
