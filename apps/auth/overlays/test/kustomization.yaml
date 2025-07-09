@@ -15,8 +15,8 @@ commonLabels:
 
 patches:
   - target:
-      kind: Ingress
-      name: keycloak-ingress
+      kind: HelmRelease
+      name: keycloak
     patch: |
       - op: replace
         path: /spec/values/replicaCount
