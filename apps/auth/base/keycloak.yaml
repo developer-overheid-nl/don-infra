@@ -37,15 +37,13 @@ spec:
       enabled: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
-      hosts:
-        - host: set-in-overlay
-          paths:
-            - /
-      tls:
+      hostname: auth.don.apps.digilab.network
+      extraTls:
         - hosts:
-            - set-in-overlays
+            - auth.don.apps.digilab.network
           secretName: auth-tls
-
+    service:
+      type: ClusterIP
     podAnnotations: {}
     podLabels: {}
 #    extraStartupArgs: "--import-realm"
