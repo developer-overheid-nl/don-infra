@@ -21,6 +21,7 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
+    production: true
     replicaCount: 1
     auth:
       adminUser:
@@ -33,6 +34,9 @@ spec:
           secretKeyRef:
             name: keycloak-secret
             key: admin-password
+    postgresql:
+      enabled: false
+    extraEnvVarsSecret: postgress-keycloak-secret
     ingress:
       enabled: true
       annotations:

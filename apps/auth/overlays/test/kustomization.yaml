@@ -20,7 +20,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/values/replicaCount
-        value: 1
+        value: 2
       - op: replace
         path: /spec/values/ingress/hostname
         value: auth.don.apps.digilab.network
