@@ -39,10 +39,10 @@ spec:
         cert-manager.io/cluster-issuer: letsencrypt-prod
       hostname: set-in-overlay
       tls: true
+      secrets: auth.tls
       extraTls:
         - hosts:
             - set-in-overlay
-          secretName: auth-tls
     service:
       type: ClusterIP
     podAnnotations: {}

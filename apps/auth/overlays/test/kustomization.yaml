@@ -23,6 +23,3 @@ patches:
       - op: replace
         path: /spec/values/ingress/extraTls/0/hosts/0
         value: auth.don.apps.digilab.network
-      - op: replace
-        path: /spec/values/ingress/tls/0/hosts/0
-        value: auth.don.apps.digilab.network
