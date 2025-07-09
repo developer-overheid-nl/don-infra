@@ -1,5 +1,5 @@
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
   name: repo-keycloak
 spec:
@@ -18,7 +18,7 @@ spec:
       chart: keycloak
       version: 24.7.5
       sourceRef:
-        kind: HelmRepository
+        kind: OCIRepository
         name: don-auth-repo-keycloak
   values:
     replicaCount: 1
