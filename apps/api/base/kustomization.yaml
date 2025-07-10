@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - apisix.yaml
   - api-register-dpl.yaml
-  - api-register-ing.yaml
   - api-register-svc.yaml

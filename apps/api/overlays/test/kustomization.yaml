@@ -20,9 +20,6 @@ images:
 
 patches:
   - target:
-      kind: Ingress
-      name: api-register-ingress
-  - target:
       kind: HelmRelease
       name: apisix
     patch: |
