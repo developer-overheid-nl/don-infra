@@ -21,7 +21,6 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
-    production: true
     replicaCount: 1
     auth:
       adminUser:
