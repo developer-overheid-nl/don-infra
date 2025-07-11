@@ -63,3 +63,17 @@ sops \
   --in-place \
   <SECRET>.yaml
 ```
+
+## create new schema
+To create a new schema in the Postgres database, the digilab user can use the following command:
+```bash
+CREATE USER don_auth_adm WITH PASSWORD 'psw1';
+CREATE USER don_auth_dml WITH PASSWORD 'psw2';
+GRANT don_auth_adm TO digilab;
+CREATE SCHEMA don_auth AUTHORIZATION don_auth_adm;
+GRANT CONNECT ON DATABASE don TO don_auth_adm;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA don_auth TO don_auth_dml;
+
+ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
+ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
+```
