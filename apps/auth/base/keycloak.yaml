@@ -23,6 +23,8 @@ spec:
   values:
     command:
       - "/opt/bitnami/scripts/keycloak/run.sh"
+    args:
+      - start
     replicaCount: 1
     auth:
       adminUser:
