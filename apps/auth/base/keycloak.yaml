@@ -21,10 +21,6 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
-    containerCommand:
-      - "/opt/bitnami/scripts/keycloak/run.sh"
-    containerArgs:
-      - start
     replicaCount: 1
     auth:
       adminUser:
