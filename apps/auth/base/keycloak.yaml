@@ -36,6 +36,8 @@ spec:
             key: admin-password
     postgresql:
       enabled: false
+    externalDatabase:
+      password: ignored-but-required
     extraEnvVarsSecret: don-auth-postgress-keycloak-secret
     ingress:
       enabled: true
