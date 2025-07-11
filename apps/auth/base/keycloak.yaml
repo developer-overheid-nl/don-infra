@@ -22,6 +22,8 @@ spec:
         name: don-auth-repo-keycloak
   values:
     replicaCount: 1
+    containerArgs:
+      - start
     auth:
       adminUser:
         valueFrom:
