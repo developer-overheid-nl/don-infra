@@ -5,7 +5,7 @@ resources:
   - ../../base
   - keycloak-secret.yaml
   - keycloak-realm-config.yaml
-  - postgress-keycloak-secret.yaml
+  - postgress-keycloak.yaml
 
 namespace: tn-don-auth
 namePrefix: don-auth-

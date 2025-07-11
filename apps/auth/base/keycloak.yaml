@@ -36,7 +36,7 @@ spec:
             key: admin-password
     postgresql:
       enabled: false
-    extraEnvVarsSecret: postgress-keycloak-secret
+    extraEnvVarsSecret: don-auth-postgress-keycloak-secret
     ingress:
       enabled: true
       annotations:
