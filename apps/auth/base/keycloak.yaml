@@ -39,7 +39,7 @@ spec:
             key: admin-password
     postgresql:
       auth:
-        password: ""
+        password: somesterkwachtwoord
       enabled: true
 
 #    externalDatabase:
