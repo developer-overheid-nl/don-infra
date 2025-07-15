@@ -38,9 +38,10 @@ spec:
             name: keycloak-secret
             key: admin-password
     postgresql:
+      auth:
+        password: ignored-but-required
       enabled: true
     externalDatabase:
-      password: ignored-but-required
       existingSecret: don-auth-postgress-keycloak-secret
       existingSecretHostKey: db-host
       existingSecretUserKey: db-user
