@@ -42,10 +42,10 @@ spec:
     externalDatabase:
       password: ignored-but-required
       existingSecret: don-auth-postgress-keycloak-secret
-      existingSecretHostKey: database-host
-      existingSecretUserKey: database-user
-      existingSecretDatabaseKey: database-name
-      existingSecretPasswordKey: database-password
+      existingSecretHostKey: db-host
+      existingSecretUserKey: db-user
+      existingSecretDatabaseKey: db-name
+      existingSecretPasswordKey: db-password
     ingress:
       enabled: true
       annotations:
