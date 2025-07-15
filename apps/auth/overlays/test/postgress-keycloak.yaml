@@ -1,9 +1,9 @@
 apiVersion: v1
 data:
-    database-host: ENC[AES256_GCM,data:5zv8maN4h30URVjDWW6rRi5sesow7QCc7OVdayBThO2hTHIOR2ItxESSraOQBylyjueuEevMUmtitxwVhCF2CPDz1rPvZcDMltNelMWEVP3UtJft,iv:h98XxKP+xZ4qeZszx1l4x82bEOsQGzMF44GKQtMmzIM=,tag:11Rd5pLq66DAwBmhdyV0vw==,type:str]
-    database-name: ENC[AES256_GCM,data:qNY07w==,iv:JjfrFxOHPLhudV0R2gYBuNqFTRsm43eQNa1NXivmuR0=,tag:XamkXZDxpeAi1J7zsXze1w==,type:str]
-    database-password: ENC[AES256_GCM,data:Yj4F1sUt53hzTeq7MgL5g8hD603s8KzbiVuEVeVUj4wrGhzvowVmBA==,iv:Z38rUFStnyZVZFszYgBbBYQrsDeLt/YCOEK5s+dOcEc=,tag:20esPTW5RS02RI7kcaOAUg==,type:str]
-    database-user: ENC[AES256_GCM,data:wMvfEW/X1i5oA488IJbmhQ==,iv:k3arbrMwmR5Gj419EYKG7xKh1grypKD5jkA7a9Kh6+w=,tag:zI7AyR9TtblD2YzkL/WKVQ==,type:str]
+    db-host: ENC[AES256_GCM,data:5zv8maN4h30URVjDWW6rRi5sesow7QCc7OVdayBThO2hTHIOR2ItxESSraOQBylyjueuEevMUmtitxwVhCF2CPDz1rPvZcDMltNelMWEVP3UtJft,iv:h98XxKP+xZ4qeZszx1l4x82bEOsQGzMF44GKQtMmzIM=,tag:11Rd5pLq66DAwBmhdyV0vw==,type:str]
+    db-name: ENC[AES256_GCM,data:qNY07w==,iv:JjfrFxOHPLhudV0R2gYBuNqFTRsm43eQNa1NXivmuR0=,tag:XamkXZDxpeAi1J7zsXze1w==,type:str]
+    db-password: ENC[AES256_GCM,data:Yj4F1sUt53hzTeq7MgL5g8hD603s8KzbiVuEVeVUj4wrGhzvowVmBA==,iv:Z38rUFStnyZVZFszYgBbBYQrsDeLt/YCOEK5s+dOcEc=,tag:20esPTW5RS02RI7kcaOAUg==,type:str]
+    db-user: ENC[AES256_GCM,data:wMvfEW/X1i5oA488IJbmhQ==,iv:k3arbrMwmR5Gj419EYKG7xKh1grypKD5jkA7a9Kh6+w=,tag:zI7AyR9TtblD2YzkL/WKVQ==,type:str]
 kind: Secret
 metadata:
     creationTimestamp: null
