@@ -38,13 +38,16 @@ spec:
             name: keycloak-secret
             key: admin-password
     postgresql:
-      enabled: false
-    externalDatabase:
-      existingSecret: don-auth-postgress-keycloak-secret
-      existingSecretHostKey: database-host
-      existingSecretUserKey: database-user
-      existingSecretDatabaseKey: database-name
-      existingSecretPasswordKey: database-password
+      auth:
+        password: ""
+      enabled: true
+
+#    externalDatabase:
+#      existingSecret: don-auth-postgress-keycloak-secret
+#      existingSecretHostKey: database-host
+#      existingSecretUserKey: database-user
+#      existingSecretDatabaseKey: database-name
+#      existingSecretPasswordKey: database-password
     command:
       - "/opt/bitnami/scripts/keycloak/run.sh"
     args:
