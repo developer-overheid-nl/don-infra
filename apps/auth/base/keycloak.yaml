@@ -45,7 +45,9 @@ spec:
       existingSecretUserKey: database-user
       existingSecretDatabaseKey: database-name
       existingSecretPasswordKey: database-password
-    containerArgs:
+    command:
+      - "/opt/bitnami/scripts/keycloak/run.sh"
+    args:
       - start
     ingress:
       enabled: true
