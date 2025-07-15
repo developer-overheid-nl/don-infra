@@ -40,15 +40,8 @@ spec:
     postgresql:
       enabled: false
     externalDatabase:
-      host: ignored-but-required
-      password: ignored-but-required
+      password: dummy
     extraEnvVarsSecret: don-auth-postgress-keycloak-secret
-    #    externalDatabase:
-#      existingSecret: don-auth-postgress-keycloak-secret
-#      existingSecretHostKey: database-host
-#      existingSecretUserKey: database-user
-#      existingSecretDatabaseKey: database-name
-#      existingSecretPasswordKey: database-password
     ingress:
       enabled: true
       annotations:
