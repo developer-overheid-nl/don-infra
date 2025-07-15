@@ -39,12 +39,13 @@ spec:
             key: admin-password
     postgresql:
       enabled: true
-#    externalDatabase:
-#      existingSecret: don-auth-postgress-keycloak-secret
-#      existingSecretHostKey: database-host
-#      existingSecretUserKey: database-user
-#      existingSecretDatabaseKey: database-name
-#      existingSecretPasswordKey: database-password
+    externalDatabase:
+      password: ignored-but-required
+      existingSecret: don-auth-postgress-keycloak-secret
+      existingSecretHostKey: database-host
+      existingSecretUserKey: database-user
+      existingSecretDatabaseKey: database-name
+      existingSecretPasswordKey: database-password
     ingress:
       enabled: true
       annotations:
