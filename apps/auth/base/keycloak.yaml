@@ -38,13 +38,13 @@ spec:
             name: keycloak-secret
             key: admin-password
     postgresql:
-      enabled: true
-#    externalDatabase:
-#      existingSecret: don-auth-postgress-keycloak-secret
-#      existingSecretHostKey: database-host
-#      existingSecretUserKey: database-user
-#      existingSecretDatabaseKey: database-name
-#      existingSecretPasswordKey: database-password
+      enabled: false
+    externalDatabase:
+      existingSecret: don-auth-postgress-keycloak-secret
+      existingSecretHostKey: database-host
+      existingSecretUserKey: database-user
+      existingSecretDatabaseKey: database-name
+      existingSecretPasswordKey: database-password
     ingress:
       enabled: true
       annotations:
