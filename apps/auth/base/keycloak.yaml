@@ -22,8 +22,8 @@ spec:
         name: don-auth-repo-keycloak
   values:
     extraEnvVars:
-      - name: KC_LOG_LEVEL
-        value: all
+      - name: NAMI_LOG_LEVEL
+        value: trace
     replicaCount: 1
     production: false
     auth:
@@ -40,8 +40,11 @@ spec:
     postgresql:
       enabled: false
     externalDatabase:
-      password: ignored-but-required
-    extraEnvVarsSecret: don-auth-postgress-keycloak-secret
+      existingSecret: don-auth-postgress-keycloak-secret
+#      existingSecretHostKey: database-host
+#      existingSecretUserKey: database-user
+#      existingSecretDatabaseKey: database-name
+#      existingSecretPasswordKey: database-password
     ingress:
       enabled: true
       annotations:
