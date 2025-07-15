@@ -22,7 +22,7 @@ spec:
         name: don-auth-repo-keycloak
   values:
     replicaCount: 1
-    production: true
+    production: false
     auth:
       adminUser:
         valueFrom:
@@ -37,6 +37,7 @@ spec:
     postgresql:
       enabled: false
     externalDatabase:
+      port: ''
       existingSecret: don-auth-postgress-keycloak-secret
       existingSecretHostKey: database-host
       existingSecretUserKey: database-user
