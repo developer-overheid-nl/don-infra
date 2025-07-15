@@ -45,6 +45,8 @@ spec:
       existingSecretUserKey: database-user
       existingSecretDatabaseKey: database-name
       existingSecretPasswordKey: database-password
+    containerArgs:
+      - start
     ingress:
       enabled: true
       annotations:
