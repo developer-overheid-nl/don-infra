@@ -30,12 +30,12 @@ spec:
       adminUser:
         valueFrom:
           secretKeyRef:
-            name: keycloak-secret
+            name: keycloak-login-secret
             key: admin-user
       adminPassword:
         valueFrom:
           secretKeyRef:
-            name: keycloak-secret
+            name: keycloak-login-secret
             key: admin-password
     postgresql:
       auth:
