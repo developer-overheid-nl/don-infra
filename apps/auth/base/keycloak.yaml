@@ -22,7 +22,7 @@ spec:
         name: don-auth-repo-keycloak
   values:
     extraEnvVars:
-      - name: NAMI_LOG_LEVEL
+      - name: KEYCLOAK_LOG_LEVEL
         value: trace
     replicaCount: 1
     production: false
