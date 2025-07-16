@@ -31,13 +31,20 @@ spec:
       enabled: false
     externalDatabase:
       existingSecret: don-auth-keycloak-login-secret
+      existingSecretHostKey: db-host
       existingSecretUserKey: db-user
+      existingSecretDatabaseKey: db-name
       existingSecretPasswordKey: db-password
     extraEnvVars:
       - name: KC_LOG_LEVEL
         value: debug
+      - name: KC_DB
+        value: 'postgres'
       - name: KC_DB_URL
-        value: jdbc:postgresql://rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com/don?currentSchema=don_auth_keycloak
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: KC_DB_URL
     ingress:
       enabled: true
       annotations:
