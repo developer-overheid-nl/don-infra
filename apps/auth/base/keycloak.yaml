@@ -37,10 +37,12 @@ spec:
       existingSecretUserKey: db-user
       existingSecretDatabaseKey: db-name
       existingSecretPasswordKey: db-password
-      
+
     extraEnvVars:
       - name: KEYCLOAK_JDBC_PARAMS
         value: "sslmode=require&currentSchema=don_auth"
+      - name: KC_DB_SCHEMA
+        value: don_auth
     ingress:
       enabled: true
       annotations:
