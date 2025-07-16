@@ -6,7 +6,7 @@ data:
     db-user: ENC[AES256_GCM,data:oWicxE3TAeZBLU+qCBpsxw==,iv:21BDRoETTWIiqZ7Z79rndrATUchKPCZSl5D16mdosT4=,tag:Dujc3iyks2JtuPrW3EBNkQ==,type:str]
 kind: Secret
 metadata:
-    name: postgress-keycloak-secret
+    name: keycloak-postgresql
 sops:
     kms: []
     gcp_kms: []
