@@ -2,7 +2,7 @@ apiVersion: v1
 data:
     db-host: ENC[AES256_GCM,data:zFxy3KprCxjdHRsVapefcw+i988JNNGNCG50+4Q+ihmMchEsr6fmFysAjka84WI40WmliVcsPJj8wd3/6WKN8AXHnRCLp3+c4RvjxOv0Eu3zDWXW,iv:g8u7PSmwEyzzR9IG+dVRoDtYgmNOEwSN88ecoQUcYk8=,tag:8/ThjpKtdEJ1ckCI2+FXFw==,type:str]
     db-name: ENC[AES256_GCM,data:NY0B4Q==,iv:UVyKnljCWqf7AVfKvSGGlkMo5SZprsxRXtm5hOC29P0=,tag:NHQ/QrZjyXOUaimKwn5Wvw==,type:str]
-    db-password: ENC[AES256_GCM,data:G+AxuvHQuSn6hoN0JhErOrDNZvaNZhwmuuBDTqbtNDXOqtjhE0/DiA==,iv:8c/BtgHL9pw8RGnh/dFCmLpoj98VVXWnmzy2xgc5nTk=,tag:riLmGQywbMsQRCKqgk3WJg==,type:str]
+    postgres-password: ENC[AES256_GCM,data:G+AxuvHQuSn6hoN0JhErOrDNZvaNZhwmuuBDTqbtNDXOqtjhE0/DiA==,iv:8c/BtgHL9pw8RGnh/dFCmLpoj98VVXWnmzy2xgc5nTk=,tag:riLmGQywbMsQRCKqgk3WJg==,type:str]
     db-user: ENC[AES256_GCM,data:oWicxE3TAeZBLU+qCBpsxw==,iv:21BDRoETTWIiqZ7Z79rndrATUchKPCZSl5D16mdosT4=,tag:Dujc3iyks2JtuPrW3EBNkQ==,type:str]
 kind: Secret
 metadata:
