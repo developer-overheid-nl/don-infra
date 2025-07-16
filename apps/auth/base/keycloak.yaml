@@ -36,8 +36,10 @@ spec:
         existingSecretDatabaseKey: db-name
         existingSecretPasswordKey: db-password
     extraEnvVars:
-      - name: KC_LOG_LEVEL
-        value: debug
+      - name: KEYCLOAK_JDBC_PARAMS
+        value: "sslmode=require"
+      # - name: KC_LOG_LEVEL
+      #   value: debug
       # - name: KC_DB
       #   value: 'postgres'
       # - name: KEYCLOAK_DATABASE_USER
