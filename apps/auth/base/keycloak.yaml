@@ -24,7 +24,7 @@ spec:
     replicaCount: 1
     production: false
     auth:
-      existingSecret: keycloak-login-secret
+      existingSecret: don-auth-keycloak-login-secret
     postgresql:
       auth:
         password: ignored-but-required
