@@ -24,16 +24,7 @@ spec:
     replicaCount: 1
     production: false
     auth:
-      adminUser:
-        valueFrom:
-          secretKeyRef:
-            name: keycloak-login-secret
-            key: admin-user
-      adminPassword:
-        valueFrom:
-          secretKeyRef:
-            name: keycloak-login-secret
-            key: admin-password
+      existingSecret: keycloak-login-secret
     postgresql:
       auth:
         password: ignored-but-required
