@@ -29,17 +29,21 @@ spec:
       auth:
         password: ignored-but-required
       enabled: false
-    externalDatabase:
-      existingSecret: don-auth-keycloak-login-secret
-      existingSecretHostKey: db-host
-      existingSecretUserKey: db-user
-      existingSecretDatabaseKey: db-name
-      existingSecretPasswordKey: db-password
     extraEnvVars:
       - name: KC_LOG_LEVEL
         value: debug
       - name: KC_DB
         value: 'postgres'
+      - name: KEYCLOAK_DATABASE_USER
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: db-user
+      - name: KEYCLOAK_DATABASE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: db-password
       - name: KC_DB_URL
         valueFrom:
           secretKeyRef:
