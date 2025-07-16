@@ -30,7 +30,7 @@ spec:
         password: ignored-but-required
       enabled: false
     externalDatabase:
-      existingSecret: don-auth-keycloak-postgresql
+      existingSecret: don-auth-keycloak-login-secret
       existingSecretHostKey: db-host
       existingSecretUserKey: db-user
       existingSecretDatabaseKey: db-name
@@ -39,7 +39,7 @@ spec:
       - name: KC_DB_URL
         valueFrom:
           secretKeyRef:
-            name: don-auth-keycloak-postgresql
+            name: don-auth-keycloak-login-secret
             key: KC_DB_URL
     ingress:
       enabled: true
