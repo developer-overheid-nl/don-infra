@@ -29,6 +29,14 @@ spec:
       auth:
         password: ignored-but-required
       enabled: false
+      externalDatabase:
+        password: ignored-but-required
+#    externalDatabase:
+#      existingSecret: don-auth-keycloak-login-secret
+#      existingSecretHostKey: db-host
+#      existingSecretUserKey: db-user
+#      existingSecretDatabaseKey: db-name
+#      existingSecretPasswordKey: db-password
     extraEnvVars:
       - name: KC_LOG_LEVEL
         value: debug
