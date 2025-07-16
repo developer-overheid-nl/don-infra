@@ -37,7 +37,7 @@ spec:
     postgresql:
       auth:
         password: ignored-but-required
-      enabled: true
+      enabled: false
     externalDatabase:
       existingSecret: don-auth-keycloak-postgresql
       existingSecretHostKey: db-host
