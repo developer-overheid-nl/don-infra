@@ -25,6 +25,7 @@ spec:
     replicaCount: 1
     production: false
     auth:
+      adminUser: don
       existingSecret: don-auth-keycloak-login-secret
     postgresql:
       enabled: false
