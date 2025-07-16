@@ -36,6 +36,8 @@ spec:
       existingSecretDatabaseKey: db-name
       existingSecretPasswordKey: db-password
     extraEnvVars:
+      - name: KC_LOG_LEVEL
+        value: debug
       - name: KC_DB_URL
         value: jdbc:postgresql://rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com/don?currentSchema=don_auth_keycloak
     ingress:
