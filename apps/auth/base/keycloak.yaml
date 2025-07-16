@@ -36,7 +36,9 @@ spec:
       existingSecretDatabaseKey: db-name
       existingSecretPasswordKey: db-password
     extraEnvVars:
-      - name: KC_DB_URL_HOST
+      - name: KC_DB
+        value: 'postgresql'
+      - name: KC_DB_URL
         valueFrom:
           secretKeyRef:
             name: don-auth-keycloak-login-secret
