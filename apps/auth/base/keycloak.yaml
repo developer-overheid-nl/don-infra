@@ -31,9 +31,7 @@ spec:
       enabled: false
     externalDatabase:
       existingSecret: don-auth-keycloak-login-secret
-      existingSecretHostKey: db-host
       existingSecretUserKey: db-user
-      existingSecretDatabaseKey: db-name
       existingSecretPasswordKey: db-password
     extraEnvVars:
       - name: KC_LOG_LEVEL
