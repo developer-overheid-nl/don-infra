@@ -26,8 +26,7 @@ spec:
     production: false
     auth:
       adminUser: don
-      adminPassword: supersecret
-      # existingSecret: don-auth-keycloak-login-secret
+      existingSecret: don-auth-keycloak-login-secret
     postgresql:
       enabled: false
       auth:
