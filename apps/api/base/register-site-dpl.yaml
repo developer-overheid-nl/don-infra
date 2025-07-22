@@ -17,7 +17,7 @@ spec:
           image: don-register-site
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 4321
           resources:
             requests:
               memory: 100Mi
@@ -28,12 +28,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 3000
+              port: 4321
             initialDelaySeconds: 3
             periodSeconds: 30
           readinessProbe:
             httpGet:
               path: /
-              port: 3000
+              port: 4321
             initialDelaySeconds: 3
             periodSeconds: 5
