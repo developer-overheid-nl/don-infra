@@ -5,3 +5,6 @@ resources:
   - apisix.yaml
   - api-register-dpl.yaml
   - api-register-svc.yaml
+  - register-site-dpl.yaml
+  - register-site-svc.yaml
+  - register-site-ing.yaml
