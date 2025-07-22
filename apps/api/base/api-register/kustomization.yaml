@@ -4,6 +4,6 @@ kind: Kustomization
 commonLabels:
   app: api-register
 
-resources:
-  - api-register-dpl.yaml
-  - api-register-svc.yaml
+resources: []
+#  - api-register-dpl.yaml
+#  - api-register-svc.yaml
