@@ -3,8 +3,8 @@ kind: Kustomization
 
 commonLabels:
   app: register-site
-
-resources: []
-#  - register-site-dpl.yaml
-#  - register-site-svc.yaml
-#  - register-site-ing.yaml
+  
+resources:
+  - register-site-dpl.yaml
+  - register-site-svc.yaml
+  - register-site-ing.yaml
