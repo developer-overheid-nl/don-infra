@@ -19,7 +19,7 @@ images:
     newTag: a0e947d2e9f7e09aef8e857f4fa4dc5dddfaba7c
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: f7855f5486690f561b9e449928f264ed74941989
+    newTag: 4c04de6174a1d30a0618920623999079e5db6dc3
 
 patches:
   - target:
