@@ -15,7 +15,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: svc
+                name: register-site-svc
                 port:
                   number: 80
   tls:
