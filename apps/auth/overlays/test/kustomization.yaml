@@ -5,7 +5,6 @@ resources:
   - ../../base
   - keycloak-secret.yaml
   - keycloak-realm-config.yaml
-  - postgress-keycloak-secret.yaml
 
 namespace: tn-don-auth
 namePrefix: don-auth-
@@ -20,7 +19,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/values/replicaCount
-        value: 2
+        value: 1
       - op: replace
         path: /spec/values/ingress/hostname
         value: auth.don.apps.digilab.network

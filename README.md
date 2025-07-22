@@ -63,3 +63,34 @@ sops \
   --in-place \
   <SECRET>.yaml
 ```
+
+## create new schema
+To create a new schema in the Postgres database, the digilab user can use the following command:
+```bash
+CREATE USER don_auth_adm WITH PASSWORD 'psw1';
+CREATE USER don_auth_dml WITH PASSWORD 'psw2';
+GRANT don_auth_adm TO digilab;
+CREATE SCHEMA don_auth AUTHORIZATION don_auth_adm;
+GRANT CONNECT ON DATABASE don TO don_auth_adm;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA don_auth TO don_auth_dml;
+
+ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
+ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
+```
+
+
+kubectl create secret generic keycloak-login-secret \
+  --from-literal=admin-user=don \
+  --from-literal=admin-password=d6PPnSFko8L4scs78z4m6KMXPAiCihRc \
+  --from-literal=db-host=rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com \
+  --from-literal=db-name=don \
+  --from-literal=db-user=don_auth_adm \
+  --from-literal=db-password=Dmq8iEnhynn4qdzjTmD7rpgnXMKK \
+  --dry-run=client -o yaml > keycloak-secret.yaml
+
+  sops \
+  --encrypt \
+  --encrypted-regex '^(data|stringData)$' \
+  --age age1jg3eun7lsymd3saszvynys3x8c5dk3q0m55qujyk9tgu4u8dk93ss86qwu \
+  --in-place \
+ keycloak-secret.yaml

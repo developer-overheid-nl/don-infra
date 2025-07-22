@@ -21,22 +21,30 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
-    production: true
+    proxyHeaders: forwarded
     replicaCount: 1
+    production: false
     auth:
-      adminUser:
-        valueFrom:
-          secretKeyRef:
-            name: keycloak-secret
-            key: admin-user
-      adminPassword:
-        valueFrom:
-          secretKeyRef:
-            name: keycloak-secret
-            key: admin-password
+      adminUser: don
+      existingSecret: don-auth-keycloak-login-secret
     postgresql:
       enabled: false
-    extraEnvVarsSecret: postgress-keycloak-secret
+      auth:
+        password: ignored-but-required
+      
+    externalDatabase:
+      password: ignored-but-required
+      existingSecret: don-auth-keycloak-login-secret
+      existingSecretHostKey: db-host
+      existingSecretUserKey: db-user
+      existingSecretDatabaseKey: db-name
+      existingSecretPasswordKey: db-password
+
+    extraEnvVars:
+      - name: KEYCLOAK_JDBC_PARAMS
+        value: "sslmode=require&currentSchema=don_auth"
+      - name: KC_DB_SCHEMA
+        value: don_auth
     ingress:
       enabled: true
       annotations:
