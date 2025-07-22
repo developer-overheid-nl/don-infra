@@ -21,4 +21,4 @@ spec:
   tls:
     - hosts:
         - set-in-overlay
-      secretName: api-tls
+      secretName: api-register-tls
