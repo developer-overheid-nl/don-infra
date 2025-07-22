@@ -10,9 +10,6 @@ resources:
 namespace: tn-don-api
 namePrefix: don-api-
 
-commonLabels:
-  app: api
-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
