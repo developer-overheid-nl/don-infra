@@ -7,7 +7,7 @@ data:
     local core = require("apisix.core")
     local http = require("resty.http")
     local cjson = require("cjson.safe")
-    
+    local limit_count = require("apisix.plugins.limit-count.init")
     local plugin_name = "rate-limit-by-keycloak-attribute"
     
     local schema = {
@@ -113,10 +113,7 @@ data:
             core.log.warn("[PLUGIN] No rate limit found for client_id: ", client_id)
             return core.response.exit(403, { message = "Rate limit not configured for this client" })
         end
-        
-        local plugin_loader = require("apisix.plugin")
-        local limit_count = plugin_loader.get("limit-count")
-        
+       
         if not limit_count or type(limit_count.access) ~= "function" then
             core.log.error("❌ Failed to load 'limit-count' plugin or its 'access' function.")
             return core.response.exit(500, { message = "Limit-count plugin not available" })
@@ -134,9 +131,7 @@ data:
         }
         
         core.log.warn("[PLUGIN] limit_conf: ", cjson.encode(limit_conf))
-        core.log.warn("[PLUGIN] ctx.var.jwt_claim_client_id: ", ctx.var.jwt_claim_client_id)
         
-        core.log.warn("VOOR limiter: ", client_id, core.json.encode(limit_conf))
         local ok, err = limit_count.rate_limit(limit_conf, ctx, "limit-count", 1)
         core.log.warn("NA limiter: ", ok, err)
         if not ok then
