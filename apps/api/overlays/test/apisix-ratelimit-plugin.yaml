@@ -125,7 +125,7 @@ data:
         ctx.var.jwt_claim_client_id = client_id
         
         local limit_conf = {
-            count = rate_limit,
+            count = 10,
             time_window = 60,
             key_type = "var",
             key = "remote_addr",
@@ -136,8 +136,9 @@ data:
         core.log.warn("[PLUGIN] limit_conf: ", cjson.encode(limit_conf))
         core.log.warn("[PLUGIN] ctx.var.jwt_claim_client_id: ", ctx.var.jwt_claim_client_id)
         
-        -- Let op: limit-count slaat teller op per key+window, check direct vóór en na aanroep:
+        core.log.warn("VOOR limiter: ", client_id, limit_conf)
         local ok, err = limit_count.access(limit_conf, ctx)
+        core.log.warn("NA limiter: ", ok, err)
         if not ok then
             core.log.warn("[PLUGIN] Rate limit REJECTED for client_id: ", client_id, "; reason: ", err)
             return core.response.exit(429, { message = err })
