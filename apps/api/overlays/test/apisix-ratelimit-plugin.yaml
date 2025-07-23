@@ -123,5 +123,5 @@ data:
             return core.response.exit(429, { message = err })
         end
     end
-    
+    plugin.schema = schema
     return plugin
