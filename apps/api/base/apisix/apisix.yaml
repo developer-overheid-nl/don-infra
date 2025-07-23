@@ -39,8 +39,7 @@ spec:
         logs:
           errorLogLevel: "debug"
         luaSharedDicts:
-          - name: limit-count
-            size: 50m
+          limit-count: 50m
       customPlugins:
         enabled: true
         luaPath: "/opt/?.lua"
