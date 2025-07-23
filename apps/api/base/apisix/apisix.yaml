@@ -37,8 +37,9 @@ spec:
     apisix:
       nginx_config:
         http:
-          custom_lua_shared_dict:
-            limit-count: 50m
+          customLuaSharedDicts:
+            - name: limit-count
+              size: 50m
       customPlugins:
         enabled: true
         luaPath: "/opt/?.lua"
