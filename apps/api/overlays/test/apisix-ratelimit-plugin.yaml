@@ -7,7 +7,7 @@ data:
     local core = require("apisix.core")
     local http = require("resty.http")
     local cjson = require("cjson.safe")
-    local limit_count = require("apisix.plugins.limit-count")
+    local limit_count = require("apisix.plugins.limit-count.handler")
     
     local plugin_name = "rate-limit-by-keycloak-attribute"
     
