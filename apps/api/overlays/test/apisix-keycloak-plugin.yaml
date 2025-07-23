@@ -124,5 +124,5 @@ data:
             return 401, { message = "Invalid API key" }
         end
     end
-
+    plugin.schema = schema
     return plugin
