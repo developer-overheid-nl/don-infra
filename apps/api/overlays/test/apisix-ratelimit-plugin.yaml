@@ -101,7 +101,8 @@ data:
         
         local cache_key = "ratelimit:" .. client_id
         local rate_limit = cache(cache_key, conf.cache_ttl, get_client_rate_limit, conf, client_id, token)
-        
+        core.log.warn("Incoming request for client_id: ", client_id)
+        core.log.warn("Rate limit resolved: ", rate_limit)
         if not rate_limit or rate_limit <= 0 then
             core.log.warn("No rate limit found for client_id: ", client_id)
             return core.response.exit(403, { message = "Rate limit not configured for this client" })
