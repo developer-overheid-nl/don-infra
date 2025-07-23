@@ -38,9 +38,7 @@ spec:
       nginx:
         logs:
           errorLogLevel: "debug"
-        luaSharedDicts:
-          - name: plugin-limit-count
-            size: 50m
+        luaSharedDicts: plugin-limit-count 50m
       customPlugins:
         enabled: true
         luaPath: "/opt/?.lua"
