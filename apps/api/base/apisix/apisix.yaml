@@ -39,7 +39,7 @@ spec:
         logs:
           errorLogLevel: "debug"
         customLuaSharedDicts:
-          - name: plugin-limit-count
+          - name: limit-count
             size: 50m
       customPlugins:
         enabled: true
