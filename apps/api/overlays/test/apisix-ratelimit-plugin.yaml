@@ -128,7 +128,7 @@ data:
             count = rate_limit,
             time_window = 60,
             key_type = "var",
-            key = "jwt_claim_client_id",
+            key = "remote_addr",
             rejected_code = 429,
             policy = "local",
         }
