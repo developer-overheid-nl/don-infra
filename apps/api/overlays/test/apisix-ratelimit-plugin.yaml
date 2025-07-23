@@ -136,7 +136,7 @@ data:
         core.log.warn("[PLUGIN] limit_conf: ", cjson.encode(limit_conf))
         core.log.warn("[PLUGIN] ctx.var.jwt_claim_client_id: ", ctx.var.jwt_claim_client_id)
         
-        core.log.warn("VOOR limiter: ", client_id, limit_conf)
+        core.log.warn("VOOR limiter: ", client_id, core.json.encode(limit_conf))
         local ok, err = limit_count.access(limit_conf, ctx)
         core.log.warn("NA limiter: ", ok, err)
         if not ok then
