@@ -20,7 +20,6 @@ data:
             client_secret = { type = "string" },
             header = { type = "string", default = "x-api-key" },
             cache_ttl = { type = "integer", default = 300 },
-            default = { type = "integer", default = 10 }
         },
         required = { "token_url", "admin_api_url", "client_id", "client_secret" }
     }
@@ -104,7 +103,8 @@ data:
         local rate_limit = cache(cache_key, conf.cache_ttl, get_client_rate_limit, conf, client_id, token)
         
         if not rate_limit or rate_limit <= 0 then
-            rate_limit = conf.default
+            core.log.warn("No rate limit found for client_id: ", client_id)
+            return core.response.exit(403, { message = "Rate limit not configured for this client" })
         end
         
         ctx.var.jwt_claim_client_id = client_id
