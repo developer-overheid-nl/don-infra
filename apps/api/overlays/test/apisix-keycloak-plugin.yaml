@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: apisix-custom-plugins
+  name: apisix-keycloak-plugins
 data:
   keycloak-api-key-auth.lua: |
     local core = require("apisix.core")
