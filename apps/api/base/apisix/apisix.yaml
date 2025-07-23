@@ -35,7 +35,7 @@ spec:
           secretName: api-tls
 
     apisix:
-      nginx_config:
+      nginx:
         customLuaSharedDicts:
           - name: limit-count
             size: 50m
