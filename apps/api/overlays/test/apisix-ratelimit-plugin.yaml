@@ -3,13 +3,13 @@ kind: ConfigMap
 metadata:
   name: apisix-ratelimit-plugins
 data:
-  rate-limit-by-claim.lua: |
+  rate-limit-by-keycloak-attribute.lua: |
     local core = require("apisix.core")
     local http = require("resty.http")
     local cjson = require("cjson.safe")
     local limit_count = require("apisix.plugins.limit-count")
     
-    local plugin_name = "rate-limit-by-claim"
+    local plugin_name = "rate-limit-by-keycloak-attribute"
     local plugin = {
         version = 0.2,
         priority = 1001,

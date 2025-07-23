@@ -42,12 +42,20 @@ spec:
           - name: "keycloak-api-key-auth"
             attrs: { }
             configMap:
-              name: "don-api-apisix-custom-plugins"
+              name: "don-api-apisix-keycloak-plugins"
               mounts:
                 - key: "keycloak-api-key-auth.lua"
                   path: "/opt/apisix/plugins/keycloak-api-key-auth.lua"
+          - name: "rate-limit-by-keycloak-attribute"
+            attrs: { }
+            configMap:
+              name: "don-api-apisix-ratelimit-plugins"
+              mounts:
+                - key: "rate-limit-by-keycloak-attribute.lua"
+                  path: "/opt/apisix/plugins/rate-limit-by-keycloak-attribute.lua"
       plugins:
         - authz-keycloak
+        - limit-count
       admin:
         allow:
           ipList:
