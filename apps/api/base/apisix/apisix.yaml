@@ -55,7 +55,6 @@ spec:
                   path: "/opt/apisix/plugins/rate-limit-by-keycloak-attribute.lua"
       plugins:
         - authz-keycloak
-        - limit-count
       admin:
         allow:
           ipList:
