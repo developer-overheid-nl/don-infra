@@ -114,7 +114,13 @@ data:
             return core.response.exit(403, { message = "Rate limit not configured for this client" })
         end
         
-        local limit_count = require("apisix.plugins.limit-count")
+        local plugin_loader = require("apisix.plugin")
+        local limit_count = plugin_loader.get("limit-count")
+        
+        if not limit_count or type(limit_count.access) ~= "function" then
+            core.log.error("❌ Failed to load 'limit-count' plugin or its 'access' function.")
+            return core.response.exit(500, { message = "Limit-count plugin not available" })
+        end
         
         ctx.var.jwt_claim_client_id = client_id
         
