@@ -36,6 +36,8 @@ spec:
 
     apisix:
       nginx:
+        logs:
+          errorLogLevel: "debug"
         customLuaSharedDicts:
           - name: limit-count
             size: 50m
