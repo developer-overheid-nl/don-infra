@@ -1,0 +1,28 @@
+apiVersion: v1
+data:
+    api-endpoint: ENC[AES256_GCM,data:K+F5cJXIbul7SbUTNAJUUU6x9F2GB8U9sQlvOe8It7ZY1ZHVIETrSvnqElmyBP2AcMkuLA==,iv:igtL1q8UnY/ccNmcyCVzDXG41i2ce1D6IODAjCutQAc=,tag:KhsAhisnhoiQS6ER7nJK2w==,type:str]
+    api-x-api-key: ENC[AES256_GCM,data:8R3f3H4V+z+XKI1viNpccKXKx2pCdJYB6L29kT3TChi9pySQnXsv3rk20NDtWptp,iv:PREvG5r2+ISXh0KYa+DSh/iriTey+EVgFumIbDz6Y0c=,tag:X5sADtB+Vgg1nLhhFKXBOQ==,type:str]
+kind: Secret
+metadata:
+    creationTimestamp: null
+    name: api-register-secret
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1jg3eun7lsymd3saszvynys3x8c5dk3q0m55qujyk9tgu4u8dk93ss86qwu
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2azZvQ2JMR0lUdUlSbFI2
+            S0ZVMEptemZveCtLbHM1Q3dsQzI1ZStXUVhvCnp4SjJsYlRwSkhlTDVxODhSOGVa
+            SERueXROYW1DQkd0bW84S2hReUtZakUKLS0tIGRKMVB0Qlg0UzJhcTdDSmNSKzFO
+            Y0JtaVBZQlN6UXpTZU1DOFpaVmg5MXMK+qs608RQKje/zQOJ0DUC9OPANWyYjwl5
+            xIOTn2Y+76PdOCXQ3xTsvOkILlXSv6za14QrRKEOa88Y1sBIc9l+lA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-24T08:09:27Z"
+    mac: ENC[AES256_GCM,data:AlIAXt8v9aLzHOjLyvDsoYiEXcrX/u7cPxZa9hPukvGzxENEjowzwU6YJYGFWcwtQZn/djXkHpw6hD2MzsaDQ3cNoLkMiVFnwFIldHKXtyXB35F1/uc5+fIpKppmmCw1eXdPavXBYgPhrbb8IaSeP85qlrFAM+EDDv6sG22WUy8=,iv:TAyL3HqonE/qO/t3r+J75ijiTYKF3f/LveeTWkdB5MQ=,tag:EXIjDx6BayBJjfVq0pmWjA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.4

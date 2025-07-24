@@ -15,6 +15,17 @@ spec:
       containers:
         - name: don-register-site
           image: don-register-site
+          env:
+            - name: api-endpoint
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: api-endpoint
+            - name: api-x-api-key
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: api-x-api-key
           ports:
             - name: http
               containerPort: 4321
