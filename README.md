@@ -77,20 +77,3 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA don_auth TO don_aut
 ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
 ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
 ```
-
-
-kubectl create secret generic keycloak-login-secret \
-  --from-literal=admin-user=don \
-  --from-literal=admin-password=d6PPnSFko8L4scs78z4m6KMXPAiCihRc \
-  --from-literal=db-host=rg-apps-sandbox-westeu-001-psql-1.postgres.database.azure.com \
-  --from-literal=db-name=don \
-  --from-literal=db-user=don_auth_adm \
-  --from-literal=db-password=Dmq8iEnhynn4qdzjTmD7rpgnXMKK \
-  --dry-run=client -o yaml > keycloak-secret.yaml
-
-  sops \
-  --encrypt \
-  --encrypted-regex '^(data|stringData)$' \
-  --age age1jg3eun7lsymd3saszvynys3x8c5dk3q0m55qujyk9tgu4u8dk93ss86qwu \
-  --in-place \
- keycloak-secret.yaml
