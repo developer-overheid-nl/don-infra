@@ -1,7 +1,7 @@
 apiVersion: v1
 data:
-    api-endpoint: ENC[AES256_GCM,data:XM5yfEw7LXdfG+CttYKbseIcYmqQi2BVy6U0NVMFc3AocsimoSLsKIpxUno8zPn4lReUow==,iv:W/Q4OTxNeVr96ZxM5x7sAzYCZ8qO6zcgmBrvjBmIqOA=,tag:NlMAzwbcZ6/xYlwMz4kBxg==,type:str]
-    api-x-api-key: ENC[AES256_GCM,data:VcEPSRb4OkwsiXpRYIq3Lo1fEn34WBoOa14y8MESdBUJUbwCJ3tXFq1k7kJL+3Eb,iv:/7aXEfs0dZQpLYpGkxn7BJzyEbdXxUdWvIyy8vq8FOA=,tag:w9qLmFusW7Wuh01wVf9CAQ==,type:str]
+    API_ENDPOINT: ENC[AES256_GCM,data:XM5yfEw7LXdfG+CttYKbseIcYmqQi2BVy6U0NVMFc3AocsimoSLsKIpxUno8zPn4lReUow==,iv:W/Q4OTxNeVr96ZxM5x7sAzYCZ8qO6zcgmBrvjBmIqOA=,tag:NlMAzwbcZ6/xYlwMz4kBxg==,type:str]
+    API_X_API_KEY: ENC[AES256_GCM,data:VcEPSRb4OkwsiXpRYIq3Lo1fEn34WBoOa14y8MESdBUJUbwCJ3tXFq1k7kJL+3Eb,iv:/7aXEfs0dZQpLYpGkxn7BJzyEbdXxUdWvIyy8vq8FOA=,tag:w9qLmFusW7Wuh01wVf9CAQ==,type:str]
 kind: Secret
 metadata:
     creationTimestamp: null
