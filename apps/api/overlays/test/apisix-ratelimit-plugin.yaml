@@ -74,12 +74,22 @@ data:
         
         local client = cjson.decode(res.body)
         core.log.info("Keycloak client attributes: ", cjson.encode(client and client.attributes))
-        if not client or not client.attributes or not client.attributes["rate-limit"] then
-            core.log.warn("No rate-limit attribute found for client_id: ", client_id)
+        if not client or not client.attributes or not client.attributes["rate-limit-profile"] then
+            core.log.warn("No rate-limit-profile attribute found for client_id: ", client_id)
             return nil
         end
+        local rate_limit = 100
+        if client.attributes["rate-limit-profile"] == "untrusted" then
+            rate_limit = 50
+        end
+        if client.attributes["rate-limit-profile"] == "trusted" then
+            rate_limit = 500
+        end
+        if client.attributes["rate-limit-profile"] == "admin" then
+            rate_limit = 2500
+        end
         
-        return tonumber(client.attributes["rate-limit"])
+        return rate_limit
     end
     
     function plugin.check_schema(conf)
@@ -106,7 +116,7 @@ data:
         
         local cache_key = "ratelimit:" .. client_id
         local rate_limit = cache(cache_key, conf.cache_ttl, get_client_rate_limit, conf, client_id, token)
-       
+        
         if not rate_limit or rate_limit <= 0 then
             core.log.warn("[PLUGIN] No rate limit found for client_id: ", client_id)
             return core.response.exit(403, { message = "Rate limit not configured for this client" })
