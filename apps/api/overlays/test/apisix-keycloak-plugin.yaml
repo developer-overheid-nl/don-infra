@@ -7,31 +7,31 @@ data:
     local core = require("apisix.core")
     local http = require("resty.http")
     local cjson = require("cjson")
-    
+
     local plugin_name = "keycloak-api-key-auth"
-    
+
     local schema = {
-    type = "object",
-    properties = {
-        token_url = { type = "string" },
-        admin_api_url = { type = "string" },
-        client_id = { type = "string" },
-        client_secret = { type = "string" },
-        header = { type = "string", default = "x-api-key" },
-    cache_ttl = { type = "integer", default = 300 }
-    },
-    required = { "token_url", "admin_api_url", "client_id", "client_secret" }
+        type = "object",
+        properties = {
+            token_url = { type = "string" },
+            admin_api_url = { type = "string" },
+            client_id = { type = "string" },
+            client_secret = { type = "string" },
+            header = { type = "string", default = "x-api-key" },
+            cache_ttl = { type = "integer", default = 300 }
+        },
+        required = { "token_url", "admin_api_url", "client_id", "client_secret" }
     }
-    
+
     local plugin = {
-        version = 0.4,
+        version = 0.3,
         priority = 2000,
         name = plugin_name,
         schema = schema
     }
-    
+
     local cache = core.lrucache.new({ ttl = 300, count = 1000 })
-    
+
     local function get_admin_token(conf)
         core.log.info("Getting admin token from: ", conf.token_url)
         local httpc = http.new()
@@ -44,24 +44,24 @@ data:
             },
             ssl_verify = false,
         })
-        
+
         if not res then
             core.log.error("Failed to get admin token: ", err)
             return nil
         end
-        
+
         if res.status ~= 200 then
             core.log.error("Admin token request failed with status: ", res.status, ", body: ", res.body)
             return nil
         end
-        
+
         local data = cjson.decode(res.body)
         core.log.info("Received admin token")
         return data.access_token
     end
-    
-    local function client_exists(conf, token, client_uuid)
-        local url = conf.admin_api_url .. "/" .. client_uuid
+
+    local function client_exists(conf, token, client_id)
+        local url = conf.admin_api_url .. "/" .. client_id
         core.log.info("Checking if client exists at: ", url)
         local httpc = http.new()
         local res, err = httpc:request_uri(url, {
@@ -71,117 +71,58 @@ data:
             },
             ssl_verify = false
         })
-        
+
         if not res then
             core.log.error("Keycloak query error: ", err)
             return false
         end
-        
+
         if res.status ~= 200 then
             core.log.warn("Keycloak client lookup failed: ", res.status, ", body: ", res.body)
             return false
         end
-        
+
         local data = cjson.decode(res.body)
         local found = data and data.clientId ~= nil
-        core.log.info("Client UUID ", client_uuid, " exists: ", found)
+        core.log.info("Client ID ", client_id, " exists: ", found)
         return found
     end
-    
-    local function get_all_clients(conf, admin_token)
-        local httpc = http.new()
-        local url = conf.admin_api_url
-        local res, err = httpc:request_uri(url, {
-            method = "GET",
-            headers = {
-                ["Authorization"] = "Bearer " .. admin_token,
-                ["Content-Type"] = "application/json"
-            },
-            ssl_verify = false,
-        })
-        if not res or res.status ~= 200 then
-            core.log.error("Failed to fetch client list from Keycloak: ", err or (res and res.body))
-            return nil
-        end
-        local list = cjson.decode(res.body)
-        return list
-    end
-    
-    local function resolve_client_uuid(clients, client_id)
-        for _, c in ipairs(clients) do
-            if c.clientId == client_id then
-                return c.id
-            end
-        end
-        return nil
-    end
-    
+
     function plugin.check_schema(conf)
         return core.schema.check(schema, conf)
     end
-    
+
     function plugin.access(conf, ctx)
         local auth_header = core.request.header(ctx, "authorization")
-        local client_uuid
-        
-        if not auth_header then
-            client_uuid = core.request.header(ctx, conf.header)
-            if not client_uuid then
-                core.log.warn("Missing API key in header: ", conf.header)
-                return 401, { message = "Missing API key" }
-            end
-            
-            -- Check of deze UUID bestaat als client in Keycloak
-            local admin_token = cache("admin-token", conf.cache_ttl, get_admin_token, conf)
-            if not admin_token then
-                core.log.error("Failed to obtain admin token, denying access")
-                return 401, { message = "Failed to obtain admin token" }
-            end
-            
-            local exists = cache("keycloak-client-exists:" .. client_uuid, conf.cache_ttl, function()
-                return client_exists(conf, admin_token, client_uuid)
-            end)
-            
-            if not exists then
-                core.log.warn("API key UUID ", client_uuid, " not valid")
-                return 401, { message = "Invalid API key (UUID not found)" }
-            end
-            
-            core.log.info("Authenticated with API-key; client UUID: ", client_uuid)
-        else
-            -- Bearer token flow: client_id-string -> UUID mapping
-            local claims = ctx.var.jwt_claims
-            local client_id = claims and (claims["client_id"] or claims["azp"])
-            if not client_id then
-                core.log.warn("Missing client_id/azp in Bearer token")
-                return 401, { message = "Missing client_id in Bearer token" }
-            end
-            
-            local admin_token = cache("admin-token", conf.cache_ttl, get_admin_token, conf)
-            if not admin_token then
-                core.log.error("Failed to obtain admin token, denying access")
-                return 401, { message = "Failed to obtain admin token" }
-            end
-            
-            local clients = cache("keycloak-clients", conf.cache_ttl, get_all_clients, conf, admin_token)
-            if not clients then
-                core.log.error("Unable to fetch client list from Keycloak")
-                return 401, { message = "Unable to fetch client list from Keycloak" }
-            end
-            
-            client_uuid = resolve_client_uuid(clients, client_id)
-            if not client_uuid then
-                core.log.warn("Client ID ", client_id, " is not valid (not found in Keycloak), access denied")
-                return 401, { message = "Unknown client_id in Bearer token" }
-            end
-            core.log.info("Authenticated with Bearer token; client_id: ", client_id, ", UUID: ", client_uuid)
+        if auth_header then
+            core.log.info("Authorization header aanwezig, sla keycloak-api-key-auth plugin over.")
+            return nil
         end
-        
-        ctx.var.keycloak_client_uuid = client_uuid
-        ctx.var.__skip_authz_keycloak = true
-        return
+        local client_id = core.request.header(ctx, conf.header)
+        core.log.info("Authenticating request using header: ", conf.header, ", value: ", client_id)
+
+        if not client_id then
+            core.log.warn("Missing API key in header: ", conf.header)
+            return 401, { message = "Missing API key" }
+        end
+
+        local ok = cache(client_id, conf.cache_ttl, function()
+            local token = get_admin_token(conf)
+            if not token then
+                core.log.error("Failed to obtain admin token, denying access")
+                return false
+            end
+            return client_exists(conf, token, client_id)
+        end)
+
+        if ok then
+            core.log.info("Client ID ", client_id, " is authorized")
+            ctx.var.__skip_authz_keycloak = true
+            return
+        else
+            core.log.warn("Client ID ", client_id, " is not valid, access denied")
+            return 401, { message = "Invalid API key" }
+        end
     end
-    
     plugin.schema = schema
     return plugin
-
