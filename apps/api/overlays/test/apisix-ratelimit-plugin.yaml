@@ -100,6 +100,7 @@ data:
         local client_id = core.request.header(ctx, conf.header)
         if not client_id then
             local claims = ctx.var.jwt_claims
+            core.log.warn("JWT claims: ", cjson.encode(claims))
             client_id = claims and claims["client_id"]
         end
         
