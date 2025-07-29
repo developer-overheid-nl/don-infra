@@ -60,6 +60,7 @@ spec:
       plugins:
         - authz-keycloak
         - limit-count
+        - cors
       admin:
         allow:
           ipList:
