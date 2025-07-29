@@ -54,10 +54,9 @@ data:
         return data and data.access_token
     end
     
-    -- Haal alle clients 1x per cache_ttl op en zoek daar de juiste op.
     local function get_all_clients(conf, admin_token)
         local httpc = http.new()
-        local url = conf.admin_api_url -- bijv. "https://auth.don.apps.digilab.network/admin/realms/don/clients"
+        local url = conf.admin_api_url
         local res, err = httpc:request_uri(url, {
             method = "GET",
             headers = {
