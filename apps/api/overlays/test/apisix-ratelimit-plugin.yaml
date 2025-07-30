@@ -148,6 +148,28 @@ data:
         return limit_count.rate_limit(limit_conf, ctx, "limit-count", 1)
     end
     
+    local function decode_jwt_payload(token)
+        if not token then
+            return nil
+        end
+        local _, _, payload = token:find("^([^.]+)%.([^.]+)%.([^.]+)$")
+        if not payload then
+            return nil
+        end
+        -- base64url decode
+        payload = payload:gsub("-", "+"):gsub("_", "/")
+        local rem = #payload % 4
+        if rem > 0 then
+            payload = payload .. string.rep("=", 4 - rem)
+        end
+        local decoded = ngx.decode_base64(payload)
+        if not decoded then
+            return nil
+        end
+        local cjson = require("cjson.safe")
+        return cjson.decode(decoded)
+    end
+    
     function plugin.access(conf, ctx)
         local auth_header = core.request.header(ctx, "authorization")
         local admin_token = cache("admin-token", conf.cache_ttl, get_admin_token, conf)
@@ -164,10 +186,23 @@ data:
             return apply_ratelimit(client_uuid, conf, ctx, admin_token)
         else
             local claims = ctx.var.jwt_claims
-            core.log.warn("ctx.var.jwt_claims: ", cjson.encode(ctx.var))
-            core.log.warn("Headers: ", cjson.encode(core.request.headers(ctx)))
-
-            local client_id = claims and (claims["client_id"] or claims["azp"])
+            local client_id
+            
+            if claims then
+                client_id = claims["client_id"] or claims["azp"]
+            else
+                -- Fallback: JWT zelf decoden uit Authorization header
+                local headers = core.request.headers(ctx)
+                local auth = headers["authorization"]
+                if auth then
+                    local token = auth:match("Bearer%s+(.+)")
+                    local payload = decode_jwt_payload(token)
+                    core.log.warn("Decoded JWT payload: ", cjson.encode(payload))
+                    if payload then
+                        client_id = payload["client_id"] or payload["azp"]
+                    end
+                end
+            end
             
             core.log.info("client_id resolved: ", client_id)
             if not client_id then
@@ -187,6 +222,7 @@ data:
             
             return apply_ratelimit(client_uuid, conf, ctx, admin_token)
         end
+
     end
     
     plugin.schema = schema
