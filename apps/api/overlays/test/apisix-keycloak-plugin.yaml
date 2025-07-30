@@ -25,7 +25,7 @@ data:
 
     local plugin = {
         version = 0.3,
-        priority = 2000,
+        priority = 3000,
         name = plugin_name,
         schema = schema
     }
@@ -95,6 +95,7 @@ data:
     function plugin.access(conf, ctx)
         local auth_header = core.request.header(ctx, "authorization")
         if auth_header then
+            core.request.set_header(ctx, "x-api-key", "")
             core.log.info("Authorization header aanwezig, sla keycloak-api-key-auth plugin over.")
             return nil
         end
