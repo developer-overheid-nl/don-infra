@@ -164,7 +164,9 @@ data:
             return apply_ratelimit(client_uuid, conf, ctx, admin_token)
         else
             local claims = ctx.var.jwt_claims
-            core.log.warn("JWT claims: ", cjson.encode(claims))
+            core.log.warn("ctx.var.jwt_claims: ", cjson.encode(ctx.var.jwt_claims))
+            core.log.warn("Headers: ", cjson.encode(core.request.headers(ctx)))
+
             local client_id = claims and (claims["client_id"] or claims["azp"])
             
             core.log.info("client_id resolved: ", client_id)
