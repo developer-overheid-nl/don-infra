@@ -140,7 +140,6 @@ data:
         local api_key = core.request.header(ctx, conf.header)
         
         if auth_header and auth_header:match("Bearer ") then
-            -- Bearer flow: check JWT
             local jwt_token = auth_header:match("Bearer%s+(.+)")
             local jwt_payload = decode_jwt_payload(jwt_token)
             if not jwt_payload then
@@ -149,18 +148,16 @@ data:
             if is_jwt_expired(jwt_payload) then
                 return core.response.exit(401, { message = "JWT token expired" })
             end
-            -- Optionally: validate permissions via UMA ticket (optional, depends on your security needs)
             local ok, status, err = check_jwt_permission(conf, jwt_token)
             if not ok then
                 return core.response.exit(status, { message = err or "JWT unauthorized" })
             end
-            -- authorized
+            
             ctx.var.jwt_claims = jwt_payload
             ctx.var.jwt_claim_client_id = jwt_payload.client_id or jwt_payload.azp
             core.log.warn("Bearer JWT authorized for: ", jwt_payload.client_id or jwt_payload.azp)
             return
         elseif api_key then
-            -- API key flow
             local admin_token = cache("admin-token", conf.cache_ttl, get_admin_token, conf)
             if not admin_token then
                 return core.response.exit(500, { message = "Unable to obtain admin token" })
@@ -168,11 +165,10 @@ data:
             if not client_exists(conf, admin_token, api_key) then
                 return core.response.exit(401, { message = "Invalid API key" })
             end
-            ctx.var.jwt_claim_client_id = api_key
+            ctx.var.jwt_claim_client_uuid = api_key
             core.log.warn("API Key authenticated for client_id: ", api_key)
             return
         else
-            -- Neither present
             return core.response.exit(401, { message = "Missing credentials (Authorization or x-api-key)" })
         end
     end

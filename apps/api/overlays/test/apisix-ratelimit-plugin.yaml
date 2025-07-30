@@ -167,25 +167,27 @@ data:
     
     function plugin.access(conf, ctx)
         local client_id = ctx.var.jwt_claim_client_id
-        if not client_id then
-            core.log.warn("No client_id found in context!")
-            return core.response.exit(401, { message = "No client_id for rate limiting" })
+        local client_uuid = ctx.var.jwt_claim_client_uuid
+        if not client_id and not client_uuid  then
+            core.log.warn("No client_id, client_uuid found in context!")
+            return core.response.exit(401, { message = "No client_id or client_uuid for rate limiting" })
         end
         
         local admin_token = cache("admin-token", conf.cache_ttl, get_cached_admin_token, conf)
         if not admin_token then
             return core.response.exit(500, { message = "Unable to obtain admin token" })
         end
-        
-        local clients = cache("keycloak-clients", conf.cache_ttl, get_all_clients, conf, admin_token)
-        if not clients then
-            return core.response.exit(500, { message = "Unable to fetch client list from Keycloak" })
-        end
-        
-        local client_uuid = resolve_client_uuid(clients, client_id)
-        if not client_uuid then
-            core.log.warn("Geen client UUID gevonden voor client_id: ", client_id)
-            return core.response.exit(403, { message = "Unknown client" })
+        if client_id then
+            local clients = cache("keycloak-clients", conf.cache_ttl, get_all_clients, conf, admin_token)
+            if not clients then
+                return core.response.exit(500, { message = "Unable to fetch client list from Keycloak" })
+            end
+            
+            client_uuid = resolve_client_uuid(clients, client_id)
+            if not client_uuid then
+                core.log.warn("Geen client UUID gevonden voor client_id: ", client_id)
+                return core.response.exit(403, { message = "Unknown client" })
+            end
         end
         
         local cache_key = "ratelimit:" .. client_uuid
