@@ -25,7 +25,7 @@ data:
     
     local plugin = {
         version = 0.2,
-        priority = 1001,
+        priority = 2000,
         name = plugin_name,
         schema = schema
     }
