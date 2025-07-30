@@ -63,11 +63,32 @@ data:
             ssl_verify = false,
         })
         if not res or res.status ~= 200 then
-            core.log.error("Failed to fetch client list from Keycloak: ", err or (res and res.body))
-            return nil
+            if res and res.status == 401 then
+                core.log.warn("401 from Keycloak, retrying with new token...")
+                admin_token = get_admin_token(conf)
+                if not admin_token then
+                    return nil
+                end
+                res, err = httpc:request_uri(url, {
+                    method = "GET",
+                    headers = {
+                        ["Authorization"] = "Bearer " .. admin_token,
+                        ["Content-Type"] = "application/json"
+                    },
+                    ssl_verify = false,
+                })
+                if not res or res.status ~= 200 then
+                    core.log.error("Retry failed: ", err or (res and res.body))
+                    return nil
+                end
+            else
+                core.log.error("Failed to fetch client list from Keycloak: ", err or (res and res.body))
+                return nil
+            end
         end
         return cjson.decode(res.body)
     end
+    
     
     local function resolve_client_uuid(clients, client_id)
         for _, c in ipairs(clients) do
@@ -129,7 +150,6 @@ data:
             return core.response.exit(500, { message = "Unable to obtain admin token" })
         end
         
-        -- fetch all clients, get the uuid
         local clients = cache("keycloak-clients", conf.cache_ttl, get_all_clients, conf, admin_token)
         if not clients then
             return core.response.exit(500, { message = "Unable to fetch client list from Keycloak" })
@@ -149,7 +169,7 @@ data:
             return core.response.exit(403, { message = "Rate limit not configured for this client" })
         end
         
-        ctx.var.jwt_claim_client_id = client_uuid -- kan je blijven zetten
+        ctx.var.jwt_claim_client_id = client_uuid
         
         local limit_conf = {
             count = rate_limit,
