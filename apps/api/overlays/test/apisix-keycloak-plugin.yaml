@@ -28,7 +28,7 @@ data:
         priority = 3000,
         name = plugin_name,
         schema = schema,
-        type = 'auth'
+        type = 'rewrite'
     }
 
     local cache = core.lrucache.new({ ttl = 300, count = 1000 })
