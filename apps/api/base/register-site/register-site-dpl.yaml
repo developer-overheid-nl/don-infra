@@ -19,12 +19,12 @@ spec:
             - name: API_ENDPOINT
               valueFrom:
                 secretKeyRef:
-                  name: api-register-secret
+                  name: don-api-api-register-secret
                   key: API_ENDPOINT
             - name: API_X_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: register-site-secrets
+                  name: don-api-api-register-secret
                   key: API_X_API_KEY
             - name: API_VERSION
               value: "v1"
