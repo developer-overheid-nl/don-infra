@@ -27,7 +27,8 @@ data:
         version = 0.3,
         priority = 3000,
         name = plugin_name,
-        schema = schema
+        schema = schema,
+        type = 'auth'
     }
 
     local cache = core.lrucache.new({ ttl = 300, count = 1000 })
@@ -92,7 +93,7 @@ data:
         return core.schema.check(schema, conf)
     end
 
-    function plugin.access(conf, ctx)
+    function plugin.rewrite(conf, ctx)
         local auth_header = core.request.header(ctx, "authorization")
         if auth_header then
             core.request.set_header(ctx, "x-api-key", "")
