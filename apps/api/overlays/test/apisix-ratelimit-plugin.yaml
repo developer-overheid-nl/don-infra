@@ -152,7 +152,7 @@ data:
         if not token then
             return nil
         end
-        local _, _, payload = token:find("^([^.]+)%.([^.]+)%.([^.]+)$")
+        local _, _, header, payload = token:find("^([^.]+)%.([^.]+)%.([^.]+)$")
         if not payload then
             return nil
         end
@@ -169,6 +169,7 @@ data:
         local cjson = require("cjson.safe")
         return cjson.decode(decoded)
     end
+    
     
     function plugin.access(conf, ctx)
         local auth_header = core.request.header(ctx, "authorization")
