@@ -25,7 +25,7 @@ data:
     
     local plugin = {
         version = 0.2,
-        priority = 2000,
+        priority = -1,
         name = plugin_name,
         schema = schema
     }
@@ -164,7 +164,7 @@ data:
             return apply_ratelimit(client_uuid, conf, ctx, admin_token)
         else
             local claims = ctx.var.jwt_claims
-            core.log.warn("ctx.var.jwt_claims: ", cjson.encode(ctx.var.jwt_claims))
+            core.log.warn("ctx.var.jwt_claims: ", cjson.encode(ctx.var))
             core.log.warn("Headers: ", cjson.encode(core.request.headers(ctx)))
 
             local client_id = claims and (claims["client_id"] or claims["azp"])
