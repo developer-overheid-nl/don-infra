@@ -155,6 +155,8 @@ data:
                 return core.response.exit(status, { message = err or "JWT unauthorized" })
             end
             -- authorized
+            ctx.var.jwt_claims = jwt_payload
+            ctx.var.jwt_claim_client_id = jwt_payload.client_id or jwt_payload.azp
             core.log.warn("Bearer JWT authorized for: ", jwt_payload.client_id or jwt_payload.azp)
             return
         elseif api_key then
@@ -166,6 +168,7 @@ data:
             if not client_exists(conf, admin_token, api_key) then
                 return core.response.exit(401, { message = "Invalid API key" })
             end
+            ctx.var.jwt_claim_client_id = api_key
             core.log.warn("API Key authenticated for client_id: ", api_key)
             return
         else
@@ -176,4 +179,4 @@ data:
     
     plugin.schema = schema
     return plugin
-
+    
