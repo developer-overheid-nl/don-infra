@@ -34,7 +34,7 @@ data:
     local cache = core.lrucache.new({ ttl = 300, count = 1000 })
 
     local function get_admin_token(conf)
-        core.log.info("Getting admin token from: ", conf.token_url)
+        core.log.warn("Getting admin token from: ", conf.token_url)
         local httpc = http.new()
         local res, err = httpc:request_uri(conf.token_url, {
             method = "POST",
@@ -57,13 +57,13 @@ data:
         end
 
         local data = cjson.decode(res.body)
-        core.log.info("Received admin token")
+        core.log.warn("Received admin token")
         return data.access_token
     end
 
     local function client_exists(conf, token, client_id)
         local url = conf.admin_api_url .. "/" .. client_id
-        core.log.info("Checking if client exists at: ", url)
+        core.log.warn("Checking if client exists at: ", url)
         local httpc = http.new()
         local res, err = httpc:request_uri(url, {
             method = "GET",
@@ -85,7 +85,7 @@ data:
 
         local data = cjson.decode(res.body)
         local found = data and data.clientId ~= nil
-        core.log.info("Client ID ", client_id, " exists: ", found)
+        core.log.warn("Client ID ", client_id, " exists: ", found)
         return found
     end
 
@@ -99,11 +99,11 @@ data:
 
         if auth_header then
             core.request.set_header(ctx, "x-api-key", "")
-            core.log.info("Authorization header aanwezig, sla keycloak-api-key-auth plugin over.")
+            core.log.warn("Authorization header aanwezig, sla keycloak-api-key-auth plugin over.")
             return nil
         end
         local client_id = core.request.header(ctx, conf.header)
-        core.log.info("Authenticating request using header: ", conf.header, ", value: ", client_id)
+        core.log.warn("Authenticating request using header: ", conf.header, ", value: ", client_id)
 
         if not client_id then
             core.log.warn("Missing API key in header: ", conf.header)
@@ -120,7 +120,7 @@ data:
         end)
 
         if ok then
-            core.log.info("Client ID ", client_id, " is authorized")
+            core.log.warn("Client ID ", client_id, " is authorized")
             ctx.var.__skip_authz_keycloak = true
             return
         else
