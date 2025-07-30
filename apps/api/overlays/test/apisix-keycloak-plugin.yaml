@@ -25,7 +25,7 @@ data:
 
     local plugin = {
         version = 0.3,
-        priority = 3000,
+        priority = 1000,
         name = plugin_name,
         schema = schema,
         type = 'rewrite'
