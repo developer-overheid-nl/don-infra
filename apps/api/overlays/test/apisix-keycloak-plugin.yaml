@@ -6,10 +6,9 @@ data:
   keycloak-api-key-auth.lua: |
     local core = require("apisix.core")
     local http = require("resty.http")
-    local cjson = require("cjson")
-
-    local plugin_name = "keycloak-api-key-auth"
-
+    local cjson = require("cjson.safe")
+    local plugin_name = "keycloak-unified-auth"
+    
     local schema = {
         type = "object",
         properties = {
@@ -18,52 +17,44 @@ data:
             client_id = { type = "string" },
             client_secret = { type = "string" },
             header = { type = "string", default = "x-api-key" },
-            cache_ttl = { type = "integer", default = 300 }
+            cache_ttl = { type = "integer", default = 300 },
+            policy_enforcement_mode = { type = "string", default = "ENFORCING" }
         },
         required = { "token_url", "admin_api_url", "client_id", "client_secret" }
     }
-
+    
     local plugin = {
-        version = 0.3,
+        version = 0.4,
         priority = 3000,
         name = plugin_name,
-        schema = schema,
-        type = 'rewrite'
+        schema = schema
     }
-
+    
     local cache = core.lrucache.new({ ttl = 300, count = 1000 })
-
+    
     local function get_admin_token(conf)
-        core.log.warn("Getting admin token from: ", conf.token_url)
         local httpc = http.new()
         local res, err = httpc:request_uri(conf.token_url, {
             method = "POST",
             body = "grant_type=client_credentials&client_id=" .. conf.client_id ..
               "&client_secret=" .. conf.client_secret,
             headers = {
-                ["Content-Type"] = "application/x-www-form-urlencoded",
+                ["Content-Type"] = "application/x-www-form-urlencoded"
             },
             ssl_verify = false,
         })
-
-        if not res then
-            core.log.error("Failed to get admin token: ", err)
+        
+        if not res or res.status ~= 200 then
+            core.log.error("Failed to obtain admin token: ", err or (res and res.body))
             return nil
         end
-
-        if res.status ~= 200 then
-            core.log.error("Admin token request failed with status: ", res.status, ", body: ", res.body)
-            return nil
-        end
-
+        
         local data = cjson.decode(res.body)
-        core.log.warn("Received admin token")
-        return data.access_token
+        return data and data.access_token
     end
-
+    
     local function client_exists(conf, token, client_id)
         local url = conf.admin_api_url .. "/" .. client_id
-        core.log.warn("Checking if client exists at: ", url)
         local httpc = http.new()
         local res, err = httpc:request_uri(url, {
             method = "GET",
@@ -72,61 +63,117 @@ data:
             },
             ssl_verify = false
         })
-
-        if not res then
-            core.log.error("Keycloak query error: ", err)
+        
+        if not res or res.status ~= 200 then
+            core.log.warn("Keycloak client lookup failed: ", err or (res and res.body))
             return false
         end
-
-        if res.status ~= 200 then
-            core.log.warn("Keycloak client lookup failed: ", res.status, ", body: ", res.body)
-            return false
-        end
-
+        
         local data = cjson.decode(res.body)
-        local found = data and data.clientId ~= nil
-        core.log.warn("Client ID ", client_id, " exists: ", found)
-        return found
+        return data and data.clientId ~= nil
     end
-
+    
+    local function decode_jwt_payload(token)
+        if not token then
+            return nil
+        end
+        local _, payload = token:match("^([^.]+)%.([^.]+)%.([^.]+)$")
+        if not payload then
+            return nil
+        end
+        payload = payload:gsub("-", "+"):gsub("_", "/")
+        local rem = #payload % 4
+        if rem > 0 then
+            payload = payload .. string.rep("=", 4 - rem)
+        end
+        local decoded = ngx.decode_base64(payload)
+        if not decoded then
+            return nil
+        end
+        return cjson.decode(decoded)
+    end
+    
+    local function is_jwt_expired(jwt)
+        if not jwt or not jwt.exp then
+            return true
+        end
+        -- ngx.time() = seconds since epoch
+        return jwt.exp < ngx.time()
+    end
+    
+    local function check_jwt_permission(conf, token)
+        -- Replicates the evaluate_permissions() from authz-keycloak
+        local httpc = http.new()
+        httpc:set_timeout(conf.timeout or 3000)
+        local params = {
+            method = "POST",
+            body = ngx.encode_args({
+                grant_type = "urn:ietf:params:oauth:grant-type:uma-ticket",
+                audience = conf.client_id, -- or conf.audience
+                response_mode = "decision"
+                -- permission = {}  -- You could add permissions here if needed
+            }),
+            ssl_verify = conf.ssl_verify ~= false,
+            headers = {
+                ["Content-Type"] = "application/x-www-form-urlencoded",
+                ["Authorization"] = "Bearer " .. token
+            }
+        }
+        local res, err = httpc:request_uri(conf.token_url, params)
+        if not res then
+            core.log.error("Error in UMA ticket call: ", err)
+            return false, 500, "Keycloak request error"
+        end
+        if res.status >= 400 then
+            core.log.warn("Keycloak rejected JWT: ", res.body)
+            return false, res.status, res.body
+        end
+        return true
+    end
+    
     function plugin.check_schema(conf)
         return core.schema.check(schema, conf)
     end
-
-    function plugin.rewrite(conf, ctx)
+    
+    function plugin.access(conf, ctx)
         local auth_header = core.request.header(ctx, "authorization")
-        core.log.warn("[PLUGIN] auth_header: ", cjson.encode(auth_header))
-
-        if auth_header then
-            core.request.set_header(ctx, "x-api-key", "")
-            core.log.warn("Authorization header aanwezig, sla keycloak-api-key-auth plugin over.")
-            return nil
-        end
-        local client_id = core.request.header(ctx, conf.header)
-        core.log.warn("Authenticating request using header: ", conf.header, ", value: ", client_id)
-
-        if not client_id then
-            core.log.warn("Missing API key in header: ", conf.header)
-            return 401, { message = "Missing API key" }
-        end
-
-        local ok = cache(client_id, conf.cache_ttl, function()
-            local token = get_admin_token(conf)
-            if not token then
-                core.log.error("Failed to obtain admin token, denying access")
-                return false
+        local api_key = core.request.header(ctx, conf.header)
+        
+        if auth_header and auth_header:match("Bearer ") then
+            -- Bearer flow: check JWT
+            local jwt_token = auth_header:match("Bearer%s+(.+)")
+            local jwt_payload = decode_jwt_payload(jwt_token)
+            if not jwt_payload then
+                return core.response.exit(401, { message = "Invalid JWT token" })
             end
-            return client_exists(conf, token, client_id)
-        end)
-
-        if ok then
-            core.log.warn("Client ID ", client_id, " is authorized")
-            ctx.var.__skip_authz_keycloak = true
+            if is_jwt_expired(jwt_payload) then
+                return core.response.exit(401, { message = "JWT token expired" })
+            end
+            -- Optionally: validate permissions via UMA ticket (optional, depends on your security needs)
+            local ok, status, err = check_jwt_permission(conf, jwt_token)
+            if not ok then
+                return core.response.exit(status, { message = err or "JWT unauthorized" })
+            end
+            -- authorized
+            core.log.warn("Bearer JWT authorized for: ", jwt_payload.client_id or jwt_payload.azp)
+            return
+        elseif api_key then
+            -- API key flow
+            local admin_token = cache("admin-token", conf.cache_ttl, get_admin_token, conf)
+            if not admin_token then
+                return core.response.exit(500, { message = "Unable to obtain admin token" })
+            end
+            if not client_exists(conf, admin_token, api_key) then
+                return core.response.exit(401, { message = "Invalid API key" })
+            end
+            core.log.warn("API Key authenticated for client_id: ", api_key)
             return
         else
-            core.log.warn("Client ID ", client_id, " is not valid, access denied")
-            return 401, { message = "Invalid API key" }
+            -- Neither present
+            return core.response.exit(401, { message = "Missing credentials (Authorization or x-api-key)" })
         end
     end
+    
     plugin.schema = schema
     return plugin
+
