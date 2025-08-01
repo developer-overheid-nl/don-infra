@@ -33,7 +33,20 @@ spec:
         - hosts:
             - set-in-overlays
           secretName: api-tls
-
+    dashboard:
+      enabled: true
+      ingress:
+        enabled: true
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+        hosts:
+          - host: set-in-overlay
+            paths:
+              - /
+        tls:
+          - hosts:
+              - set-in-overlay
+            secretName: api-dashboard-tls
     apisix:
       nginx:
         customLuaSharedDicts:
