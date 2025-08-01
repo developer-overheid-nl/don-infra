@@ -61,6 +61,7 @@ spec:
         - limit-count
         - cors
         - proxy-rewrite
+        - openid-connect
       admin:
         enable_admin_ui: true
         allow:
