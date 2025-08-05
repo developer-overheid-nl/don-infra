@@ -37,7 +37,7 @@ data:
         local res, err = httpc:request_uri(conf.token_url, {
             method = "POST",
             body = "grant_type=client_credentials&client_id=" .. conf.client_id ..
-                    "&client_secret=" .. conf.client_secret,
+              "&client_secret=" .. conf.client_secret,
             headers = {
                 ["Content-Type"] = "application/x-www-form-urlencoded"
             },
@@ -173,7 +173,12 @@ data:
             return
         elseif api_key then
             local cache_key = "admin-token:" .. conf.client_id
-            local admin_token = cache(cache_key, conf.cache_ttl, get_cached_token, cache_key, conf)
+            local wrapped = cache(cache_key, nil, fetch_admin_token_with_ttl, conf)
+            if not wrapped or not wrapped.token then
+                return core.response.exit(500, { message = "Unable to obtain admin token" })
+            end
+            local admin_token = wrapped.token
+            
             if not admin_token then
                 return core.response.exit(500, { message = "Unable to obtain admin token" })
             end
