@@ -7,3 +7,4 @@ commonLabels:
 resources:
   - api-register-dpl.yaml
   - api-register-svc.yaml
+  - api-register-ing.yaml
