@@ -56,7 +56,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: api.don.apps.digilab.network/api-register
+        value: apis.don.apps.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: api.don.apps.digilab.network/api-register
+        value: apis.don.apps.digilab.network
