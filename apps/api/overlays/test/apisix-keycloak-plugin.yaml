@@ -59,12 +59,12 @@ data:
         return data.access_token, ttl
     end
     
-    local function get_cached_token(cache_key, conf)
+    local function fetch_admin_token_with_ttl(conf)
         local token, ttl = get_admin_token(conf)
-        if token and ttl then
-            core.lrucache.set(cache_key, token, ttl)
-        end
-        return token
+        return {
+            token = token,
+            ttl = ttl
+        }
     end
     
     local function client_exists(conf, token, client_id)
