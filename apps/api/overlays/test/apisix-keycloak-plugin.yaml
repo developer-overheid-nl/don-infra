@@ -131,7 +131,7 @@ data:
         end
         
         if not has_required_scopes(payload.scope, required_scopes) then
-            return false, 403, "Insufficient scopes"
+            return false, 403, "JWT does not have required scope"
         end
         
         return true
