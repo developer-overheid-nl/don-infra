@@ -5,6 +5,7 @@ resources:
   - ../../base
   - keycloak-secret.yaml
   - keycloak-realm-config.yaml
+  - docker.yaml
 
 namespace: tn-don-auth
 namePrefix: don-auth-
