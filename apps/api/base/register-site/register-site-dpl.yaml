@@ -16,11 +16,13 @@ spec:
         - name: don-register-site
           image: don-register-site
           env:
-            - name: API_ENDPOINT
+            - name: API_URL
               valueFrom:
                 secretKeyRef:
                   name: don-api-api-register-secret
-                  key: API_ENDPOINT
+                  key: API_URL
+            - name: API_ENDPOINT
+              value: "api-register"
             - name: API_X_API_KEY
               valueFrom:
                 secretKeyRef:
