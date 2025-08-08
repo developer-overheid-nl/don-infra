@@ -20,7 +20,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: don-api-api-register-secret
-                  key: API_URL
+                  key: API_ENDPOINT
             - name: API_ENDPOINT
               value: "api-register"
             - name: API_X_API_KEY
