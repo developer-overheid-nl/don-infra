@@ -1,0 +1,216 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apisix-ratelimit-plugins
+data:
+  rate-limit-by-keycloak-attribute.lua: |
+    local core = require("apisix.core")
+    local http = require("resty.http")
+    local cjson = require("cjson.safe")
+    local limit_count = require("apisix.plugins.limit-count.init")
+    local plugin_name = "rate-limit-by-keycloak-attribute"
+    
+    local schema = {
+        type = "object",
+        properties = {
+            token_url = { type = "string" },
+            admin_api_url = { type = "string" },
+            client_id = { type = "string" },
+            client_secret = { type = "string" },
+            cache_ttl = { type = "integer", default = 300 }
+        },
+        required = { "token_url", "admin_api_url", "client_id", "client_secret" }
+    }
+    
+    local plugin = {
+        version = 0.4,
+        priority = -1,
+        name = plugin_name,
+        schema = schema
+    }
+    
+    local cache = core.lrucache.new({ ttl = 300, count = 1000 })
+    
+    local function fetch_admin_token(conf)
+        local httpc = http.new()
+        local res, err = httpc:request_uri(conf.token_url, {
+            method = "POST",
+            body = "grant_type=client_credentials&client_id=" .. conf.client_id ..
+              "&client_secret=" .. conf.client_secret,
+            headers = {
+                ["Content-Type"] = "application/x-www-form-urlencoded"
+            },
+            ssl_verify = false,
+        })
+        if not res or res.status ~= 200 then
+            core.log.error("Failed to obtain admin token: ", err or (res and res.body))
+            return nil, 0
+        end
+        local data = cjson.decode(res.body)
+        if not data or not data.access_token then
+            return nil, 0
+        end
+        local token = data.access_token
+        
+        local _, _, payload = token:find("^([^.]+)%.([^.]+)%.([^.]+)$")
+        local ttl = conf.cache_ttl or 300
+        if payload then
+            payload = payload:gsub("-", "+"):gsub("_", "/")
+            local rem = #payload % 4
+            if rem > 0 then
+                payload = payload .. string.rep("=", 4 - rem)
+            end
+            local decoded = ngx.decode_base64(payload)
+            local jwt = decoded and cjson.decode(decoded)
+            if jwt and jwt.exp then
+                local now = ngx.time()
+                local seconds = jwt.exp - now - 10
+                if seconds > 0 then
+                    ttl = math.min(ttl, seconds)
+                end
+            end
+        end
+        return token, ttl
+    end
+    
+    local function get_cached_admin_token(conf)
+        local token, ttl = fetch_admin_token(conf)
+        return token, ttl
+    end
+    
+    local function get_all_clients(conf, admin_token)
+        local httpc = http.new()
+        local url = conf.admin_api_url
+        local res, err = httpc:request_uri(url, {
+            method = "GET",
+            headers = {
+                ["Authorization"] = "Bearer " .. admin_token,
+                ["Content-Type"] = "application/json"
+            },
+            ssl_verify = false,
+        })
+        if not res or res.status ~= 200 then
+            if res and res.status == 401 then
+                core.log.warn("401 from Keycloak, retrying with new token...")
+                admin_token = fetch_admin_token(conf)
+                if not admin_token then
+                    return nil
+                end
+                res, err = httpc:request_uri(url, {
+                    method = "GET",
+                    headers = {
+                        ["Authorization"] = "Bearer " .. admin_token,
+                        ["Content-Type"] = "application/json"
+                    },
+                    ssl_verify = false,
+                })
+                if not res or res.status ~= 200 then
+                    core.log.error("Retry failed: ", err or (res and res.body))
+                    return nil
+                end
+            else
+                core.log.error("Failed to fetch client list from Keycloak: ", err or (res and res.body))
+                return nil
+            end
+        end
+        return cjson.decode(res.body)
+    end
+    
+    local function resolve_client_uuid(clients, client_id)
+        -- client_id is de clientId uit Keycloak (vaak 'amsterdam-trusted-api')
+        for _, c in ipairs(clients) do
+            if c.clientId == client_id then
+                return c.id
+            end
+        end
+        return nil
+    end
+    
+    local function get_client_rate_limit(conf, client_uuid, admin_token)
+        local url = conf.admin_api_url .. "/" .. client_uuid
+        local httpc = http.new()
+        local res, err = httpc:request_uri(url, {
+            method = "GET",
+            headers = {
+                ["Authorization"] = "Bearer " .. admin_token,
+                ["Content-Type"] = "application/json"
+            },
+            ssl_verify = false,
+        })
+        
+        if not res or res.status ~= 200 then
+            core.log.warn("Failed to fetch client from Keycloak: ", err or (res and res.body))
+            return 100
+        end
+        
+        local client = cjson.decode(res.body)
+        if not client or not client.attributes or not client.attributes["rate-limit-profile"] then
+            core.log.warn("No rate-limit-profile attribute found for client_uuid: ", client_uuid)
+            return 100
+        end
+        local attr = client.attributes["rate-limit-profile"]
+        if attr == "untrusted" then
+            return 50
+        end
+        if attr == "trusted" then
+            return 500
+        end
+        if attr == "admin" then
+            return 2500
+        end
+        return 100
+    end
+    
+    function plugin.check_schema(conf)
+        return core.schema.check(schema, conf)
+    end
+    
+    function plugin.access(conf, ctx)
+        local client_id = ctx.var.jwt_claim_client_id
+        local client_uuid = ctx.var.jwt_claim_client_uuid
+        if not client_id and not client_uuid  then
+            core.log.warn("No client_id, client_uuid found in context!")
+            return core.response.exit(401, { message = "No client_id or client_uuid for rate limiting" })
+        end
+        
+        local admin_token = cache("admin-token", conf.cache_ttl, get_cached_admin_token, conf)
+        if not admin_token then
+            return core.response.exit(500, { message = "Unable to obtain admin token" })
+        end
+        if client_id then
+            local clients = cache("keycloak-clients", conf.cache_ttl, get_all_clients, conf, admin_token)
+            if not clients then
+                return core.response.exit(500, { message = "Unable to fetch client list from Keycloak" })
+            end
+            
+            client_uuid = resolve_client_uuid(clients, client_id)
+            if not client_uuid then
+                core.log.warn("Geen client UUID gevonden voor client_id: ", client_id)
+                return core.response.exit(403, { message = "Unknown client" })
+            end
+        end
+        
+        local cache_key = "ratelimit:" .. client_uuid
+        local rate_limit = cache(cache_key, conf.cache_ttl, get_client_rate_limit, conf, client_uuid, admin_token)
+        
+        if not rate_limit or rate_limit <= 0 then
+            core.log.warn("[PLUGIN] No rate limit found for client_uuid: ", client_uuid)
+            return core.response.exit(403, { message = "Rate limit not configured for this client" })
+        end
+        
+        ctx.var.jwt_claim_client_id = client_uuid
+        
+        local limit_conf = {
+            count = rate_limit,
+            time_window = 60,
+            key_type = "var",
+            key = "jwt_claim_client_id",
+            rejected_code = 429,
+            policy = "local",
+        }
+        return limit_count.rate_limit(limit_conf, ctx, "limit-count", 1)
+    end
+    
+    plugin.schema = schema
+    return plugin
+    

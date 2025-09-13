@@ -3,6 +3,53 @@ kind: Kustomization
 
 resources:
   - ../../base
+  # - apisix.yaml
+  # - api-db.yaml
+  - apisix-keycloak-plugin.yaml
+  - apisix-ratelimit-plugin.yaml
+  # - api-register.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
+
+images:
+  - name: don-api-register
+    newName: ghcr.io/developer-overheid-nl/don-api-register
+    newTag: a01db21423f54014b99c8f68a4f46321cac7beb9
+  - name: don-register-site
+    newName: ghcr.io/developer-overheid-nl/don-register-site
+    newTag: e2722f5e6c7a4ef497411484d62bb944faabf05b
+  - name: don-tools-api
+    newName: ghcr.io/developer-overheid-nl/don-api-tools
+    newTag: 0c4973c8054510e32a6c58806bb71a189d71f5ba
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: apisix
+    patch: |
+      - op: replace
+        path: /spec/values/replicaCount
+        value: 1
+      - op: replace
+        path: /spec/values/ingress/hosts/0/host
+        value: api.developer.overheid.nl
+      - op: replace
+        path: /spec/values/ingress/tls/0/hosts/0
+        value: api.developer.overheid.nl
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/hosts/0/host
+        value: api-admin.developer.overheid.nl
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
+        value: api-admin.developer.overheid.nl
+  - target:
+        kind: Ingress
+        name: register-site-ing
+    patch: |    
+      - op: replace
+        path: /spec/rules/0/host
+        value: api-register.developer.overheid.nl
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: api-register.developer.overheid.nl
