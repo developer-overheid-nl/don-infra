@@ -3,11 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
-  # - apisix.yaml
-  # - api-db.yaml
   - apisix-keycloak-plugin.yaml
   - apisix-ratelimit-plugin.yaml
-  # - api-register.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
