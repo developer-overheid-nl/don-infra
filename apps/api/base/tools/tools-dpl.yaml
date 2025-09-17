@@ -25,15 +25,36 @@ spec:
             limits:
               memory: 256Mi
               cpu: 1
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: 1337
-#            initialDelaySeconds: 3
-#            periodSeconds: 30
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: 1337
-#            initialDelaySeconds: 3
-#            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 1338
+            initialDelaySeconds: 3
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 1338
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          env:
+            - name: PDOK_REGISTER_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: tools-secret
+                  key: PDOK_REGISTER_ENDPOINT
+            - name: AUTH_TOKEN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: tools-secret
+                  key: AUTH_TOKEN_URL
+            - name: AUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: tools-secret
+                  key: AUTH_CLIENT_ID
+            - name: AUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tools-secret
+                  key: AUTH_CLIENT_SECRET
