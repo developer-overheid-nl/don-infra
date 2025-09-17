@@ -18,7 +18,7 @@ The project is divided into multiple applications:
 Connect to the Kubernetes cluster and start a port-forward for the pgAdmin service:
 
 ```bash
-kubectl port-forward svc/don-community-pgadmin-pgadmin4 8888:80 -n tn-don-auth
+kubectl port-forward svc/don-auth-pgadmin-pgadmin4 8888:80 -n tn-don-auth
 ```
 
 Open the pgAdmin UI: http://localhost:8888 (sign in with: `chart@domain.com` / `SuperSecret`)
