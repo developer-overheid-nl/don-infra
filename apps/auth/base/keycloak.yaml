@@ -58,7 +58,8 @@ spec:
       type: ClusterIP
     podAnnotations: {}
     podLabels: {}
-    extraStartupArgs: "--import-realm"
+    extraStartupArgs:
+      - --import-realm
 
     extraVolumes:
       - name: realm-config
