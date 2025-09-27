@@ -11,3 +11,18 @@ namePrefix: don-auth-
 
 commonLabels:
   app: auth
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: keycloak
+    patch: |
+      - op: replace
+        path: /spec/values/replicaCount
+        value: 1
+      - op: replace
+        path: /spec/values/ingress/hostname
+        value: auth.developer.overheid.nl
+      - op: replace
+        path: /spec/values/ingress/extraTls/0/hosts/0
+        value: auth.developer.overheid.nl
