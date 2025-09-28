@@ -7,6 +7,9 @@ resources:
   - api-db.yaml
   - api-register.yaml
   - api-secret.yaml
+  - tools-secret.yaml
+  - apisix-secret.yaml
+
 
 namespace: tn-don-api
 namePrefix: don-api-
