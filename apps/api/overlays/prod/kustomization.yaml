@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - apisix-keycloak-plugin.yaml
+  - api-db.yaml
+  - api-register.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
