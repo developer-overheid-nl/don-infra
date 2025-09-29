@@ -45,6 +45,8 @@ spec:
         value: "sslmode=require&currentSchema=don_auth"
       - name: KC_DB_SCHEMA
         value: don_auth
+      - name: KEYCLOAK_EXTRA_ARGS
+        value: "--import-realm"
     ingress:
       enabled: true
       annotations:
@@ -58,9 +60,6 @@ spec:
       type: ClusterIP
     podAnnotations: {}
     podLabels: {}
-    extraStartupArgs:
-      - --import-realm
-
     extraVolumes:
       - name: realm-config
         configMap:
