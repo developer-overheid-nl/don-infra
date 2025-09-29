@@ -3,9 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
-  # - apisix.yaml
+  - apisix.yaml
   - api-db.yaml
-  # - apisix-keycloak-plugin.yaml
+  - apisix-keycloak-plugin.yaml
   - api-register.yaml
   - tools-secret.yaml
   - api-secret.yaml
@@ -25,25 +25,25 @@ images:
     newTag: bf3da837d4b1f1da5c33f08927a2c184931fd0d1
 
 patches:
-  # - target:
-  #     kind: HelmRelease
-  #     name: apisix
-  #   patch: |
-  #     - op: replace
-  #       path: /spec/values/replicaCount
-  #       value: 1
-  #     - op: replace
-  #       path: /spec/values/ingress/hosts/0/host
-  #       value: api.don.apps.digilab.network
-  #     - op: replace
-  #       path: /spec/values/ingress/tls/0/hosts/0
-  #       value: api.don.apps.digilab.network
-  #     - op: replace
-  #       path: /spec/values/apisix/admin/ingress/hosts/0/host
-  #       value: api-admin.don.apps.digilab.network
-  #     - op: replace
-  #       path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
-  #       value: api-admin.don.apps.digilab.network
+  - target:
+      kind: HelmRelease
+      name: apisix
+    patch: |
+      - op: replace
+        path: /spec/values/replicaCount
+        value: 1
+      - op: replace
+        path: /spec/values/ingress/hosts/0/host
+        value: api.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/ingress/tls/0/hosts/0
+        value: api.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/hosts/0/host
+        value: api-admin.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
+        value: api-admin.don.apps.digilab.network
   - target:
         kind: Ingress
         name: register-site-ing

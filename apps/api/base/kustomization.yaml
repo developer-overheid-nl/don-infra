@@ -4,5 +4,5 @@ kind: Kustomization
 resources:
   - api-register/
   - register-site/
-  # - apisix/
+  - apisix/
   - tools/
