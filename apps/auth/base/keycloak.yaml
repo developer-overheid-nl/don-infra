@@ -46,7 +46,7 @@ spec:
       - name: KC_DB_SCHEMA
         value: don_auth
       - name: KEYCLOAK_EXTRA_ARGS
-        value: "--import-realm"
+        value: "--import-realm  --features=scripts"
     ingress:
       enabled: true
       annotations:
