@@ -4,11 +4,11 @@ kind: Kustomization
 resources:
   - ../../base
   - apisix.yaml
-  - api-db.yaml
   - apisix-keycloak-plugin.yaml
-  - api-register.yaml
+  - register-site.yaml
   - tools-secret.yaml
-  - api-secret.yaml
+  - api-register-secret.yaml
+  - api-register-db.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
@@ -16,13 +16,13 @@ namePrefix: don-api-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
-    newTag: ae950cef27a61155ee36e9d1e1e525746a64702f
+    newTag: 1e32df520e117427eef02bcef2b796398b7ce366
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
     newTag: 1383005d4ad50af3e57e2acecb7cace3a9d8920e
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
-    newTag: bf3da837d4b1f1da5c33f08927a2c184931fd0d1
+    newTag: 8c4068c889733ea452f964924010a3138d222226
 
 patches:
   - target:
