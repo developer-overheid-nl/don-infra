@@ -7,7 +7,7 @@ resources:
   - apisix-keycloak-plugin.yaml
   - register-site.yaml
   - tools-secret.yaml
-  # - api-register-secret.yaml
+  - api-register-secret.yaml
   - api-register-db.yaml
 
 namespace: tn-don-api
