@@ -3,12 +3,12 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - apisix.yaml
   - apisix-keycloak-plugin.yaml
-  - api-db.yaml
-  - api-register.yaml
-  - api-secret.yaml
+  - register-site.yaml
   - tools-secret.yaml
-  - apisix-secret.yaml
+  - api-register-secret.yaml
+  - api-register-db.yaml
 
 
 namespace: tn-don-api
