@@ -5,7 +5,7 @@ data:
 kind: Secret
 metadata:
     creationTimestamp: null
-    name: api-register-secret
+    name: register-site-secret
 sops:
     kms: []
     gcp_kms: []
