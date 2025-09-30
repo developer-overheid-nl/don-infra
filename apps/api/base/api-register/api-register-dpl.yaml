@@ -46,6 +46,11 @@ spec:
                 secretKeyRef:
                   name: api-register-secret
                   key: X_API_KEY
+            - name: TOOLS_API_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: TOOLS_API_ENDPOINT
           ports:
             - name: http
               containerPort: 1337
