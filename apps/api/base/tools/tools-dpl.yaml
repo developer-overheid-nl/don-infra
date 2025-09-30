@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: tools-dpl
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
@@ -20,11 +20,11 @@ spec:
               containerPort: 1338
           resources:
             requests:
-              memory: 100Mi
-              cpu: 100m
-            limits:
+              memory: 2Gi
               cpu: "2"
-              memory: "2Gi"
+            limits:
+              cpu: "4"
+              memory: "4Gi"
           # livenessProbe:
           #   httpGet:
           #     path: /
