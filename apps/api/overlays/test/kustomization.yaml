@@ -16,7 +16,7 @@ namePrefix: don-api-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
-    newTag: 92de3e32285e2e09a081a95f7f48c61763dc8466
+    newTag: 7037baf8aeca2b049820638e7e3c9a7f34d444fe
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
     newTag: 1383005d4ad50af3e57e2acecb7cace3a9d8920e
