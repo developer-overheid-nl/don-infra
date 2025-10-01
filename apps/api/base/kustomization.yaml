@@ -3,6 +3,6 @@ kind: Kustomization
 
 resources:
   - api-register/
-  - register-site/
+  # - register-site/
   - apisix/
   - tools/
