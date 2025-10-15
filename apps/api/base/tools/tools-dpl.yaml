@@ -43,11 +43,16 @@ spec:
                 secretKeyRef:
                   name: tools-secret
                   key: PDOK_REGISTER_ENDPOINT
-            - name: AUTH_TOKEN_URL
+            - name: KEYCLOAK_BASE_URL
               valueFrom:
                 secretKeyRef:
                   name: tools-secret
-                  key: AUTH_TOKEN_URL
+                  key: KEYCLOAK_BASE_URL
+            - name: KEYCLOAK_REALM
+              valueFrom:
+                secretKeyRef:
+                  name: tools-secret
+                  key: KEYCLOAK_REALM
             - name: AUTH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
