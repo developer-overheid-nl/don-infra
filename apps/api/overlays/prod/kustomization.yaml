@@ -51,7 +51,7 @@ patches:
     patch: |    
       - op: replace
         path: /spec/rules/0/host
-        value: api-register.developer.overheid.nl
+        value: apis.developer.overheid.nl
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: api-register.developer.overheid.nl
+        value: apis.developer.overheid.nl
