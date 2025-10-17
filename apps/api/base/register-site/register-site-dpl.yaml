@@ -20,9 +20,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: don-api-register-site-secret
-                  key: API_ENDPOINT
+                  key: API_URL
             - name: API_ENDPOINT
-              value: "api-register"
+              alueFrom:
+                secretKeyRef:
+                  name: don-api-register-site-secret
+                  key: API_ENDPOINT
             - name: API_X_API_KEY
               valueFrom:
                 secretKeyRef:
