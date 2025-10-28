@@ -22,7 +22,7 @@ images:
     newTag: e7d5f9c090f1e51affbb9ccfb989fbe635a5e07b
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
-    newTag: f985b88873f2449bfdea439a0de04adb42a500c8
+    newTag: 958b06eafb76b95db6e0bdfb2fb76815661b5fcd
 
 patches:
   - target:
