@@ -13,6 +13,9 @@ spec:
   template:
     spec:
       containers:
+        - name: backfill
+          image: don-api-register
+          command: ["./main", "backfill-oas"]
         - name: don-api-register
           image: don-api-register
           env:
