@@ -9,7 +9,7 @@ data:
       "start_urls": [
         "https://developer.overheid.nl/kennisbank/",
         "https://developer.overheid.nl/communities/",
-        "https://developer.overheid.nl/blog/",
+        "https://developer.overheid.nl/blog/"
       ],
       "sitemap_urls": ["https://developer.overheid.nl/sitemap.xml"],
       "selectors": {
