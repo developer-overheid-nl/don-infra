@@ -51,6 +51,26 @@ spec:
                 secretKeyRef:
                   name: api-register-secret
                   key: TOOLS_API_ENDPOINT
+            - name: API_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: API_ENDPOINT
+            - name: TYPESENSE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: TYPESENSE_API_KEY
+            - name: TYPESENSE_COLLECTION
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: TYPESENSE_COLLECTION
+            - name: TYPESENSE_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: TYPESENSE_ENDPOINT
           ports:
             - name: http
               containerPort: 1337
