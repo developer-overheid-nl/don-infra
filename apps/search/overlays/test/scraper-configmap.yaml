@@ -10,8 +10,6 @@ data:
         "https://developer.overheid.nl/kennisbank/",
         "https://developer.overheid.nl/communities/",
         "https://developer.overheid.nl/blog/",
-        "https://apis.developer.overheid.nl/apis",
-        "https://oss.developer.overheid.nl/repositories"
       ],
       "sitemap_urls": ["https://developer.overheid.nl/sitemap.xml"],
       "selectors": {
