@@ -15,7 +15,7 @@ commonLabels:
 images:
   - name: typesense
     newName: typesense/typesense
-    newTag: "28.0"
+    newTag: "29.0"
   - name: docsearch-scraper
     newName: typesense/docsearch-scraper
     newTag: "0.11.0"
