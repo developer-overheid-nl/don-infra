@@ -79,21 +79,3 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA don_auth TO don_aut
 ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
 ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
 ```
-
-
-kubectl create secret generic api-register-secret \
---from-literal='TOOLS_API_ENDPOINT=https://api.don.apps.digilab.network/tools/v1/' \
---from-literal='X_API_KEY=***REMOVED***' \
---from-literal='TYPESENSE_ENDPOINT=https://search.don.apps.digilab.network' \
---from-literal='API_ENDPOINT=https://api-register.don.apps.digilab.network' \
---from-literal='TYPESENSE_API_KEY=***REMOVED***' \
---from-literal='TYPESENSE_COLLECTION=api_register' \
---dry-run=client \
--o yaml > api-register-secret.yaml
-
-sops \
-  --encrypt \
-  --encrypted-regex '^(data|stringData)$' \
-  --age age17uzpswwz9g0frdfy7md5kvlvkcw6pkd9k3k2cad6mfe0zdvcm9pscyzd7v \
-  --in-place \
- api-register-secret.yaml
