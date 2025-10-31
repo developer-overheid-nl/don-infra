@@ -1,0 +1,298 @@
+openapi: 3.0.1
+info:
+  title: Tools API v1
+  description: API van het Tools (apis.developer.overheid.nl)
+  contact:
+    name: Team developer.overheid.nl
+    url: 'https://github.com/developer-overheid-nl/don-tools-api/issues'
+    email: developer.overheid@geonovum.nl
+  version: 1.0.0
+servers:
+  - url: 'https://api.developer.overheid.nl/tools/v1'
+    description: Production
+  - url: 'https://api-register.don.apps.digilab.network/tools/v1'
+    description: Test
+paths:
+  /v1/bruno/convert:
+    get:
+      tags:
+        - Tools
+      summary: Maak Bruno-collectie
+      description: >-
+        Converteert OpenAPI naar Bruno ZIP. Gebruik query parameter 'oasUrl' of
+        POST body met OAS.
+      operationId: convertOpenAPIToBruno
+      parameters:
+        - name: oasUrl
+          in: query
+          schema:
+            type: string
+            example: 'https://example.com/openapi.yaml'
+      responses:
+        '200':
+          description: OK
+          headers:
+            API-Version:
+              description: De API-versie van de response
+              schema:
+                type: string
+        '404':
+          description: Not Found
+      security:
+        - apiKey: []
+          clientCredentials:
+            - 'tools:read'
+    post:
+      tags:
+        - Tools
+      summary: Maak Bruno-collectie (POST)
+      description: >-
+        Converteert OpenAPI naar Bruno ZIP. Body bevat het volledige OpenAPI
+        document (JSON of YAML).
+      operationId: convertOpenAPIToBrunoPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertOpenAPIToBrunoPostInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            API-Version:
+              description: De API-versie van de response
+              schema:
+                type: string
+        '404':
+          description: Not Found
+      security:
+        - apiKey: []
+          clientCredentials:
+            - 'tools:read'
+  /v1/lint:
+    get:
+      tags:
+        - Tools
+      summary: Lint OpenAPI
+      description: >-
+        Lint een OpenAPI specificatie met de DON ADR ruleset. Gebruik query
+        parameter 'oasUrl'.
+      operationId: lintOpenAPI
+      parameters:
+        - name: oasUrl
+          in: query
+          schema:
+            type: string
+            example: 'https://example.com/openapi.yaml'
+      responses:
+        '200':
+          description: OK
+          headers:
+            API-Version:
+              description: De API-versie van de response
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelsLintResult'
+        '404':
+          description: Not Found
+      security:
+        - apiKey: []
+          clientCredentials:
+            - 'tools:read'
+    post:
+      tags:
+        - Tools
+      summary: Lint OpenAPI (POST)
+      description: >-
+        Lint een OpenAPI specificatie met de DON ADR ruleset. Body bevat het
+        volledige OpenAPI document (JSON of YAML).
+      operationId: lintOpenAPIPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LintOpenAPIPostInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            API-Version:
+              description: De API-versie van de response
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelsLintResult'
+        '404':
+          description: Not Found
+      security:
+        - apiKey: []
+          clientCredentials:
+            - 'tools:read'
+  /v1/postman/convert:
+    get:
+      tags:
+        - Tools
+      summary: Maak Postman-collectie
+      description: >-
+        Converteert OpenAPI naar Postman Collection JSON. Gebruik query
+        parameter 'oasUrl' of POST body met OAS.
+      operationId: convertOpenAPIToPostman
+      parameters:
+        - name: oasUrl
+          in: query
+          schema:
+            type: string
+            example: 'https://example.com/openapi.yaml'
+      responses:
+        '200':
+          description: OK
+          headers:
+            API-Version:
+              description: De API-versie van de response
+              schema:
+                type: string
+        '404':
+          description: Not Found
+      security:
+        - apiKey: []
+          clientCredentials:
+            - 'tools:read'
+    post:
+      tags:
+        - Tools
+      summary: Maak Postman-collectie (POST)
+      description: >-
+        Converteert OpenAPI naar Postman Collection JSON. Body bevat het
+        volledige OpenAPI document (JSON of YAML).
+      operationId: convertOpenAPIToPostmanPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertOpenAPIToPostmanPostInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            API-Version:
+              description: De API-versie van de response
+              schema:
+                type: string
+        '404':
+          description: Not Found
+      security:
+        - apiKey: []
+          clientCredentials:
+            - 'tools:read'
+components:
+  schemas:
+    ConvertOpenAPIToBrunoPostInput:
+      type: object
+      properties:
+        '':
+          type: array
+          items:
+            type: integer
+            format: int32
+        oas:
+          type: array
+          items:
+            type: integer
+            format: int32
+    ConvertOpenAPIToPostmanPostInput:
+      type: object
+      properties:
+        '':
+          type: array
+          items:
+            type: integer
+            format: int32
+        oas:
+          type: array
+          items:
+            type: integer
+            format: int32
+    LintOpenAPIPostInput:
+      type: object
+      properties:
+        '':
+          type: array
+          items:
+            type: integer
+            format: int32
+        oas:
+          type: array
+          items:
+            type: integer
+            format: int32
+    ModelsLintMessage:
+      type: object
+      properties:
+        code:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        id:
+          type: string
+        infos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelsLintMessageInfo'
+        severity:
+          type: string
+    ModelsLintMessageInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        lintMessageId:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+    ModelsLintResult:
+      type: object
+      properties:
+        apiId:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        failures:
+          type: integer
+          format: int32
+        id:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelsLintMessage'
+        score:
+          type: integer
+          format: int32
+        successes:
+          type: boolean
+        warnings:
+          type: integer
+          format: int32
+  responses:
+    '404':
+      $ref: 'https://static.developer.overheid.nl/adr/components.yaml#/responses/404'
+  headers:
+    API-Version:
+      description: De API-versie van de response
+      schema:
+        type: string
+        example: 1.0.0
+tags:
+  - name: API v1
+    description: Tools API V1 routes
+  - name: Tools
+    description: Conversies en hulpmiddelen

@@ -5,4 +5,4 @@ commonLabels:
   app: apisix
   
 resources:
-  - apisix.yaml
+  # - apisix.yaml

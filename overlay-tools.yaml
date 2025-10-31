@@ -1,0 +1,508 @@
+overlay: 1.0.0
+info:
+  title: APISIX overlay voor DON Tools API v1
+  version: 0.1.0
+
+actions:
+  # /v1/bruno/convert (GET)
+  - target: $.paths["/v1/bruno/convert"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /v1/bruno/convert
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 300
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          scope_required:
+            - tools:read
+
+  # /v1/bruno/convert (POST)
+  - target: $.paths["/v1/bruno/convert"].post
+    update:
+      x-adc-status: 1
+      x-adc-uri: /v1/bruno/convert
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 300
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          scope_required:
+            - tools:read
+
+  # /v1/lint (GET)
+  - target: $.paths["/v1/lint"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /v1/lint
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 300
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          scope_required:
+            - tools:read
+
+  # /v1/lint (POST)
+  - target: $.paths["/v1/lint"].post
+    update:
+      x-adc-status: 1
+      x-adc-uri: /v1/lint
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 300
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          scope_required:
+            - tools:read
+
+  # /v1/postman/convert (GET)
+  - target: $.paths["/v1/postman/convert"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /v1/postman/convert
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 300
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          scope_required:
+            - tools:read
+
+  # /v1/postman/convert (POST)
+  - target: $.paths["/v1/postman/convert"].post
+    update:
+      x-adc-status: 1
+      x-adc-uri: /v1/postman/convert
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 300
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: https://auth.don.apps.digilab.network/realms/don/protocol/openid-connect/token
+          client_secret: ***REMOVED***
+          client_id: don-admin-client
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: https://auth.don.apps.digilab.network/admin/realms/don/clients/
+          scope_required:
+            - tools:read
+  - target: $.paths["/apis"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /apis
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 300
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          scope_required:
+            - apis:read
+  - target: $.paths["/apis"].post
+    update:
+      x-adc-status: 1
+      x-adc-uri: /apis
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 300
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          scope_required:
+            - apis:write
+  - target: $.paths["/apis/{id}"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /apis/{id}
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 300
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          scope_required:
+            - apis:read
+  - target: $.paths["/apis/{id}"].put
+    update:
+      x-adc-status: 1
+      x-adc-uri: /apis/{id}
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 300
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          scope_required:
+            - apis:write
+  - target: $.paths["/organisations"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /organisations
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 300
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          scope_required:
+            - organisations:read
+  - target: $.paths["/organisations"].post
+    update:
+      x-adc-status: 1
+      x-adc-uri: /organisations
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        rate-limit-by-keycloak-attribute:
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 300
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
+        keycloak-api-key-auth:
+          token_url: ${keycloak_url}/realms/${realm_name}/protocol/openid-connect/token
+          client_secret: ${client_secret}
+          client_id: ${client_id}
+          cache_ttl: 120
+          policy_enforcement_mode: ENFORCING
+          header: x-api-key
+          admin_api_url: ${keycloak_url}/admin/realms/${realm_name}/clients/
+          scope_required:
+            - organisations:write
+  - target: $.paths["/openapi.json"].get
+    update:
+      x-adc-status: 1
+      x-adc-uri: /openapi.json
+      x-adc-upstream:
+        scheme: http
+        nodes:
+          ${endpoint:port}: 1
+        hash_on: vars
+        type: roundrobin
+        pass_host: pass
+      x-adc-plugins:
+        proxy-rewrite:
+          regex_uri:
+            - ^/(.*)
+            - /$1
+          use_real_request_uri_unsafe: false
+        cors:
+          allow_origins: '*'
+          allow_credential: false
+          allow_headers: Authorization,x-api-key,Content-Type
+          allow_methods: '*'
+          max_age: 5
