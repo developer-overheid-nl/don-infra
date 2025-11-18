@@ -21,6 +21,14 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
+    image:
+      registry: docker.io
+      repository: bitnamilegacy/keycloak
+      tag: 26.3.0-debian-12-r0
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      debug: false
     proxyHeaders: forwarded
     replicaCount: 1
     production: false
