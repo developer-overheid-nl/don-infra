@@ -21,6 +21,9 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
+        path: /spec/values/image/repository
+        value: bitnamilegacy/keycloak
+      - op: replace
         path: /spec/values/ingress/hostname
         value: auth.don.apps.digilab.network
       - op: replace

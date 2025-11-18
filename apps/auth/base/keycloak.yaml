@@ -21,8 +21,6 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
-    image:
-      repository: bitnamilegacy/keycloak
     proxyHeaders: forwarded
     replicaCount: 1
     production: false
