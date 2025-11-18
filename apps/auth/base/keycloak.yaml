@@ -21,6 +21,9 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
+    global:
+      security:
+        allowInsecureImages: true
     image:
       registry: docker.io
       repository: bitnamilegacy/keycloak
@@ -29,6 +32,7 @@ spec:
       pullPolicy: IfNotPresent
       pullSecrets: []
       debug: false
+
     proxyHeaders: forwarded
     replicaCount: 1
     production: false
