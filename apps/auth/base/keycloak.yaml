@@ -21,6 +21,8 @@ spec:
         kind: HelmRepository
         name: don-auth-repo-keycloak
   values:
+    image:
+      repository: bitnamilegacy/keycloak
     proxyHeaders: forwarded
     replicaCount: 1
     production: false
@@ -31,7 +33,7 @@ spec:
       enabled: false
       auth:
         password: ignored-but-required
-      
+
     externalDatabase:
       password: ignored-but-required
       existingSecret: don-auth-keycloak-login-secret
