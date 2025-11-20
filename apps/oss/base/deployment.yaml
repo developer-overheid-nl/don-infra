@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    spec:
+      containers:
+        - name: don-oss-register
+          image: don-oss-register
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: oss-db
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: oss-db
+                  key: DB_PASSWORD
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: oss-db
+                  key: DB_HOSTNAME
+            - name: DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: oss-db
+                  key: DB_DBNAME
+            - name: DB_SCHEMA
+              valueFrom:
+                secretKeyRef:
+                  name: oss-db
+                  key: DB_SCHEMA
+          ports:
+            - name: http
+              containerPort: 1337
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: 1337
+#            initialDelaySeconds: 3
+#            periodSeconds: 30
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: 1337
+#            initialDelaySeconds: 3
+#            periodSeconds: 5

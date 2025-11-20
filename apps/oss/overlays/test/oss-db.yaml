@@ -1,0 +1,31 @@
+apiVersion: v1
+data:
+    DB_DBNAME: ENC[AES256_GCM,data:+7d0Hw==,iv:wRfK0RdGYi4lmXwiXw00Cc5U0zcZG+NYy9pBIu9BJHU=,tag:6AXLfA7nW/nkWNajYkVOlw==,type:str]
+    DB_HOSTNAME: ENC[AES256_GCM,data:8c/HQIJbu5/dBKmYypk8W+K/wuAC1UBnvs/6GfIbkB/oQmRmTkW6XcBUkdN8P7KR2O/xWSBEEcQuglH6Rskfik+DdNSo1SbvnnHxBx6nWvxrPrrQ,iv:fRWZtWIABOUiqIDQ6MNjwdw5vNhGnJLNk13P0zGtuNE=,tag:bdp3FYui9Sh+j3XsS+N9Dg==,type:str]
+    DB_PASSWORD: ENC[AES256_GCM,data:lnw1D+u9iaGVhXK4O32tbMGPjn4A213UCuh6xw5OTU8tYNdK,iv:Yh/rsSRP+PAGhubf4zd6rd1Q3XTQj8SXDZVtE8or+uw=,tag:TvA0FvXN+YqypgNF9V/H4Q==,type:str]
+    DB_SCHEMA: ENC[AES256_GCM,data:6iLIxtT9/BT3e+QA,iv:AsKC+074MIf1epMOCMoDtEK0hME5i55gebpTP7X/ci8=,tag:sLytBHzZ6OEr7Pry8bCeEw==,type:str]
+    DB_USERNAME: ENC[AES256_GCM,data:bcXfZ8m7itYsMCc/,iv:FYReYmG8HeNXIHt9B2AWr53ZjZyeYdrudxKl8m+aY8k=,tag:4qG+GRUCKqNzXajpB2dvVw==,type:str]
+kind: Secret
+metadata:
+    creationTimestamp: null
+    name: oss-db
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1ku5kl8lmkhfe6g0ednujus3tjwn2hc2msjk0dq70u40sc8u0cgzqgp34uy
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjM1NDdmJoUUREc1J2cDBJ
+            TkhDVzBOT3hjcGRTMzNQNklpMFNFZEFwSHowCnp2NU9XSkhwRUd2blBKYXFOS3U5
+            MlNhY3hsV29EYm9FL0ViajJ2NmdqOXcKLS0tIGNVZmo0cHgzM2RUdklseU85d2hJ
+            dUs3OVpMTlI3N2h1Nm03NC92SnFIT0kKshS5SxzejNrqMGmSSoqTTI6uTIBc9iTC
+            i4aaJYAotXXGd+v67bM0y/3zeTsrKqsSwSTP0l0QUdBKl4Wx6P8HBg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-11-20T10:07:19Z"
+    mac: ENC[AES256_GCM,data:YlP+1uTKNyaYBOTG4KuTzsB9GFS9RkON/E9CwVNTaHBxOlanwYOSCCEc7HyA+K3zx0jIK4D0JDW1rlcO7pYOO8kG2OTEN3gO0gRO5fuyr7nX1NXjtrTtJEx0fXg/VrDXoofEf+EruS0+rbLOgTQ45DRwWko/EH84KXmPtHwnfzw=,iv:gKzeta/HQczWJwl7hkaDWaLg9cLDF6//dqk0z16fatQ=,tag:Ljd9KhC4mn5ycwHJF6RLQA==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.4

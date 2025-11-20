@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+namespace: tn-don-analytics
+namePrefix: don-analytics-
+
+commonLabels:
+  app: analytics
+
+patches: []
