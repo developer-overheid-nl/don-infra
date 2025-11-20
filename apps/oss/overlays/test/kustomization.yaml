@@ -14,6 +14,6 @@ commonLabels:
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
-    newTag: 5ddecde38cc42312b2b79ee4857f8e33b35f20f4
+    newTag: a83a9876b23923c36ff76667505ede76ed452730
 
 patches: []
