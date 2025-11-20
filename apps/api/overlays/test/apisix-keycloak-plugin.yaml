@@ -169,7 +169,9 @@ data:
             if not has_required_scopes("apis:read", required_scopes) then
                 if not has_required_scopes("organisations:read", required_scopes) then
                     if not has_required_scopes("tools", required_scopes) then
-                        return core.response.exit(403, { message = "API key does not have required scope" })
+                        if not has_required_scopes("oss:read", required_scopes) then
+                            return core.response.exit(403, { message = "API key does not have required scope" })
+                        end
                     end 
                 end
             end
