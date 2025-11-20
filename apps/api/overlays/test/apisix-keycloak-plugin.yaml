@@ -145,8 +145,11 @@ data:
         local auth_header = core.request.header(ctx, "authorization")
         local api_key = core.request.header(ctx, conf.header)
         
-        if auth_header and auth_header:match("Bearer ") then
-            local jwt_token = auth_header:match("Bearer%s+(.+)")
+        if auth_header then
+            local jwt_token = auth_header:match("^[Bb]earer%s+(.+)$")
+            if not jwt_token then
+                return core.response.exit(401, { message = "Invalid Authorization header format" })
+            end
             local ok, status, err = check_jwt_permission(conf, jwt_token, conf.scope_required)
             if not ok then
                 return core.response.exit(status, { message = err or "Unauthorized" })
