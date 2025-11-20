@@ -35,6 +35,8 @@ All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-o
 - frontend: `age17n4n96sqw3rx7a5exuqascs69h8d3wux0746xvldae3x7kv4zu8q5m75pe`
 - search: `age1vg75nw5vk2vndzzud8sdvc5w9wtjz0ztejxrsuyg3dzjlpj9n5es94kzzn`
 - static: `age12k87tkhgdr7s309k6rcpss9x8df62tw9v0haxswtzd2mwr6jwacs858ac2`
+- analytics: `age1zy02fydy9s4e5x2lzut7red9rdk4njazet39htmskj63wqzxvuwqjw0jt0`
+- oss: `age1ku5kl8lmkhfe6g0ednujus3tjwn2hc2msjk0dq70u40sc8u0cgzqgp34uy`
 
 ### Production
 
@@ -43,6 +45,8 @@ All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-o
 - frontend: `age1gpl0td68sdh0u5q5dpcdh7dh3w5uzj9n0w3j6028hv0f5hqr2ysqq9mns0`
 - search: `age16g3k56fseufjxsh3pmt07cg7llesz2crzaw6nq7l49j9gtrv24jqu4epuk`
 - static: `age10jzjgvj847xvaqhknc2j0dreuutrr9tjmkek9xgse6h7nxlpdshsmf2l8q`
+- analytics: `age1hfarccnhjakg4x8e6dsgmq8x4736f5vegavp3qtyp37xvs7fccvsqa0qsf`
+- oss: `age1g59lru89pjncetzrnlr23cc4vq6rct5npsc9xcf89v26slm6g5msh579ue`
 
 ## Creating secrets
 
