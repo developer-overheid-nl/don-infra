@@ -24,8 +24,9 @@ data:
                 items = { type = "string" },
                 default = {}
             }
+            keycloak_authz = authz_keycloak.schema,
         },
-        required = { "token_url", "admin_api_url", "client_id", "client_secret" }
+        required = { "token_url", "admin_api_url", "client_id", "client_secret", "keycloak_authz" },
     }
     
     local plugin = {
@@ -136,9 +137,27 @@ data:
         
         return true
     end
+
+    local function authorize_jwt_with_keycloak(conf, ctx)
+        local status, body = authz_keycloak.access(conf.keycloak_authz, ctx)
+        if status then
+            return false, status, body
+        end
+        return true
+    end
     
     function plugin.check_schema(conf)
-        return core.schema.check(schema, conf)
+        local ok, err = core.schema.check(schema, conf)
+        if not ok then
+            return ok, err
+        end
+
+        -- extra: valideren dat de embedded keycloak_authz ook klopt
+        if conf.keycloak_authz then
+            return authz_keycloak.check_schema(conf.keycloak_authz)
+        end
+
+        return true
     end
     
     function plugin.access(conf, ctx)
@@ -146,17 +165,15 @@ data:
         local api_key = core.request.header(ctx, conf.header)
         
         if auth_header then
-            local jwt_token = auth_header:match("^[Bb]earer%s+(.+)$")
-            if not jwt_token then
-                return core.response.exit(401, { message = "Invalid Authorization header format" })
-            end
-            local ok, status, err = check_jwt_permission(conf, jwt_token, conf.scope_required)
+            local ok, status, body = authorize_jwt_with_keycloak(conf, ctx)
             if not ok then
-                return core.response.exit(status, { message = err or "Unauthorized" })
+                return core.response.exit(status, body or { message = "Unauthorized" })
             end
+            local jwt_token = auth_header:match("^[Bb]earer%s+(.+)$") or auth_header
             local jwt_payload = decode_jwt_payload(jwt_token)
-            ctx.var.jwt_claims = jwt_payload
-            ctx.var.jwt_claim_client_id = jwt_payload.client_id or jwt_payload.azp
+            ctx.var.jwt_claims = jwt_payload or {}
+            ctx.var.jwt_claim_client_id = jwt_payload and (jwt_payload.client_id or jwt_payload.azp)
+
             return
         elseif api_key then
             local admin_token = get_admin_token(conf)
