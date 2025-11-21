@@ -23,7 +23,7 @@ data:
                 type = "array",
                 items = { type = "string" },
                 default = {}
-            }
+            },
             keycloak_authz = authz_keycloak.schema,
         },
         required = { "token_url", "admin_api_url", "client_id", "client_secret", "keycloak_authz" },
