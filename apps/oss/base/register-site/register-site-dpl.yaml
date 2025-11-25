@@ -13,8 +13,8 @@ spec:
   template:
     spec:
       containers:
-        - name: don-register-site
-          image: don-register-site
+        - name: don-register-oss-site
+          image: don-register-oss-site
           env:
             - name: OSS_URL
               valueFrom:
