@@ -8,7 +8,6 @@ data:
     local http = require("resty.http")
     local cjson = require("cjson.safe")
     local plugin_name = "keycloak-unified-auth"
-    local authz_keycloak = require("apisix.plugins.authz-keycloak")
     
     local schema = {
         type = "object",
@@ -24,10 +23,9 @@ data:
                 type = "array",
                 items = { type = "string" },
                 default = {}
-            },
-            keycloak_authz = authz_keycloak.schema,
+            }
         },
-        required = { "token_url", "admin_api_url", "client_id", "client_secret" },
+        required = { "token_url", "admin_api_url", "client_id", "client_secret" }
     }
     
     local plugin = {
@@ -138,27 +136,9 @@ data:
         
         return true
     end
-
-    local function authorize_jwt_with_keycloak(conf, ctx)
-        local status, body = authz_keycloak.access(conf.keycloak_authz, ctx)
-        if status then
-            return false, status, body
-        end
-        return true
-    end
     
     function plugin.check_schema(conf)
-        local ok, err = core.schema.check(schema, conf)
-        if not ok then
-            return ok, err
-        end
-
-        -- extra: valideren dat de embedded keycloak_authz ook klopt
-        if conf.keycloak_authz then
-            return authz_keycloak.check_schema(conf.keycloak_authz)
-        end
-
-        return true
+        return core.schema.check(schema, conf)
     end
     
     function plugin.access(conf, ctx)
@@ -166,15 +146,17 @@ data:
         local api_key = core.request.header(ctx, conf.header)
         
         if auth_header then
-            local ok, status, body = authorize_jwt_with_keycloak(conf, ctx)
-            if not ok then
-                return core.response.exit(status, body or { message = "Unauthorized" })
+            local jwt_token = auth_header:match("^[Bb]earer%s+(.+)$")
+            if not jwt_token then
+                return core.response.exit(401, { message = "Invalid Authorization header format" })
             end
-            local jwt_token = auth_header:match("^[Bb]earer%s+(.+)$") or auth_header
+            local ok, status, err = check_jwt_permission(conf, jwt_token, conf.scope_required)
+            if not ok then
+                return core.response.exit(status, { message = err or "Unauthorized" })
+            end
             local jwt_payload = decode_jwt_payload(jwt_token)
-            ctx.var.jwt_claims = jwt_payload or {}
-            ctx.var.jwt_claim_client_id = jwt_payload and (jwt_payload.client_id or jwt_payload.azp)
-
+            ctx.var.jwt_claims = jwt_payload
+            ctx.var.jwt_claim_client_id = jwt_payload.client_id or jwt_payload.azp
             return
         elseif api_key then
             local admin_token = get_admin_token(conf)
