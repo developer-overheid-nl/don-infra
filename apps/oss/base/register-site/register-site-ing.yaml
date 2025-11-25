@@ -21,4 +21,4 @@ spec:
   tls:
     - hosts:
         - set-in-overlay
-      secretName: oss-register-tls
+      secretName: register-site-tls
