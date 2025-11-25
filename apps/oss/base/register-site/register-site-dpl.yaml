@@ -15,7 +15,6 @@ spec:
       containers:
         - name: don-register-oss-site
           image: don-register-oss-site
-          imagePullPolicy: Always
           env:
             - name: API_URL
               valueFrom:
