@@ -18,7 +18,7 @@ images:
     newTag: a83a9876b23923c36ff76667505ede76ed452730
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
-    newTag: 92facd6116e29ee6e7bc39d86191f904f5d54b2f
+    newTag: latest
 
 patches:
   - target:
