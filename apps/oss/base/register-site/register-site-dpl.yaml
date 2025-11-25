@@ -16,12 +16,12 @@ spec:
         - name: don-register-oss-site
           image: don-register-oss-site
           env:
-            - name: OSS_URL
+            - name: API_URL
               valueFrom:
                 secretKeyRef:
                   name: register-site-secret
-                  key: OSS_URL
-            - name: OSS_ENDPOINT
+                  key: API_URL
+            - name: API_ENDPOINT
               value: "oss-register"
             - name: API_X_API_KEY
               valueFrom:
