@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app: oss-register
+
+resources:
+  - oss-register-dpl.yaml
+  - oss-register-svc.yaml

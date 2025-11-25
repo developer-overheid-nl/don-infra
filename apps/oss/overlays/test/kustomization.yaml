@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - oss-db.yaml
+  - resgiter-site-secret.yaml
 
 namespace: tn-don-oss
 namePrefix: don-oss-
@@ -15,5 +16,8 @@ images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
     newTag: a83a9876b23923c36ff76667505ede76ed452730
+  - name: don-register-oss-site
+    newName: ghcr.io/developer-overheid-nl/don-register-oss-site
+    newTag: 18f4b95b17616878b3a07dc725d5641517bf1f56
 
 patches: []

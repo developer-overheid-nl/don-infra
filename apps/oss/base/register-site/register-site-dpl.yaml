@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: register-site-dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    spec:
+      containers:
+        - name: don-register-site
+          image: don-register-site
+          env:
+            - name: OSS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: register-site-secret
+                  key: OSS_URL
+            - name: OSS_ENDPOINT
+              value: "oss-register"
+            - name: API_X_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: register-site-secret
+                  key: API_X_API_KEY
+            - name: API_VERSION
+              value: "v1"
+          ports:
+            - name: http
+              containerPort: 4321
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 1
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 4321
+            initialDelaySeconds: 3
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 4321
+            initialDelaySeconds: 3
+            periodSeconds: 5
