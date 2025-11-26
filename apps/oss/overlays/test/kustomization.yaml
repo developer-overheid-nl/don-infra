@@ -15,19 +15,19 @@ commonLabels:
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
-    newTag: a83a9876b23923c36ff76667505ede76ed452730
-  # - name: don-register-oss-site
-  #   newName: ghcr.io/developer-overheid-nl/don-register-oss-site
-  #   newTag: latest
+    newTag: d2dd8a295797237378b70a06d22e8daceb614d77
+  - name: don-register-oss-site
+    newName: ghcr.io/developer-overheid-nl/don-register-oss-site
+    newTag: 92facd6116e29ee6e7bc39d86191f904f5d54b2f
 
-patches: []
-  # - target:
-  #       kind: Ingress
-  #       name: oss-register-site-ing
-  #   patch: |    
-  #     - op: replace
-  #       path: /spec/rules/0/host
-  #       value: oss-register.don.apps.digilab.network
-  #     - op: replace
-  #       path: /spec/tls/0/hosts/0
-  #       value: oss-register.don.apps.digilab.network
+patches:
+  - target:
+        kind: Ingress
+        name: oss-register-site-ing
+    patch: |    
+      - op: replace
+        path: /spec/rules/0/host
+        value: oss-register.don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: oss-register.don.apps.digilab.network
