@@ -50,7 +50,6 @@ spec:
               cpu: 100m
             limits:
               cpu: "2"
-              cpu: 2
           livenessProbe:
             httpGet:
               path: /v1/openapi.json
