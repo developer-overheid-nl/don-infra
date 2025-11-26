@@ -50,16 +50,16 @@ spec:
               cpu: 100m
             limits:
               cpu: "2"
-              memory: "2Gi"
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: 1337
-#            initialDelaySeconds: 3
-#            periodSeconds: 30
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: 1337
-#            initialDelaySeconds: 3
-#            periodSeconds: 5
+              cpu: 2
+          livenessProbe:
+            httpGet:
+              path: /v1/openapi.json
+              port: 1337
+            initialDelaySeconds: 3
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /v1/openapi.json
+              port: 1337
+            initialDelaySeconds: 3
+            periodSeconds: 5

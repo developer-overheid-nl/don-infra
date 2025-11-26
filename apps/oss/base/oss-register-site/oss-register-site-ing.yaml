@@ -15,7 +15,7 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: oss-register-site-svc
+                name: register-oss-site-svc
                 port:
                   number: 4321
   tls:
