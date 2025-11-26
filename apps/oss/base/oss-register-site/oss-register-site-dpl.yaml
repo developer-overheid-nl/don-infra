@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: register-site-dpl
+  name: oss-register-site-dpl
 spec:
   replicas: 1
   revisionHistoryLimit: 5

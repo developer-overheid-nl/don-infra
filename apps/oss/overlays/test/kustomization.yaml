@@ -23,7 +23,7 @@ images:
 patches:
   - target:
         kind: Ingress
-        name: register-site-ing
+        name: oss-register-site-ing
     patch: |    
       - op: replace
         path: /spec/rules/0/host
