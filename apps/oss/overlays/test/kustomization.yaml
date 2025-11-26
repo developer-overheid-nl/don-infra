@@ -9,8 +9,11 @@ resources:
 namespace: tn-don-oss
 namePrefix: don-oss-
 
-commonLabels:
-  app: oss
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: oss
+    includeSelectors: false
+    includeTemplates: true
 
 images:
   - name: don-oss-register
