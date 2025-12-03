@@ -5,6 +5,7 @@ resources:
   - ../../base
   - oss-db.yaml
   - register-site-secret.yaml
+  - don-crawler-secret.yaml
 
 namespace: tn-don-oss
 namePrefix: don-oss-
@@ -22,6 +23,9 @@ images:
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
     newTag: 92facd6116e29ee6e7bc39d86191f904f5d54b2f
+  - name: don-oss-crawler
+    newName: ghcr.io/developer-overheid-nl/don-oss-crawler
+    newTag: 014ea32082f977ddcad0fef28de8aa3c3685883d
 
 patches:
   - target:

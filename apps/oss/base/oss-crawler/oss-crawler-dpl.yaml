@@ -1,0 +1,66 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: oss-crawler
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          containers:
+            - name: don-oss-crawler
+              image: don-oss-crawler
+              env:
+                - name: API_BASEURL
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: API_BASEURL
+                - name: API_X_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: API_X_API_KEY
+                - name: AUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: AUTH_CLIENT_ID
+                - name: AUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: AUTH_CLIENT_SECRET
+                - name: KEYCLOAK_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: KEYCLOAK_BASE_URL
+                - name: KEYCLOAK_REALM
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: KEYCLOAK_REALM
+                - name: GITHUB_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: GITHUB_TOKEN
+                - name: GITLAB_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: GITLAB_TOKEN
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+                limits:
+                  cpu: 1400m
+                  memory: 4Gi
+          restartPolicy: OnFailure
