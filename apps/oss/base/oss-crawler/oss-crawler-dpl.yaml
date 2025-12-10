@@ -13,8 +13,8 @@ spec:
       template:
         spec:
           containers:
-            - name: don-oss-crawler
-              image: don-oss-crawler
+            - name: don-crawler
+              image: don-crawler
               env:
                 - name: API_BASEURL
                   valueFrom:
