@@ -23,8 +23,8 @@ images:
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
     newTag: 143e9f6c59b85e6960c0ee725016bff463dd18a0
-  - name: don-oss-crawler
-    newName: ghcr.io/developer-overheid-nl/don-oss-crawler
+  - name: don-crawler
+    newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: b1ac84099f623bfa70e7431f43baff61cf8ba168
 
 patches:
