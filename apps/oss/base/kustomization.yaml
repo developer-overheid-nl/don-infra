@@ -4,4 +4,4 @@ kind: Kustomization
 resources: 
   - oss-register-site/
   - oss-register/
-  - oss-crawler/
+  #- oss-crawler/
