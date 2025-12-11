@@ -3,6 +3,8 @@ kind: Service
 metadata:
   name: register-oss-site-svc
 spec:
+  selector:
+    app: oss-register-site
   ports:
     - port: 4321
       targetPort: http
