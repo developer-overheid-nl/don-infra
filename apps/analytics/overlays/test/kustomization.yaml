@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - don-matomo-secret.yaml
 
 namespace: tn-don-analytics
 namePrefix: don-analytics-
@@ -10,4 +11,11 @@ namePrefix: don-analytics-
 commonLabels:
   app: analytics
 
-patches: []
+patches:
+  - target:
+      kind: HelmRelease
+      name: matomo
+    patch: |
+      - op: replace
+        path: /spec/values/ingress/hostname
+        value: matomo.don.apps.digilab.network
