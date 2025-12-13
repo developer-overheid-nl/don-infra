@@ -4,16 +4,37 @@ kind: Kustomization
 resources:
   - ../../base
   - oss-db.yaml
+  - register-site-secret.yaml
+  - don-crawler-secret.yaml
 
 namespace: tn-don-oss
 namePrefix: don-oss-
 
-commonLabels:
-  app: oss
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: oss
+    includeSelectors: false
+    includeTemplates: true
 
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
-    newTag: 5ddecde38cc42312b2b79ee4857f8e33b35f20f4
+    newTag: 868af3504cf74a7d4d44fc64696ade168f37c85f
+  - name: don-register-oss-site
+    newName: ghcr.io/developer-overheid-nl/don-register-oss-site
+    newTag: d20e0bb76a6df2030334f0869883c9101a1fde70
+  - name: don-crawler
+    newName: ghcr.io/developer-overheid-nl/don-crawler
+    newTag: 5bb2faa70fdf80e571976d6eb92ed922cb738a1e
 
-patches: []
+patches:
+  - target:
+        kind: Ingress
+        name: oss-register-site-ing
+    patch: |    
+      - op: replace
+        path: /spec/rules/0/host
+        value: oss.developer.overheid.nl
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: oss.developer.overheid.nl
