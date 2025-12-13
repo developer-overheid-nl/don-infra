@@ -31,6 +31,5 @@ spec:
     matomoUsername: don
     matomoEmail: developer.overheid@geonovum.nl
     matomoWebsiteName: Developer Overheid
-    existingSecret: don-matomo-secret
     mariadb:
       enabled: true

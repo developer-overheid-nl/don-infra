@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - don-matomo-secret.yaml
 
 namespace: tn-don-analytics
 namePrefix: don-analytics-
