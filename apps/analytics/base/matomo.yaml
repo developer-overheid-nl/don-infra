@@ -20,6 +20,10 @@ spec:
         kind: HelmRepository
         name: don-analytics-repo-matomo
   values:
+    image:
+      registry: docker.io
+      repository: bitnami/matomo
+      tag: 5.3.2-debian-12-r12
     replicaCount: 1
     ingress:
       enabled: true
