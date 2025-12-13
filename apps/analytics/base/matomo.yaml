@@ -1,7 +1,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: matomo
+  name: repo-matomo
 spec:
   interval: 5m
   url: https://charts.bitnami.com/bitnami
@@ -15,14 +15,12 @@ spec:
   chart:
     spec:
       chart: matomo
-      version: 11.0.1
+      version: 11.0.0
       sourceRef:
         kind: HelmRepository
-        name: matomo
+        name: don-analytics-repo-matomo
   values:
     replicaCount: 1
-    image:
-      debug: false
     ingress:
       enabled: true
       hostname: set-in-overlay
@@ -34,11 +32,5 @@ spec:
     matomoEmail: developer.overheid@geonovum.nl
     matomoWebsiteName: Developer Overheid
     existingSecret: don-matomo-secret
-    persistence:
-      enabled: true
-      storageClass: azurefile-csi
-      accessModes:
-        - ReadWriteMany
-      size: 10Gi
     mariadb:
       enabled: true
