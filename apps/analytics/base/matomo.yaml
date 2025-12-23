@@ -37,7 +37,6 @@ spec:
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
     matomoSkipInstall: false
-    matomoUsername: don
     matomoEmail: developer.overheid@geonovum.nl
     matomoWebsiteName: Developer Overheid
     matomoUsername: don
