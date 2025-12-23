@@ -42,3 +42,8 @@ spec:
     matomoWebsiteName: Developer Overheid
     mariadb:
       enabled: true
+      image:
+        registry: ghcr.io
+        repository: developer-overheid-nl/mariadb
+        tag: 12.0.2-debian-12-r0
+        pullPolicy: IfNotPresent
