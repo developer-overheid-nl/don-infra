@@ -40,6 +40,7 @@ spec:
     matomoUsername: don
     matomoEmail: developer.overheid@geonovum.nl
     matomoWebsiteName: Developer Overheid
+    matomoUsername: don
     mariadb:
       enabled: true
       image:
