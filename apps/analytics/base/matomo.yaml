@@ -21,6 +21,9 @@ spec:
         kind: HelmRepository
         name: don-analytics-repo-matomo
   values:
+    global:
+      security:
+        allowInsecureImages: true
     image:
       registry: ghcr.io
       repository: developer-overheid-nl/matomo
