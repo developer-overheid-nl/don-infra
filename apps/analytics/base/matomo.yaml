@@ -50,6 +50,7 @@ spec:
     mariadb:
       enabled: true
       auth:
+        rootPassword: test123!123
         password: test123!
         username: don
       image:
