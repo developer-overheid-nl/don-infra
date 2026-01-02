@@ -49,6 +49,9 @@ spec:
     matomoUsername: don
     mariadb:
       enabled: true
+      auth:
+        password: test123!
+        username: don
       image:
         registry: docker.io
         repository: bitnamilegacy/mariadb
