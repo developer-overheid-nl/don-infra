@@ -13,6 +13,7 @@ data:
         type = "object",
         properties = {
             token_url = { type = "string" },
+            introspection_url = { type = "string", default = "" },
             admin_api_url = { type = "string" },
             client_id = { type = "string" },
             client_secret = { type = "string" },
@@ -121,20 +122,80 @@ data:
         return true
     end
     
-    local function check_jwt_permission(conf, token, required_scopes)
-        local payload = decode_jwt_payload(token)
-        if not payload then
-            return false, 401, "Invalid JWT token"
+    local function get_introspection_url(conf)
+        if conf.introspection_url and conf.introspection_url ~= "" then
+            return conf.introspection_url
         end
-        if is_jwt_expired(payload) then
+        if conf.token_url:find("/introspect$") then
+            return conf.token_url
+        end
+        return conf.token_url .. "/introspect"
+    end
+
+    local function introspect_token(conf, token)
+        local url = get_introspection_url(conf)
+        local httpc = http.new()
+        httpc:set_timeout(5000)
+
+        local res, err = httpc:request_uri(url, {
+            method = "POST",
+            body = "token=" .. ngx.escape_uri(token) ..
+                    "&client_id=" .. ngx.escape_uri(conf.client_id) ..
+                    "&client_secret=" .. ngx.escape_uri(conf.client_secret),
+            headers = {
+                ["Content-Type"] = "application/x-www-form-urlencoded"
+            },
+            ssl_verify = false,
+        })
+
+        if not res then
+            core.log.error("Token introspection request failed: ", err)
+            return { __error = true, status = 500, message = "Failed to introspect token" }
+        end
+
+        if res.status ~= 200 then
+            core.log.warn("Token introspection failed with status ", res.status, ": ", res.body)
+            return { __error = true, status = 401, message = "Token introspection failed" }
+        end
+
+        local data = cjson.decode(res.body)
+        if not data then
+            core.log.error("Failed to decode token introspection response: ", res.body)
+            return { __error = true, status = 500, message = "Invalid token introspection response" }
+        end
+
+        return data
+    end
+
+    local function check_jwt_permission(conf, token, required_scopes)
+        if not token or token == "" then
+            return false, 401, "Missing bearer token"
+        end
+
+        -- IMPORTANT: validate against Keycloak (RFC7662 token introspection), not just local JWT decode
+        local cache_key = "kc_introspect:" .. ngx.md5(token)
+        local info = cache(cache_key, conf.cache_ttl, introspect_token, conf, token)
+        if not info then
+            return false, 500, "Failed to introspect token"
+        end
+
+        if info.__error then
+            return false, info.status or 401, info.message or "Unauthorized"
+        end
+
+        if info.active ~= true then
+            return false, 401, "Token is not active"
+        end
+
+        if info.exp and info.exp < ngx.time() then
             return false, 401, "JWT token expired"
         end
-        
-        if not has_required_scopes(payload.scope, required_scopes) then
+
+        if required_scopes and #required_scopes > 0 and not has_required_scopes(info.scope, required_scopes) then
             return false, 403, "JWT does not have required scope"
         end
-        
-        return true
+
+        return true, nil, nil, info
     end
     
     function plugin.check_schema(conf)
@@ -150,13 +211,14 @@ data:
             if not jwt_token then
                 return core.response.exit(401, { message = "Invalid Authorization header format" })
             end
-            local ok, status, err = check_jwt_permission(conf, jwt_token, conf.scope_required)
+            local ok, status, err, token_info = check_jwt_permission(conf, jwt_token, conf.scope_required)
             if not ok then
                 return core.response.exit(status, { message = err or "Unauthorized" })
             end
-            local jwt_payload = decode_jwt_payload(jwt_token)
-            ctx.var.jwt_claims = jwt_payload
-            ctx.var.jwt_claim_client_id = jwt_payload.client_id or jwt_payload.azp
+
+            -- Store Keycloak introspection result for upstream/logging
+            ctx.var.jwt_claims = token_info
+            ctx.var.jwt_claim_client_id = token_info.client_id or token_info.azp
             return
         elseif api_key then
             local admin_token = get_admin_token(conf)
