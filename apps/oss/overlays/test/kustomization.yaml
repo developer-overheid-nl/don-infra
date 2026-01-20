@@ -23,9 +23,9 @@ images:
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
     newTag: 613088aca7d6f5dfa91ed2d48f25c0d9f35d1955
-  # - name: don-crawler
-  #   newName: ghcr.io/developer-overheid-nl/don-crawler
-  #   newTag: 78fdd44fd27da1a6cac1d593322fca93ab6156c9
+  - name: don-crawler
+    newName: ghcr.io/developer-overheid-nl/don-crawler
+    newTag: 78fdd44fd27da1a6cac1d593322fca93ab6156c9
 
 patches:
   - target:
@@ -38,3 +38,10 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: oss-register.don.apps.digilab.network
+  - target:
+        kind: CronJob
+        name: oss-crawler
+    patch: |-
+      - op: add
+        path: /spec/suspend
+        value: true
