@@ -75,20 +75,6 @@ spec:
             - hosts:
                 - set-in-overlay
               secretName: api-admin-tls
-    extraContainers:
-      - name: opa
-        image: openpolicyagent/opa:1.13.0-dev
-        args:
-        - "run"
-        - "--server"
-        - "--addr=:8181"
-        - "--config-file=/run/secrets/opa-config.yaml"
-        ports:
-          - containerPort: 8181
-        volumeMounts:
-          - name: opa-config
-            mountPath: /run/secrets
-            readOnly: true
     volumes:
       - name: opa-config
         secret:
