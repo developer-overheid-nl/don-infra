@@ -4,5 +4,5 @@ kind: Kustomization
 commonLabels:
   app: oss-crawler
 
-resources: []
-  # - oss-crawler-dpl.yaml
+resources: 
+  - oss-crawler-dpl.yaml
