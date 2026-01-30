@@ -1,0 +1,40 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: repo-altcha
+spec:
+  interval: 5m
+  url: https://altcha-org.github.io/helm-charts
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: altcha-sentinel
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: sentinel
+      version: 0.19.0
+      sourceRef:
+        kind: HelmRepository
+        name: don-api-repo-altcha
+  values:
+    replicaCount: 1
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+      hosts:
+        - host: set-in-overlay
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+      tls:
+        - hosts:
+            - set-in-overlay
+          secretName: altcha-tls
+    podAnnotations: {}
+    podLabels: {}

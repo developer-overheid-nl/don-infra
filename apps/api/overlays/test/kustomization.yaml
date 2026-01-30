@@ -54,3 +54,13 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: api-register.don.apps.digilab.network
+  - target:
+      kind: HelmRelease
+      name: altcha-sentinel
+    patch: |
+      - op: replace
+        path: /spec/values/ingress/hosts/0/host
+        value: altcha.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/ingress/tls/0/hosts/0
+        value: altcha.don.apps.digilab.network
