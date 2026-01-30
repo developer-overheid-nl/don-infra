@@ -5,5 +5,4 @@ resources:
   - api-register/
   - register-site/
   - apisix/
-  - altcha/
   - tools/
