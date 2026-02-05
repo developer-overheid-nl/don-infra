@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sourcemeta-one-ing
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: set-in-overlay
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: sourcemeta-one-svc
+                port:
+                  number: 8000
+  tls:
+    - hosts:
+        - set-in-overlay
+      secretName: sourcemeta-one-tls

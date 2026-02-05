@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sourcemeta-one-svc
+spec:
+  ports:
+    - port: 8000
+      targetPort: http

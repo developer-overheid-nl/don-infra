@@ -6,3 +6,4 @@ resources:
   - register-site/
   - apisix/
   - tools/
+  - sourcemeta-one/

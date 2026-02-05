@@ -23,6 +23,9 @@ images:
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 38e9f5824a06234feeb75a524f918c38e7435ecb
+  - name: don-sourcemeta-one
+    newName: ghcr.io/developer-overheid-nl/don-sourcemeta-one
+    newTag: latest
 
 patches:
   - target:
@@ -54,3 +57,13 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: api-register.don.apps.digilab.network
+  - target:
+        kind: Ingress
+        name: sourcemeta-one-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: schema.don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: schema.don.apps.digilab.network
