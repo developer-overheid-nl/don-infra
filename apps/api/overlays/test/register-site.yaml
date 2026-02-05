@@ -7,7 +7,6 @@ data:
     TOOLS_ENDPOINT: ENC[AES256_GCM,data:VY9rBmg+jDU=,iv:pFGA4dW1aFu7EazPk1XrNmbhz4nshkExnkCvHXSK6nY=,tag:+J10BsLdolAdqE/Jqigjzw==,type:str]
 kind: Secret
 metadata:
-    creationTimestamp: null
     name: register-site-secret
 sops:
     kms: []
