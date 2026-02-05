@@ -5,7 +5,7 @@ resources:
   - ../../base
   - apisix.yaml
   - apisix-keycloak-plugin.yaml
-  # - register-site.yaml
+  - register-site.yaml
   - tools-secret.yaml
   - api-register-secret.yaml
   - api-register-db.yaml
