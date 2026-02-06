@@ -19,24 +19,24 @@ spec:
             - name: API_URL
               valueFrom:
                 secretKeyRef:
-                  name: don-api-register-site-secret
+                  name: register-site-secret
                   key: API_URL
             - name: API_ENDPOINT
               value: "api-register"
             - name: TOOLS_ENDPOINT
               valueFrom:
                 secretKeyRef:
-                  name: don-api-register-site-secret
+                  name: register-site-secret
                   key: TOOLS_ENDPOINT
             - name: ALTCHA_HMAC_KEY
               valueFrom:
                 secretKeyRef:
-                  name: don-api-register-site-secret
+                  name: register-site-secret
                   key: ALTCHA_HMAC_KEY
             - name: API_X_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: don-api-register-site-secret
+                  name: register-site-secret
                   key: API_X_API_KEY
             - name: API_VERSION
               value: "v1"
