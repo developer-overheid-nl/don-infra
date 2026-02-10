@@ -6,4 +6,4 @@ resources:
   - register-site/
   - apisix/
   - tools/
-  # - sourcemeta-one/
+  - don-schema-register/
