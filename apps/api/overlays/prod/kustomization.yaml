@@ -24,6 +24,9 @@ images:
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 3c22ff12d060db3628c0d800d93c5c8bb0d4f12a
+  - name: don-schema-register
+    newName: ghcr.io/developer-overheid-nl/don-schema-register
+    newTag: d51738bcd24d7da1df37a52b9cb9686a2fc0bbfb
 
 patches:
   - target:
@@ -55,3 +58,13 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: apis.developer.overheid.nl
+  - target:
+        kind: Ingress
+        name: sourcemeta-one-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: schema.developer.overheid.nl
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: schema.developer.overheid.nl
