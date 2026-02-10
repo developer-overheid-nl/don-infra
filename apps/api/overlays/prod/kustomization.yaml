@@ -60,7 +60,7 @@ patches:
         value: apis.developer.overheid.nl
   - target:
         kind: Ingress
-        name: sourcemeta-one-ing
+        name: don-schema-register-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host

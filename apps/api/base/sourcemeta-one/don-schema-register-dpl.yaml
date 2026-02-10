@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sourcemeta-one-dpl
+  name: don-schema-register-dpl
 spec:
   replicas: 1
   revisionHistoryLimit: 5
@@ -13,8 +13,8 @@ spec:
   template:
     spec:
       containers:
-        - name: don-sourcemeta-one
-          image: don-sourcemeta-one
+        - name: don-schema-register
+          image: don-schema-register
           env:
             - name: SOURCEMETA_ONE_PORT
               value: "8000"
