@@ -64,7 +64,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: schema.developer.overheid.nl
+        value: schemas.developer.overheid.nl
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: schema.developer.overheid.nl
+        value: schemas.developer.overheid.nl
