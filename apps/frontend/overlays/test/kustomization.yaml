@@ -13,7 +13,7 @@ commonLabels:
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-site
-    newTag: fd0721ebe3582388d852f1ef82674a0e43b73b07
+    newTag: 3d7d0333b75e85e92b4a867deec0a98ffb194075
 
 patches:
   - target:
