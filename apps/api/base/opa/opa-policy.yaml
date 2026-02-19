@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opa-policy
+data:
+  apisix.rego: |
+    package apisix.test
+
+    default allow = false
+
+    # Temporary test policy: allow only GET requests.
+    # Non-GET returns 429 so you can quickly verify APISIX -> OPA enforcement.
+    allow if {
+      input.request.method == "GET"
+    }
+
+    reason := "Blocked by OPA test policy (only GET is allowed)" if {
+      not allow
+    }
+
+    status_code := 429 if {
+      not allow
+    }

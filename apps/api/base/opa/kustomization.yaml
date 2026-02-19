@@ -5,4 +5,5 @@ commonLabels:
   app: opa
 
 resources:
+  - opa-policy.yaml
   - opa-runtime.yaml
