@@ -51,6 +51,7 @@ spec:
                   path: "/opt/apisix/plugins/keycloak-api-key-auth.lua"
       plugins:
         - authz-keycloak
+        - opa
         - limit-count
         - cors
         - proxy-rewrite

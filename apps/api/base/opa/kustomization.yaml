@@ -5,4 +5,4 @@ commonLabels:
   app: opa
 
 resources:
-  - opa.yaml
+  - opa-runtime.yaml
