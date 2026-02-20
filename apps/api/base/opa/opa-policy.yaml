@@ -9,15 +9,39 @@ data:
     default allow = false
 
     # Temporary test policy: allow only GET requests.
-    # Non-GET returns 429 so you can quickly verify APISIX -> OPA enforcement.
+    # Send `x-opa-debug: 1` to force a deny response with debug headers,
+    # so you can visibly verify APISIX -> OPA enforcement on a route.
+    debug_mode if {
+      lower(object.get(input.request.headers, "x-opa-debug", "")) == "1"
+    }
+
     allow if {
       input.request.method == "GET"
+      not debug_mode
+    }
+
+    reason := "Denied by OPA debug mode (set x-opa-debug: 1)" if {
+      debug_mode
+    }
+
+    status_code := 418 if {
+      debug_mode
     }
 
     reason := "Blocked by OPA test policy (only GET is allowed)" if {
       not allow
+      not debug_mode
     }
 
     status_code := 429 if {
+      not allow
+      not debug_mode
+    }
+
+    headers := {
+      "X-OPA-Checked": "true",
+      "X-OPA-Decision": "deny",
+      "X-OPA-Policy": "apisix.test"
+    } if {
       not allow
     }
