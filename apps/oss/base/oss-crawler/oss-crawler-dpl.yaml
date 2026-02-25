@@ -47,11 +47,22 @@ spec:
                     secretKeyRef:
                       name: don-crawler-secret
                       key: GITHUB_TOKEN
-                - name: GITLAB_TOKEN
+                - name: GIT_OAUTH_CLIENTID
                   valueFrom:
                     secretKeyRef:
                       name: don-crawler-secret
-                      key: GITLAB_TOKEN
+                      key: GIT_OAUTH_CLIENTID
+                - name: GIT_OAUTH_INSTALLATION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: GIT_OAUTH_INSTALLATION_ID
+                - name: GIT_OAUTH_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: GIT_OAUTH_SECRET
+                
               resources:
                 requests:
                   cpu: 200m
