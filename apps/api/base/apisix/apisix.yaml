@@ -76,9 +76,3 @@ spec:
             - hosts:
                 - set-in-overlay
               secretName: api-admin-tls
-    volumes:
-      - name: opa-config
-        secret:
-            secretName: opa-config
-    podAnnotations: {}
-    podLabels: {}
