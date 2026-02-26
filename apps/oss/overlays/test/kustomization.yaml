@@ -6,6 +6,7 @@ resources:
   - oss-db.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
+  - piwik-secret.yaml
 
 namespace: tn-don-oss
 namePrefix: don-oss-
