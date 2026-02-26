@@ -30,6 +30,16 @@ spec:
                   key: API_X_API_KEY
             - name: API_VERSION
               value: "v1"
+            - name: PIWIK_PRO_ACCOUNT_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: piwik-secret
+                  key: PIWIK_PRO_ACCOUNT_ADDRESS
+            - name: PIWIK_PRO_SITE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: piwik-secret
+                  key: PIWIK_PRO_SITE_ID
           ports:
             - name: http
               containerPort: 4321

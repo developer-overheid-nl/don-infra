@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - piwik-secret.yaml
 
 namespace: tn-don-frontend
 namePrefix: don-frontend-
