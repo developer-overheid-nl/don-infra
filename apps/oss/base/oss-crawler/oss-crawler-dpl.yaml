@@ -42,11 +42,6 @@ spec:
                     secretKeyRef:
                       name: don-crawler-secret
                       key: KEYCLOAK_REALM
-                - name: GITHUB_TOKEN
-                  valueFrom:
-                    secretKeyRef:
-                      name: don-crawler-secret
-                      key: GITHUB_TOKEN
                 - name: GIT_OAUTH_CLIENTID
                   valueFrom:
                     secretKeyRef:
