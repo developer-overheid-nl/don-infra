@@ -26,7 +26,7 @@ images:
     newTag: c301c96ebe42197b3e924a27131cee2e292b395a
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
-    newTag: 3ff0fd81d5af90477598ff6442409ce903627a70
+    newTag: d7defb16085e8029376e3e86fc9d40c2bea3d9ab
 
 patches:
   - target:
