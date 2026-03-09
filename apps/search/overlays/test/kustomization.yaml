@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - api-key.yaml
   - scraper-configmap.yaml
 
@@ -31,6 +32,13 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: search.don.apps.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: search.don.projects.digilab.network
   - target:
       kind: Deployment
       name: dpl
