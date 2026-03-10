@@ -41,6 +41,8 @@ spec:
                 secretKeyRef:
                   name: oss-db
                   key: DB_SCHEMA
+            - name: CRAWL_STALE_AFTER_HOURS
+              value: 48
           ports:
             - name: http
               containerPort: 1337
