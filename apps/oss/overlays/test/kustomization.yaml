@@ -29,6 +29,14 @@ images:
     newTag: 30e83d0d262f36fad3b9f15064c56e202ecbf8ab
 
 patches:
+  # Keep in sync with base: CRAWL_STALE_AFTER_HOURS is intentionally env[0].
+  - target:
+        kind: Deployment
+        name: oss-register-dpl
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: "168"
   - target:
         kind: Ingress
         name: oss-register-site-ing

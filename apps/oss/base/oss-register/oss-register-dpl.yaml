@@ -16,6 +16,9 @@ spec:
         - name: don-oss-register
           image: don-oss-register
           env:
+            # Keep this at index 0; test overlay patches /env/0/value.
+            - name: CRAWL_STALE_AFTER_HOURS
+              value: "48"
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -41,8 +44,6 @@ spec:
                 secretKeyRef:
                   name: oss-db
                   key: DB_SCHEMA
-            - name: CRAWL_STALE_AFTER_HOURS
-              value: 48
           ports:
             - name: http
               containerPort: 1337
