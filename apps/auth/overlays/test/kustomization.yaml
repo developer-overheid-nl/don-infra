@@ -22,6 +22,12 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
+        path: /spec/values/ingress/hostname
+        value: auth.don.apps.digilab.network
+      - op: replace
+        path: /spec/values/ingress/extraTls/0/hosts/0
+        value: auth.don.apps.digilab.network
+      - op: replace
         path: /spec/values/ingress/enabled
         value: false
   - target:
