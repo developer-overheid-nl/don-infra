@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - keycloak-secret.yaml
   - keycloak-realm-config.yaml
 
@@ -21,8 +22,12 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/hostname
-        value: auth.don.apps.digilab.network
+        path: /spec/values/ingress/enabled
+        value: false
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
       - op: replace
-        path: /spec/values/ingress/extraTls/0/hosts/0
-        value: auth.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: auth.don.projects.digilab.network
