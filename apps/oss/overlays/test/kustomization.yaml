@@ -21,7 +21,7 @@ labels:
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
-    newTag: 117a510e10c36cfb2ae83066d43bf6d5d37a2419
+    newTag: 25412ad362c916307edb864b4e98bd639824adee
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
     newTag: 807df0e2d74a25a897e82442c6766303df98bb94
@@ -30,6 +30,14 @@ images:
     newTag: 30e83d0d262f36fad3b9f15064c56e202ecbf8ab
 
 patches:
+  # Keep in sync with base: CRAWL_STALE_AFTER_HOURS is intentionally env[0].
+  - target:
+        kind: Deployment
+        name: oss-register-dpl
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/0/value
+        value: "168"
   - target:
         kind: Ingress
         name: oss-register-site-ing
