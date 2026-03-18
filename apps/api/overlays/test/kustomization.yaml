@@ -2,6 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - register-site-http-route.yaml
+  - don-schema-register-http-route.yaml
+  - apisix-http-route.yaml
   - apisix.yaml
   - apisix-keycloak-plugin.yaml
   - register-site.yaml
@@ -33,17 +36,25 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/hosts/0/host
-        value: api.don.apps.digilab.network
+        path: /spec/values/ingress/enabled
+        value: false
       - op: replace
-        path: /spec/values/ingress/tls/0/hosts/0
-        value: api.don.apps.digilab.network
+        path: /spec/values/apisix/admin/ingress/enabled
+        value: false
+  - target:
+      kind: HTTPRoute
+      name: apisix-http-route
+    patch: |
       - op: replace
-        path: /spec/values/apisix/admin/ingress/hosts/0/host
-        value: api-admin.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: api.don.projects.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: apisix-admin-http-route
+    patch: |
       - op: replace
-        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
-        value: api-admin.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: api-admin.don.projects.digilab.network
   - target:
       kind: Ingress
       name: register-site-ing
@@ -64,3 +75,17 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: schemas.don.apps.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: register-site-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: api-register.don.projects.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: don-schema-register-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: schemas.don.projects.digilab.network

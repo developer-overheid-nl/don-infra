@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - http-route.yaml
   - oss-db.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
@@ -43,8 +44,15 @@ patches:
         path: /spec/tls/0/hosts/0
         value: oss-register.don.apps.digilab.network
   - target:
-      kind: CronJob
-      name: oss-crawler
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: oss-register.don.projects.digilab.network
+  - target:
+        kind: CronJob
+        name: oss-crawler
     patch: |-
       - op: add
         path: /spec/suspend
