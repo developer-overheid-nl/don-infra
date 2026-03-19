@@ -36,4 +36,4 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: auth.don.projects.digilab.network
+        value: auth.don.apps.digilab.network
