@@ -38,7 +38,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: search.don.projects.digilab.network
+        value: search.don.apps.digilab.network
   - target:
       kind: Deployment
       name: dpl
