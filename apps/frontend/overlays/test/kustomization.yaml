@@ -17,13 +17,13 @@ images:
   newTag: 711608a76f5a2a0f9538c171063b0e406e3f77d4
 
 patches:
-- patch: |
-    - op: replace
-      path: /spec/rules/0/host
-      value: don.apps.digilab.network
-    - op: replace
-      path: /spec/tls/0/hosts/0
-      value: don.apps.digilab.network
-  target:
-    kind: Ingress
-    name: ing
+  - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: don.apps.digilab.network
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: don.apps.digilab.network
