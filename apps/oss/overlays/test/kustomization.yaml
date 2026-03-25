@@ -1,22 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - oss-db.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml
-
 namespace: tn-don-oss
 namePrefix: don-oss-
-
 labels:
   - pairs:
       app.kubernetes.io/part-of: oss
     includeSelectors: false
     includeTemplates: true
-
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
@@ -27,20 +23,19 @@ images:
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: 30e83d0d262f36fad3b9f15064c56e202ecbf8ab
-
 patches:
   # Keep in sync with base: CRAWL_STALE_AFTER_HOURS is intentionally env[0].
   - target:
-        kind: Deployment
-        name: oss-register-dpl
+      kind: Deployment
+      name: oss-register-dpl
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/env/0/value
         value: "168"
   - target:
-        kind: Ingress
-        name: oss-register-site-ing
-    patch: |    
+      kind: Ingress
+      name: oss-register-site-ing
+    patch: |
       - op: replace
         path: /spec/rules/0/host
         value: oss-register.don.apps.digilab.network
@@ -48,8 +43,8 @@ patches:
         path: /spec/tls/0/hosts/0
         value: oss-register.don.apps.digilab.network
   - target:
-        kind: CronJob
-        name: oss-crawler
+      kind: CronJob
+      name: oss-crawler
     patch: |-
       - op: add
         path: /spec/suspend
