@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - apisix.yaml
@@ -10,10 +9,8 @@ resources:
   - api-register-secret.yaml
   - api-register-db.yaml
   - piwik-secret.yaml
-
 namespace: tn-don-api
 namePrefix: don-api-
-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
@@ -27,7 +24,6 @@ images:
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
     newTag: e7e7b664183df1f82c0cea0f83ad8310cd7687ab
-
 patches:
   - target:
       kind: HelmRelease
@@ -49,9 +45,9 @@ patches:
         path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
         value: api-admin.don.apps.digilab.network
   - target:
-        kind: Ingress
-        name: register-site-ing
-    patch: |    
+      kind: Ingress
+      name: register-site-ing
+    patch: |
       - op: replace
         path: /spec/rules/0/host
         value: api-register.don.apps.digilab.network
@@ -59,8 +55,8 @@ patches:
         path: /spec/tls/0/hosts/0
         value: api-register.don.apps.digilab.network
   - target:
-        kind: Ingress
-        name: don-schema-register-ing
+      kind: Ingress
+      name: don-schema-register-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
