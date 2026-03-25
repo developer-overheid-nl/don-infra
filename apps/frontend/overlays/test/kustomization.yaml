@@ -1,22 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - http-route.yaml
   - piwik-secret.yaml
-
 namespace: tn-don-frontend
 namePrefix: don-frontend-
-
 commonLabels:
   app: frontend
-
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-site
-    newTag: 99a10db8876ee845c8b4a2c55a4855fe79881e42
-
+    newTag: f9777a6d09a6beb2662b43aff0116217069de330
 patches:
   - target:
       kind: Ingress
