@@ -37,16 +37,16 @@ patches:
         value: 1
       - op: replace
         path: /spec/values/ingress/hosts/0/host
-        value: api.don.apps.digilab.network
+        value: api.don. projects.digilab.network
       - op: replace
         path: /spec/values/ingress/tls/0/hosts/0
-        value: api.don.apps.digilab.network
+        value: api.don. projects.digilab.network
       - op: replace
         path: /spec/values/apisix/admin/ingress/hosts/0/host
-        value: api-admin.don.apps.digilab.network
+        value: api-admin.don. projects.digilab.network
       - op: replace
         path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
-        value: api-admin.don.apps.digilab.network
+        value: api-admin.don. projects.digilab.network
       - op: replace
         path: /spec/values/ingress/enabled
         value: false
@@ -59,45 +59,45 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: api.don.apps.digilab.network
+        value: api.don. projects.digilab.network
   - target:
       kind: HTTPRoute
       name: apisix-admin-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: api-admin.don.apps.digilab.network
+        value: api-admin.don. projects.digilab.network
   - target:
       kind: Ingress
       name: register-site-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: api-register.don.apps.digilab.network
+        value: api-register.don. projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: api-register.don.apps.digilab.network
+        value: api-register.don. projects.digilab.network
   - target:
       kind: Ingress
       name: don-schema-register-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: schemas.don.apps.digilab.network
+        value: schemas.don. projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: schemas.don.apps.digilab.network
+        value: schemas.don. projects.digilab.network
   - target:
       kind: HTTPRoute
       name: register-site-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: api-register.don.apps.digilab.network
+        value: api-register.don. projects.digilab.network
   - target:
       kind: HTTPRoute
       name: don-schema-register-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: schemas.don.apps.digilab.network
+        value: schemas.don. projects.digilab.network
