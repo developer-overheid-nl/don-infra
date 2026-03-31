@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oss-db
+type: Opaque
+stringData:
+  DB_DBNAME: "don_oss"
+  DB_HOSTNAME: "localhost"
+  DB_PASSWORD: "changeme-db-password"
+  DB_SCHEMA: "don_oss"
+  DB_USERNAME: "don_oss"

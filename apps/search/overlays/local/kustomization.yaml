@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - api-key.yaml           # kopieer van api-key.example.yaml, nooit committen
+  - scraper-configmap.yaml # kopieer van ../../overlays/test/scraper-configmap.yaml
+
+namespace: tn-don-search
+namePrefix: don-search-
+
+commonLabels:
+  app: search
+
+patches:
+  - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: search.k8s.orb.local
+      - op: remove
+        path: /spec/tls
+      - op: remove
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: Deployment
+      name: dpl
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: TYPESENSE_CORS_DOMAINS
+          value: "http://don.k8s.orb.local"
+  - target:
+      kind: CronJob
+      name: scraper
+    patch: |
+      - op: add
+        path: /spec/jobTemplate/spec/template/spec/containers/0/env/-
+        value:
+          name: TYPESENSE_HOST
+          value: "search.k8s.orb.local"
+      - op: add
+        path: /spec/suspend
+        value: true

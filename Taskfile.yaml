@@ -1,0 +1,203 @@
+version: "3"
+
+vars:
+  CONTEXT: kind-don-local
+  NAMESPACES: tn-don-api tn-don-auth tn-don-frontend tn-don-search tn-don-static tn-don-oss
+  APPS: api auth frontend search static oss
+
+tasks:
+
+  # ── Setup ────────────────────────────────────────────────────────────────────
+
+  local:setup:
+    desc: "Eerste keer: installeer Flux en maak alle namespaces aan op de lokale cluster"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - |
+        for ns in {{.NAMESPACES}}; do
+          kubectl get namespace $ns > /dev/null 2>&1 || kubectl create namespace $ns
+        done
+      - flux install
+
+  # ── Secrets ──────────────────────────────────────────────────────────────────
+
+  local:secrets:from-cluster:
+    desc: "Exporteer alle secrets uit de test-cluster naar overlays/local/ (TEST_CONTEXT vereist)"
+    requires:
+      vars: [TEST_CONTEXT]
+    cmds:
+      - task: local:secret:api
+      - task: local:secret:auth
+      - task: local:secret:search
+      - task: local:secret:oss
+      - echo "Klaar. Controleer de gegenereerde *-secret.yaml bestanden."
+
+  local:secret:api:
+    desc: "Exporteer apisix-secret uit test-cluster"
+    requires:
+      vars: [TEST_CONTEXT]
+    cmds:
+      - |
+        kubectl get secret don-api-apisix -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "apisix"' \
+          > apps/api/overlays/local/apisix-secret.yaml
+
+  local:secret:auth:
+    desc: "Exporteer keycloak-secret uit test-cluster"
+    requires:
+      vars: [TEST_CONTEXT]
+    cmds:
+      - |
+        kubectl get secret don-auth-keycloak-login-secret -n tn-don-auth --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "keycloak-login-secret"' \
+          > apps/auth/overlays/local/keycloak-secret.yaml
+
+  local:secret:search:
+    desc: "Exporteer search api-key uit test-cluster"
+    requires:
+      vars: [TEST_CONTEXT]
+    cmds:
+      - |
+        kubectl get secret don-search-api-key -n tn-don-search --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "api-key"' \
+          > apps/search/overlays/local/api-key.yaml
+
+  local:secret:oss:
+    desc: "Exporteer oss-secrets uit test-cluster"
+    requires:
+      vars: [TEST_CONTEXT]
+    cmds:
+      - |
+        kubectl get secret don-oss-oss-db -n tn-don-oss --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "oss-db"' \
+          > apps/oss/overlays/local/oss-db.yaml
+      - |
+        kubectl get secret don-oss-register-site-secret -n tn-don-oss --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "register-site-secret"' \
+          > apps/oss/overlays/local/register-site-secret.yaml
+      - |
+        kubectl get secret don-oss-don-crawler-secret -n tn-don-oss --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "don-crawler-secret"' \
+          > apps/oss/overlays/local/don-crawler-secret.yaml
+
+  local:secrets:from-examples:
+    desc: "Kopieer alle *.example.yaml naar hun echte naam (handmatig invullen daarna)"
+    cmds:
+      - |
+        for app in {{.APPS}}; do
+          for f in apps/$app/overlays/local/*.example.yaml; do
+            target="${f/.example/}"
+            if [ ! -f "$target" ]; then
+              cp "$f" "$target"
+              echo "Aangemaakt: $target"
+            fi
+          done
+        done
+      - echo "Vul de waarden in de gegenereerde bestanden in voor je local:apply draait."
+
+  local:configs:
+    desc: "Kopieer plain ConfigMaps vanuit de test-overlay naar overlays/local/ (geen secrets)"
+    cmds:
+      - |
+        cp apps/auth/overlays/test/keycloak-realm-config.yaml \
+           apps/auth/overlays/local/keycloak-realm-config.yaml
+        echo "Gekopieerd: keycloak-realm-config.yaml"
+      - |
+        cp apps/search/overlays/test/scraper-configmap.yaml \
+           apps/search/overlays/local/scraper-configmap.yaml
+        echo "Gekopieerd: scraper-configmap.yaml"
+
+  # ── Deploy ───────────────────────────────────────────────────────────────────
+
+  local:apply:
+    desc: "Deploy alle apps naar de lokale cluster"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - for: { var: APPS }
+        cmd: |
+          echo "→ deploying {{.ITEM}}..."
+          kubectl apply -k apps/{{.ITEM}}/overlays/local/
+
+  local:apply:api:
+    desc: "Deploy alleen de api namespace"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - kubectl apply -k apps/api/overlays/local/
+
+  local:apply:auth:
+    desc: "Deploy alleen de auth namespace"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - kubectl apply -k apps/auth/overlays/local/
+
+  local:apply:frontend:
+    desc: "Deploy alleen de frontend namespace"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - kubectl apply -k apps/frontend/overlays/local/
+
+  local:apply:search:
+    desc: "Deploy alleen de search namespace"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - kubectl apply -k apps/search/overlays/local/
+
+  local:apply:static:
+    desc: "Deploy alleen de static namespace"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - kubectl apply -k apps/static/overlays/local/
+
+  local:apply:oss:
+    desc: "Deploy alleen de oss namespace"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - kubectl apply -k apps/oss/overlays/local/
+
+  local:diff:
+    desc: "Preview wat er deployed zou worden (alle apps)"
+    cmds:
+      - for: { var: APPS }
+        cmd: |
+          echo "=== {{.ITEM}} ==="
+          kubectl diff -k apps/{{.ITEM}}/overlays/local/ || true
+
+  # ── Port-forward ─────────────────────────────────────────────────────────────
+
+  local:forward:
+    desc: "Port-forward Apisix gateway (:9080) en admin (:9180)"
+    cmds:
+      - echo "Apisix gateway → http://localhost:9080"
+      - echo "Apisix admin   → http://localhost:9180"
+      - kubectl port-forward -n tn-don-api svc/don-api-apisix-gateway 9080:80 &
+      - kubectl port-forward -n tn-don-api svc/don-api-apisix-admin 9180:9180 &
+
+  local:forward:auth:
+    desc: "Port-forward Keycloak (:8080)"
+    cmds:
+      - echo "Keycloak → http://localhost:8080"
+      - kubectl port-forward -n tn-don-auth svc/don-auth-keycloak 8080:80 &
+
+  local:forward:frontend:
+    desc: "Port-forward frontend (:3000)"
+    cmds:
+      - echo "Frontend → http://localhost:3000"
+      - kubectl port-forward -n tn-don-frontend svc/don-frontend-svc 3000:80 &
+
+  local:forward:search:
+    desc: "Port-forward Typesense (:8108)"
+    cmds:
+      - echo "Typesense → http://localhost:8108"
+      - kubectl port-forward -n tn-don-search svc/don-search-svc 8108:8108 &
+
+  # ── Teardown ─────────────────────────────────────────────────────────────────
+
+  local:teardown:
+    desc: "Verwijder alle lokale namespaces"
+    prompt: "Weet je zeker dat je alle lokale namespaces wil verwijderen?"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - |
+        for ns in {{.NAMESPACES}}; do
+          kubectl delete namespace $ns --ignore-not-found
+        done

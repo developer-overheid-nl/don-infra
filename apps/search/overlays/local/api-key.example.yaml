@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-key
+type: Opaque
+stringData:
+  value: "changeme-typesense-api-key"

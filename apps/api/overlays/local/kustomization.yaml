@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/apisix
+  - ../../base/opa
+  - apisix-secret.yaml  # kopieer van apisix-secret.example.yaml, nooit committen
+
+namespace: tn-don-api
+namePrefix: don-api-
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: apisix
+    patch: |
+      - op: replace
+        path: /spec/values/ingress/annotations
+        value: {}
+      - op: replace
+        path: /spec/values/ingress/hosts/0/host
+        value: api.k8s.orb.local
+      - op: remove
+        path: /spec/values/ingress/tls
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/annotations
+        value: {}
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/hosts/0/host
+        value: api-admin.k8s.orb.local
+      - op: remove
+        path: /spec/values/apisix/admin/ingress/tls

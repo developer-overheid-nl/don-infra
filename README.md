@@ -13,6 +13,150 @@ The project is divided into multiple applications:
 - [search](./apps/search/)
 - [static](./apps/static/)
 
+## Lokaal draaien
+
+Zo draai je alle apps lokaal voor sneller experimenteren, zonder dat je de test-omgeving nodig hebt.
+
+### Vereisten
+
+| Tool | Installatie |
+| --- | --- |
+| [OrbStack](https://orbstack.dev) (Mac) of [Docker Desktop](https://www.docker.com/products/docker-desktop/) + [Kind](https://kind.sigs.k8s.io/) (Windows) | zie hieronder |
+| `kubectl` | `brew install kubectl` / `choco install kubernetes-cli` |
+| `flux` CLI | `brew install fluxcd/tap/flux` / `choco install flux` |
+| `kustomize` | `brew install kustomize` / `choco install kustomize` |
+| `jq` | `brew install jq` / `choco install jq` |
+| [`task`](https://taskfile.dev) | `brew install go-task` / `choco install go-task` |
+
+### Mac (OrbStack)
+
+OrbStack start automatisch een K8s cluster. De Taskfile gebruikt de `orbstack` context.
+
+```bash
+brew install orbstack
+# Start OrbStack via de app, daarna is kubectl automatisch geconfigureerd
+```
+
+### Windows
+
+OrbStack werkt niet op Windows. Gebruik Kind met Docker Desktop:
+
+```bash
+# Docker Desktop installeren en K8s inschakelen via Settings → Kubernetes
+# of Kind gebruiken:
+kind create cluster --name don-local
+```
+
+Pas daarna in [Taskfile.yaml](./Taskfile.yaml) de `CONTEXT` var aan:
+
+```yaml
+vars:
+  CONTEXT: kind-don-local   # of: docker-desktop
+```
+
+> **Ingress-DNS**: `*.k8s.orb.local` is OrbStack-specifiek en werkt niet op Windows.
+> Gebruik op Windows altijd `task local:forward` (port-forward) in plaats van de ingress-hostnamen.
+
+### Eerste keer opzetten
+
+```bash
+# 1. Flux installeren op de lokale cluster + namespaces aanmaken
+task local:setup
+
+# 2a. Secrets overnemen uit de test-cluster
+#     Vind je context met: kubectl config get-contexts
+task local:secrets:from-cluster TEST_CONTEXT=<naam-test-context>
+
+# 2b. Of handmatig invullen vanuit de voorbeeldbestanden:
+task local:secrets:from-examples
+# → Pas de gegenereerde *-secret.yaml bestanden aan in elk overlays/local/
+```
+
+### Deployen en testen
+
+```bash
+# Preview wat er deployed wordt
+task local:diff
+
+# Alles deployen
+task local:apply
+
+# Of per namespace:
+task local:apply:api
+task local:apply:auth
+task local:apply:frontend
+task local:apply:search
+task local:apply:static
+task local:apply:oss
+```
+
+Port-forwards per service:
+
+```bash
+task local:forward          # Apisix gateway :9080, admin :9180
+task local:forward:auth     # Keycloak :8080
+task local:forward:frontend # Frontend :3000
+task local:forward:search   # Typesense :8108
+```
+
+Lokale endpoints (OrbStack, via Ingress):
+
+| Service | URL |
+| --- | --- |
+| Frontend | [don.k8s.orb.local](http://don.k8s.orb.local) |
+| Apisix gateway | [api.k8s.orb.local](http://api.k8s.orb.local) |
+| Apisix admin | [api-admin.k8s.orb.local](http://api-admin.k8s.orb.local) |
+| Auth (Keycloak) | [auth.k8s.orb.local](http://auth.k8s.orb.local) |
+| Search | [search.k8s.orb.local](http://search.k8s.orb.local) |
+| Static | [static.k8s.orb.local](http://static.k8s.orb.local) |
+| OSS register | [oss-register.k8s.orb.local](http://oss-register.k8s.orb.local) |
+
+### Opruimen
+
+```bash
+task local:teardown
+```
+
+### Alle beschikbare tasks
+
+```bash
+task --list
+```
+
+### Cluster inspecteren
+
+**Snel via kubectl:**
+
+```bash
+# Werkt de cluster?
+kubectl get nodes
+
+# Alle pods in alle namespaces
+kubectl get pods -A
+
+# Pods in één namespace
+kubectl get pods -n tn-don-api
+
+# Logs van een pod bekijken
+kubectl logs -n tn-don-api <pod-naam>
+
+# Beschrijving van een pod (handig bij CrashLoopBackOff etc.)
+kubectl describe pod -n tn-don-api <pod-naam>
+```
+
+**Aanbevolen: K9s** — terminal UI die je cluster live laat zien
+
+```bash
+brew install k9s   # of: choco install k9s
+k9s                # opent direct in je huidige kubectl context
+```
+
+In K9s navigeer je met de pijltjestoetsen, `enter` om in te zoomen, `esc` om terug te gaan, `l` voor logs, `d` voor describe en `:` om te wisselen van resource type (bijv. `:pods`, `:namespaces`, `:helmreleases`).
+
+**OrbStack (Mac only):** heeft ook een ingebouwde UI via de menubar-app waar je pods, logs en namespaces kunt bekijken zonder extra tooling.
+
+---
+
 ## Connect to Postgres DB
 
 Connect to the Kubernetes cluster and start a port-forward for the pgAdmin service:

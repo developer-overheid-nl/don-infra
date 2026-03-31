@@ -1,0 +1,38 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - oss-db.yaml               # kopieer van oss-db.example.yaml, nooit committen
+  - register-site-secret.yaml # kopieer van register-site-secret.example.yaml, nooit committen
+  - don-crawler-secret.yaml   # kopieer van don-crawler-secret.example.yaml, nooit committen
+  - piwik-secret.yaml         # kopieer van piwik-secret.example.yaml, nooit committen
+
+namespace: tn-don-oss
+namePrefix: don-oss-
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: oss
+    includeSelectors: false
+    includeTemplates: true
+
+patches:
+  - target:
+      kind: Ingress
+      name: oss-register-site-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: oss-register.k8s.orb.local
+      - op: remove
+        path: /spec/tls
+      - op: remove
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: CronJob
+      name: oss-crawler
+    patch: |
+      - op: add
+        path: /spec/suspend
+        value: true

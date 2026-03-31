@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - piwik-secret.yaml   # kopieer van piwik-secret.example.yaml, nooit committen
+
+namespace: tn-don-frontend
+namePrefix: don-frontend-
+
+commonLabels:
+  app: frontend
+
+patches:
+  - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: don.k8s.orb.local
+      - op: remove
+        path: /spec/tls
+      - op: remove
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
