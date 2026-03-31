@@ -23,10 +23,10 @@ patches:
         value: 1
       - op: replace
         path: /spec/values/ingress/hostname
-        value: auth.don. projects.digilab.network
+        value: auth.don.projects.digilab.network
       - op: replace
         path: /spec/values/ingress/extraTls/0/hosts/0
-        value: auth.don. projects.digilab.network
+        value: auth.don.projects.digilab.network
       - op: replace
         path: /spec/values/ingress/enabled
         value: false
@@ -36,4 +36,4 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: auth.don. projects.digilab.network
+        value: auth.don.projects.digilab.network
