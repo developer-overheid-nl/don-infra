@@ -39,7 +39,7 @@ patches:
         path: /spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_CORS_DOMAINS
-          value: "https://developer.overheid.nl,https://don.projects.digilab.network"
+          value: "https://developer.overheid.nl,https://projects.digilab.network"
   - target:
       kind: CronJob
       name: scraper

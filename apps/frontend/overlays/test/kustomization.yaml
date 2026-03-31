@@ -19,14 +19,14 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: don.projects.digilab.network
+        value: projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: don.projects.digilab.network
+        value: projects.digilab.network
   - target:
       kind: HTTPRoute
       name: http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: don.projects.digilab.network
+        value: projects.digilab.network

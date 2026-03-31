@@ -28,17 +28,17 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: search.don.projects.digilab.network
+        value: search.projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: search.don.projects.digilab.network
+        value: search.projects.digilab.network
   - target:
       kind: HTTPRoute
       name: http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: search.don.projects.digilab.network
+        value: search.projects.digilab.network
   - target:
       kind: Deployment
       name: dpl
@@ -47,7 +47,7 @@ patches:
         path: /spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_CORS_DOMAINS
-          value: "https://developer.overheid.nl,https://don.projects.digilab.network"
+          value: "https://developer.overheid.nl,https://projects.digilab.network"
   - target:
       kind: CronJob
       name: scraper
@@ -56,4 +56,4 @@ patches:
         path: /spec/jobTemplate/spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_HOST
-          value: "search.don.projects.digilab.network"
+          value: "search.projects.digilab.network"
