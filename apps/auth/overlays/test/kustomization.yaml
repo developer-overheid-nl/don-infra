@@ -30,6 +30,9 @@ patches:
       - op: replace
         path: /spec/values/ingress/enabled
         value: false
+      - op: replace
+        path: /spec/values/proxyHeaders
+        value: xforwarded
   - target:
       kind: HTTPRoute
       name: http-route
