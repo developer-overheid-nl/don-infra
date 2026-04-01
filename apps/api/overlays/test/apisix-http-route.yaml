@@ -11,9 +11,9 @@ spec:
     - set-in-overlay
   rules:
     - backendRefs:
-        - name: don-api-apisix
+        - name: don-api-apisix-gateway
           kind: Service
-          port: 9080
+          port: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
