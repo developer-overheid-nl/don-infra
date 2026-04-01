@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+
 resources:
   - ../../base
   - register-site-http-route.yaml
@@ -12,8 +13,10 @@ resources:
   - api-register-secret.yaml
   - api-register-db.yaml
   - piwik-secret.yaml
+
 namespace: tn-don-api
 namePrefix: don-api-
+
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
@@ -27,11 +30,15 @@ images:
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
     newTag: e7e7b664183df1f82c0cea0f83ad8310cd7687ab
+    
 patches:
   - target:
       kind: HelmRelease
       name: apisix
     patch: |
+      - op: add
+        path: /metadata/annotations/trigger
+        value: "1"
       - op: replace
         path: /spec/values/replicaCount
         value: 1
