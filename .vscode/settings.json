@@ -1,5 +1,8 @@
 {
     "yaml.schemas": {
-        "https://www.schemastore.org/publiccode.json": "file:///home/tom/Projects/don/don-infra/publiccode.yml"
+        "https://www.schemastore.org/publiccode.json": "publiccode.yml"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
 }
