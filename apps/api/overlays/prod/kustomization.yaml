@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - apisix.yaml
@@ -10,25 +9,21 @@ resources:
   - api-register-secret.yaml
   - api-register-db.yaml
   - piwik-secret.yaml
-
-
 namespace: tn-don-api
 namePrefix: don-api-
-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
     newTag: 7f4ed11119790f7154de4ac4b723ef988a7369ee
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: 807df0e2d74a25a897e82442c6766303df98bb94
+    newTag: 8124258816420eadef9d3d72669ab21336a6f6cb
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: dea9f870f88ac8f5eef77b71af605e520d017a83
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
     newTag: d51738bcd24d7da1df37a52b9cb9686a2fc0bbfb
-
 patches:
   - target:
       kind: HelmRelease
@@ -50,9 +45,9 @@ patches:
         path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
         value: api-admin.developer.overheid.nl
   - target:
-        kind: Ingress
-        name: register-site-ing
-    patch: |    
+      kind: Ingress
+      name: register-site-ing
+    patch: |
       - op: replace
         path: /spec/rules/0/host
         value: apis.developer.overheid.nl
@@ -60,8 +55,8 @@ patches:
         path: /spec/tls/0/hosts/0
         value: apis.developer.overheid.nl
   - target:
-        kind: Ingress
-        name: don-schema-register-ing
+      kind: Ingress
+      name: don-schema-register-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host

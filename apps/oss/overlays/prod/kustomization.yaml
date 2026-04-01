@@ -1,38 +1,33 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - oss-db.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml
-
 namespace: tn-don-oss
 namePrefix: don-oss-
-
 labels:
   - pairs:
       app.kubernetes.io/part-of: oss
     includeSelectors: false
     includeTemplates: true
-
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
     newTag: 59aef7f25361b9b30719f471861b0139be86cc4c
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
-    newTag: 807df0e2d74a25a897e82442c6766303df98bb94
+    newTag: 8124258816420eadef9d3d72669ab21336a6f6cb
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: cfd6179d45528f6a85eb7800f791acc52974ed9a
-
 patches:
   - target:
-        kind: Ingress
-        name: oss-register-site-ing
-    patch: |    
+      kind: Ingress
+      name: oss-register-site-ing
+    patch: |
       - op: replace
         path: /spec/rules/0/host
         value: oss.developer.overheid.nl
