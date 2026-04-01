@@ -36,9 +36,6 @@ patches:
       kind: HelmRelease
       name: apisix
     patch: |
-      - op: add
-        path: /metadata/annotations/trigger
-        value: "1"
       - op: replace
         path: /spec/values/replicaCount
         value: 1
