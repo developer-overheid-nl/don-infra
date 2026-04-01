@@ -23,6 +23,9 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: don.projects.digilab.network
+      - op: replace
+        path: /spec/ingressClassName
+        value: disabled
   - target:
       kind: HTTPRoute
       name: http-route

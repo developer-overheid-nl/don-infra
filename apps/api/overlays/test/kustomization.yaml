@@ -77,6 +77,9 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: api-register.projects.digilab.network
+      - op: replace
+        path: /spec/ingressClassName
+        value: disabled
   - target:
       kind: Ingress
       name: don-schema-register-ing
@@ -87,6 +90,9 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: schemas.projects.digilab.network
+      - op: replace
+        path: /spec/ingressClassName
+        value: disabled
   - target:
       kind: HTTPRoute
       name: register-site-http-route
