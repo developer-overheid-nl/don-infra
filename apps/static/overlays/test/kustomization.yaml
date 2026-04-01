@@ -22,12 +22,6 @@ patches:
       name: ing
     patch: |
       - op: replace
-        path: /spec/rules/0/host
-        value: static.projects.digilab.network
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: static.projects.digilab.network
-      - op: replace
         path: /spec/ingressClassName
         value: disabled
   - target:

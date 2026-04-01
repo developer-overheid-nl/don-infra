@@ -40,18 +40,6 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/hosts/0/host
-        value: api.projects.digilab.network
-      - op: replace
-        path: /spec/values/ingress/tls/0/hosts/0
-        value: api.projects.digilab.network
-      - op: replace
-        path: /spec/values/apisix/admin/ingress/hosts/0/host
-        value: api-admin.projects.digilab.network
-      - op: replace
-        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
-        value: api-admin.projects.digilab.network
-      - op: replace
         path: /spec/values/ingress/enabled
         value: false
       - op: replace
