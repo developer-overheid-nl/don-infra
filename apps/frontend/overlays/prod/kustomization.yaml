@@ -14,13 +14,6 @@ images:
     newTag: f047228520cce2b4fb81a2c8866bb68426fdabf0
 patches:
   - target:
-      kind: Ingress
-      name: ing
-    patch: |
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
-  - target:
       kind: HTTPRoute
       name: http-route
     patch: |

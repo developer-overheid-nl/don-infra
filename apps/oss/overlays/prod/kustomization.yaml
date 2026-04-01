@@ -31,13 +31,6 @@ images:
 
 patches:
   - target:
-      kind: Ingress
-      name: oss-register-site-ing
-    patch: |
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
-  - target:
       kind: HTTPRoute
       name: http-route
     patch: |

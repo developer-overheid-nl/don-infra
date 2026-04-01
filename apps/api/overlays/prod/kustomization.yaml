@@ -70,9 +70,6 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: apis.developer.overheid.nl
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
   - target:
         kind: Ingress
         name: don-schema-register-ing
@@ -83,9 +80,6 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: schemas.developer.overheid.nl
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
   - target:
       kind: HTTPRoute
       name: register-site-http-route
