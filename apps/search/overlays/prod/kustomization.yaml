@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - api-key.yaml
   - scraper-configmap.yaml
 
@@ -26,10 +27,14 @@ patches:
       name: ing
     patch: |
       - op: replace
-        path: /spec/rules/0/host
-        value: search.developer.overheid.nl
+        path: /spec/ingressClassName
+        value: disabled
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
       - op: replace
-        path: /spec/tls/0/hosts/0
+        path: /spec/hostnames/0
         value: search.developer.overheid.nl
   - target:
       kind: Deployment
