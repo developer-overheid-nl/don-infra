@@ -41,11 +41,18 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/enabled
-        value: false
+        path: /spec/values/ingress/hosts/0/host
+        value: api.developer.overheid.nl
       - op: replace
-        path: /spec/values/apisix/admin/ingress/enabled
-        value: false
+        path: /spec/values/ingress/tls/0/hosts/0
+        value: api.developer.overheid.nl
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/hosts/0/host
+        value: api-admin.developer.overheid.nl
+      - op: replace
+        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
+        value: api-admin.developer.overheid.nl
+      - op: replace
   - target:
       kind: HTTPRoute
       name: apisix-http-route
@@ -70,16 +77,6 @@ patches:
       - op: replace
         path: /spec/tls/0/hosts/0
         value: apis.developer.overheid.nl
-  - target:
-        kind: Ingress
-        name: don-schema-register-ing
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: schemas.developer.overheid.nl
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: schemas.developer.overheid.nl
   - target:
       kind: HTTPRoute
       name: register-site-http-route

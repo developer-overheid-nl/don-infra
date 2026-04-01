@@ -22,8 +22,11 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/enabled
-        value: false
+        path: /spec/values/ingress/hostname
+        value: auth.developer.overheid.nl
+      - op: replace
+        path: /spec/values/ingress/extraTls/0/hosts/0
+        value: auth.developer.overheid.nl
       - op: replace
         path: /spec/values/proxyHeaders
         value: xforwarded
