@@ -23,6 +23,16 @@ images:
 
 patches:
   - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: search.developer.overheid.nl
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: search.developer.overheid.nl
+  - target:
       kind: HTTPRoute
       name: http-route
     patch: |

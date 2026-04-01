@@ -31,6 +31,16 @@ images:
 
 patches:
   - target:
+      kind: Ingress
+      name: oss-register-site-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: oss.developer.overheid.nl
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: oss.developer.overheid.nl
+  - target:
       kind: HTTPRoute
       name: http-route
     patch: |

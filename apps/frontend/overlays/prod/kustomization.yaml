@@ -14,6 +14,16 @@ images:
     newTag: f047228520cce2b4fb81a2c8866bb68426fdabf0
 patches:
   - target:
+      kind: Ingress
+      name: ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: developer.overheid.nl
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: developer.overheid.nl
+  - target:
       kind: HTTPRoute
       name: http-route
     patch: |
