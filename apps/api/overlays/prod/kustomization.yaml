@@ -52,7 +52,6 @@ patches:
       - op: replace
         path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
         value: api-admin.developer.overheid.nl
-      - op: replace
   - target:
       kind: HTTPRoute
       name: apisix-http-route
