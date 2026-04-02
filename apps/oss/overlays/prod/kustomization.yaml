@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - http-route.yaml
@@ -8,16 +7,13 @@ resources:
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml
-
 namespace: tn-don-oss
 namePrefix: don-oss-
-
 labels:
   - pairs:
       app.kubernetes.io/part-of: oss
     includeSelectors: false
     includeTemplates: true
-
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
@@ -27,8 +23,7 @@ images:
     newTag: 807df0e2d74a25a897e82442c6766303df98bb94
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
-    newTag: cfd6179d45528f6a85eb7800f791acc52974ed9a
-
+    newTag: 80097985fb79117fa1289f64f60e0f605b363e85
 patches:
   - target:
       kind: Ingress
