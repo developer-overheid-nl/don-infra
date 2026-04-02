@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - http-route.yaml
   - oss-db.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
@@ -16,10 +17,10 @@ labels:
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
-    newTag: 8a5fda7c00e70b93fb101770154531d6ce78898a
+    newTag: 1f455abb6d4dc63ee1f688a615bd581f23d4b765
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
-    newTag: 9d1574e52cfbdc4d798c99470cd6b4867a7df502
+    newTag: 52938fcde1e14581fbad6e07e8534ccc1581dc2c
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: 30e83d0d262f36fad3b9f15064c56e202ecbf8ab
@@ -37,11 +38,15 @@ patches:
       name: oss-register-site-ing
     patch: |
       - op: replace
-        path: /spec/rules/0/host
-        value: oss-register.don.apps.digilab.network
+        path: /spec/ingressClassName
+        value: disabled
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
       - op: replace
-        path: /spec/tls/0/hosts/0
-        value: oss-register.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: oss-register.projects.digilab.network
   - target:
       kind: CronJob
       name: oss-crawler

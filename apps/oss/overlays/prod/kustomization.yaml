@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - oss-db.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
@@ -30,12 +31,19 @@ images:
 
 patches:
   - target:
-        kind: Ingress
-        name: oss-register-site-ing
-    patch: |    
+      kind: Ingress
+      name: oss-register-site-ing
+    patch: |
       - op: replace
         path: /spec/rules/0/host
         value: oss.developer.overheid.nl
       - op: replace
         path: /spec/tls/0/hosts/0
+        value: oss.developer.overheid.nl
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
         value: oss.developer.overheid.nl

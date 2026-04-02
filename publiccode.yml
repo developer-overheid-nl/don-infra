@@ -1,0 +1,52 @@
+publiccodeYmlVersion: "0.5"
+
+name: DON Infra
+url: "https://github.com/developer-overheid-nl/don-infra"
+landingURL: "https://developer.overheid.nl"
+
+softwareType: configurationFiles
+
+platforms:
+  - web
+  - linux
+
+developmentStatus: stable
+
+description:
+  nl:
+    shortDescription: >-
+      Kubernetes manifests voor developer.overheid.nl
+    longDescription: |
+      Deze repository bevat alle Kubernetes manifests voor
+      developer.overheid.nl. Het platform biedt Nederlandse
+      overheidsontwikkelaars toegang tot tools, richtlijnen en
+      community-resources. De infrastructuur bestaat uit meerdere applicaties:
+      API, authenticatie, community-platform, frontend, zoekfunctie en
+      statische bestanden. Secrets worden versleuteld beheerd met SOPS.
+    features:
+      - Kubernetes-configuratie voor developer.overheid.nl
+      - Kustomize-gebaseerde overlay structuur voor test- en productieomgevingen
+      - SOPS-versleutelde secrets
+
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: Geonovum
+
+intendedAudience:
+  countries:
+    - NL
+  scope:
+    - government
+
+localisation:
+  availableLanguages:
+    - nl
+    - en
+  localisationReady: false
+
+maintenance:
+  type: internal
+  contacts:
+    - name: Team developer.overheid.nl
+      email: developer.overheid@geonovum.nl
+      affiliation: Geonovum

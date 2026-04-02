@@ -1,0 +1,152 @@
+name: Cleanup Release PRs
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  cleanup-current-release-prs:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close oudere release PR's voor dezelfde repo
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CURRENT_TITLE: ${{ github.event.pull_request.title }}
+          CURRENT_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          set -euo pipefail
+
+          SOURCE_REPO=""
+
+          if [[ "$CURRENT_TITLE" == Release:\ *" → "* ]]; then
+            SOURCE_REPO="${CURRENT_TITLE#Release: }"
+            SOURCE_REPO="${SOURCE_REPO%% → *}"
+          elif [[ "$CURRENT_HEAD_REF" == release/* ]]; then
+            SOURCE_REPO="${CURRENT_HEAD_REF#release/}"
+            if [[ "$SOURCE_REPO" =~ ^(.+)-[0-9a-f]{7,40}$ ]]; then
+              SOURCE_REPO="${BASH_REMATCH[1]}"
+            fi
+          fi
+
+          if [[ -z "$SOURCE_REPO" ]]; then
+            echo "PR hoort niet bij het release-patroon, niets te doen."
+            exit 0
+          fi
+
+          PRS_JSON="$(gh pr list \
+            --repo "$REPO" \
+            --state open \
+            --limit 200 \
+            --json number,title,headRefName,createdAt)"
+
+          KEEP_PR="$(printf '%s' "$PRS_JSON" | jq -r --arg source_repo "$SOURCE_REPO" '
+            def matches_repo($repo):
+              (.title | startswith("Release: " + $repo + " → "))
+              or (.headRefName == ("release/" + $repo))
+              or (.headRefName | startswith("release/" + $repo + "-"));
+
+            [
+              .[]
+              | select(matches_repo($source_repo))
+            ]
+            | sort_by(.createdAt, .number)
+            | reverse
+            | .[0].number // empty
+          ')"
+
+          if [[ -z "$KEEP_PR" ]]; then
+            echo "Geen open release PR's gevonden voor $SOURCE_REPO."
+            exit 0
+          fi
+
+          mapfile -t STALE_PRS < <(
+            printf '%s' "$PRS_JSON" | jq -r --arg source_repo "$SOURCE_REPO" --argjson keep "$KEEP_PR" '
+              def matches_repo($repo):
+                (.title | startswith("Release: " + $repo + " → "))
+                or (.headRefName == ("release/" + $repo))
+                or (.headRefName | startswith("release/" + $repo + "-"));
+
+              .[]
+              | select(.number != $keep)
+              | select(matches_repo($source_repo))
+              | .number
+            '
+          )
+
+          if [[ "${#STALE_PRS[@]}" -eq 0 ]]; then
+            echo "Geen dubbele release PR's gevonden voor $SOURCE_REPO."
+            exit 0
+          fi
+
+          for pr in "${STALE_PRS[@]}"; do
+            gh pr close "$pr" \
+              --repo "$REPO" \
+              --delete-branch \
+              --comment "Gesloten omdat #$KEEP_PR de nieuwste open release-PR is voor $SOURCE_REPO."
+          done
+
+  cleanup-existing-release-prs:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close alle oudere release PR's
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          PRS_JSON="$(gh pr list \
+            --repo "$REPO" \
+            --state open \
+            --limit 200 \
+            --json number,title,headRefName,createdAt)"
+
+          mapfile -t STALE_PRS < <(
+            printf '%s' "$PRS_JSON" | jq -r '
+              def source_repo:
+                if (.title | startswith("Release: ")) and (.title | contains(" → ")) then
+                  (.title | sub("^Release: "; "") | split(" → ")[0])
+                elif (.headRefName | startswith("release/")) then
+                  (.headRefName | sub("^release/"; "") | sub("-[0-9a-f]{7,40}$"; ""))
+                else
+                  empty
+                end;
+
+              [
+                .[]
+                | . + {sourceRepo: source_repo}
+                | select(.sourceRepo != null and .sourceRepo != "")
+              ]
+              | sort_by(.sourceRepo, .createdAt, .number)
+              | group_by(.sourceRepo)
+              | .[]
+              | sort_by(.createdAt, .number)
+              | reverse
+              | .[1:]
+              | .[]
+              | .number
+            '
+          )
+
+          if [[ "${#STALE_PRS[@]}" -eq 0 ]]; then
+            echo "Geen dubbele release PR's gevonden."
+            exit 0
+          fi
+
+          for pr in "${STALE_PRS[@]}"; do
+            gh pr close "$pr" \
+              --repo "$REPO" \
+              --delete-branch \
+              --comment "Gesloten omdat er al een nieuwere open release-PR is voor dezelfde repo."
+          done

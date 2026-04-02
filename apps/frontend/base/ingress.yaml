@@ -5,30 +5,30 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location = /kennisplatform-apis {
-        return 301 /communities/kennisplatform-apis;
-      }
+    # nginx.ingress.kubernetes.io/server-snippet: |
+    #   location = /kennisplatform-apis {
+    #     return 301 /communities/kennisplatform-apis;
+    #   }
 
-      location = /.well-known/security.txt {
-        return 301 $scheme://www.ncsc.nl/.well-known/security.txt;
-      }
+    #   location = /.well-known/security.txt {
+    #     return 301 $scheme://www.ncsc.nl/.well-known/security.txt;
+    #   }
 
-      location ~ ^/api/v0(/.*)?$ {
-        return 301 $scheme://apis.$host/api/v0$1$is_args$args;
-      }
+    #   location ~ ^/api/v0(/.*)?$ {
+    #     return 301 $scheme://apis.$host/api/v0$1$is_args$args;
+    #   }
 
-      location ~ ^/apis(/.*)?$ {
-        return 301 $scheme://apis.$host/apis$1$is_args$args;
-      }
+    #   location ~ ^/apis(/.*)?$ {
+    #     return 301 $scheme://apis.$host/apis$1$is_args$args;
+    #   }
 
-      location ~ ^/repositories(/.*)?$ {
-        return 301 $scheme://oss.$host/repositories$1$is_args$args;
-      }
+    #   location ~ ^/repositories(/.*)?$ {
+    #     return 301 $scheme://oss.$host/repositories$1$is_args$args;
+    #   }
 
-      location ~ ^/static(/.*)?$ {
-        return 301 $scheme://apis.$host/static$1;
-      }
+    #   location ~ ^/static(/.*)?$ {
+    #     return 301 $scheme://apis.$host/static$1;
+    #   }
 spec:
   ingressClassName: nginx
   rules:

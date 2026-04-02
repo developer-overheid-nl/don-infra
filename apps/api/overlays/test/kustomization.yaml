@@ -2,6 +2,9 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - register-site-http-route.yaml
+  - don-schema-register-http-route.yaml
+  - apisix-http-route.yaml
   - apisix.yaml
   - apisix-keycloak-plugin.yaml
   - register-site.yaml
@@ -14,10 +17,10 @@ namePrefix: don-api-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
-    newTag: 1ed8430827501d55ec3e55165a635f03adcd5771
+    newTag: c48c5301571ff357061d94678c4d8aa31d04cfe8
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: 9d1574e52cfbdc4d798c99470cd6b4867a7df502
+    newTag: 52938fcde1e14581fbad6e07e8534ccc1581dc2c
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 5e9d8483911830902681f84e105e9032db650bc4
@@ -33,34 +36,62 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/hosts/0/host
-        value: api.don.apps.digilab.network
+        path: /spec/values/ingress/enabled
+        value: false
       - op: replace
-        path: /spec/values/ingress/tls/0/hosts/0
-        value: api.don.apps.digilab.network
+        path: /spec/values/apisix/admin/ingress/enabled
+        value: false
+  - target:
+      kind: HTTPRoute
+      name: apisix-http-route
+    patch: |
       - op: replace
-        path: /spec/values/apisix/admin/ingress/hosts/0/host
-        value: api-admin.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: api.projects.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: apisix-admin-http-route
+    patch: |
       - op: replace
-        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
-        value: api-admin.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: api-admin.projects.digilab.network
   - target:
       kind: Ingress
       name: register-site-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: api-register.don.apps.digilab.network
+        value: api-register.projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: api-register.don.apps.digilab.network
+        value: api-register.projects.digilab.network
+      - op: replace
+        path: /spec/ingressClassName
+        value: disabled
   - target:
       kind: Ingress
       name: don-schema-register-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: schemas.don.apps.digilab.network
+        value: schemas.projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: schemas.don.apps.digilab.network
+        value: schemas.projects.digilab.network
+      - op: replace
+        path: /spec/ingressClassName
+        value: disabled
+  - target:
+      kind: HTTPRoute
+      name: register-site-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: api-register.projects.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: don-schema-register-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: schemas.projects.digilab.network

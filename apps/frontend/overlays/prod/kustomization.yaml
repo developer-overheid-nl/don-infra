@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - http-route.yaml
   - piwik-secret.yaml
 namespace: tn-don-frontend
 namePrefix: don-frontend-
@@ -21,4 +22,11 @@ patches:
         value: developer.overheid.nl
       - op: replace
         path: /spec/tls/0/hosts/0
+        value: developer.overheid.nl
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
         value: developer.overheid.nl

@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - http-route.yaml
   - piwik-secret.yaml
 namespace: tn-don-frontend
 namePrefix: don-frontend-
@@ -10,15 +11,19 @@ commonLabels:
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-site
-    newTag: 72250037cf662068cf37934dafcc7f52d8df5874
+    newTag: 2abd9cde051d06906895458e11648af0e71ddc85
 patches:
   - target:
       kind: Ingress
       name: ing
     patch: |
       - op: replace
-        path: /spec/rules/0/host
-        value: don.apps.digilab.network
+        path: /spec/ingressClassName
+        value: disabled
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
       - op: replace
-        path: /spec/tls/0/hosts/0
-        value: don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: don.projects.digilab.network
