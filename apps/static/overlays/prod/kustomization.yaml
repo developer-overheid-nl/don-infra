@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
 
 namespace: tn-don-static
 namePrefix: don-static-
@@ -25,6 +26,13 @@ patches:
         value: static.developer.overheid.nl
       - op: replace
         path: /spec/tls/0/hosts/0
+        value: static.developer.overheid.nl
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
         value: static.developer.overheid.nl
   - target:
       kind: Deployment

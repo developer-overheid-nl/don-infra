@@ -3,6 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - register-site-http-route.yaml
+  - don-schema-register-http-route.yaml
+  - apisix-http-route.yaml
   - apisix.yaml
   - apisix-keycloak-plugin.yaml
   - register-site.yaml
@@ -50,6 +53,20 @@ patches:
         path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
         value: api-admin.developer.overheid.nl
   - target:
+      kind: HTTPRoute
+      name: apisix-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: api.developer.overheid.nl
+  - target:
+      kind: HTTPRoute
+      name: apisix-admin-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: api-admin.developer.overheid.nl
+  - target:
         kind: Ingress
         name: register-site-ing
     patch: |    
@@ -60,12 +77,16 @@ patches:
         path: /spec/tls/0/hosts/0
         value: apis.developer.overheid.nl
   - target:
-        kind: Ingress
-        name: don-schema-register-ing
+      kind: HTTPRoute
+      name: register-site-http-route
     patch: |
       - op: replace
-        path: /spec/rules/0/host
-        value: schemas.developer.overheid.nl
+        path: /spec/hostnames/0
+        value: apis.developer.overheid.nl
+  - target:
+      kind: HTTPRoute
+      name: don-schema-register-http-route
+    patch: |
       - op: replace
-        path: /spec/tls/0/hosts/0
+        path: /spec/hostnames/0
         value: schemas.developer.overheid.nl

@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
 
 namespace: tn-don-static
 namePrefix: don-static-
@@ -21,8 +22,12 @@ patches:
       name: ing
     patch: |
       - op: replace
-        path: /spec/rules/0/host
-        value: static.don.apps.digilab.network
+        path: /spec/ingressClassName
+        value: disabled
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
       - op: replace
-        path: /spec/tls/0/hosts/0
-        value: static.don.apps.digilab.network
+        path: /spec/hostnames/0
+        value: static.projects.digilab.network
