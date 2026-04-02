@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: write
 
 jobs:
@@ -91,6 +91,7 @@ jobs:
           for pr in "${STALE_PRS[@]}"; do
             gh pr close "$pr" \
               --repo "$REPO" \
+              --delete-branch \
               --comment "Gesloten omdat #$KEEP_PR de nieuwste open release-PR is voor $SOURCE_REPO."
           done
 
@@ -146,5 +147,6 @@ jobs:
           for pr in "${STALE_PRS[@]}"; do
             gh pr close "$pr" \
               --repo "$REPO" \
+              --delete-branch \
               --comment "Gesloten omdat er al een nieuwere open release-PR is voor dezelfde repo."
           done
