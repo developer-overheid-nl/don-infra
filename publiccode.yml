@@ -18,7 +18,7 @@ description:
       Kubernetes manifests voor developer.overheid.nl
     longDescription: |
       Deze repository bevat alle Kubernetes manifests voor
-      developer.overheid.nl. Het platform biedt Nederlandseasdf asdf asdf asdf asdf asdf asf asdf asdf asfd asdf asdef
+      developer.overheid.nl. Het platform biedt Nederlandse
       overheidsontwikkelaars toegang tot tools, richtlijnen en
       community-resources. De infrastructuur bestaat uit meerdere applicaties:
       API, authenticatie, community-platform, frontend, zoekfunctie en
@@ -30,7 +30,7 @@ description:
 
 legal:
   license: EUPL-1.2
-  mainCopyrightOwner: Geonovum  . Het platform biedt Nederlandseasdf asdf asdf asdf asdf asdf asf asdf asdf asfd asdf a. Het platform biedt Nederlandseasdf asdf asdf asdf asdf asdf asf asdf asdf asfd asdf a. Het platform biedt Nederlandseasdf asdf asdf asdf asdf asdf asf asdf asdf asfd asdf a. Het platform biedt Nederlandseasdf asdf asdf asdf asdf asdf asf asdf asdf asfd asdf a. Het platform biedt Nederlandseasdf asdf asdf asdf asdf asdf asf asdf asdf asfd asdf a
+  mainCopyrightOwner: Geonovum
 
 intendedAudience:
   countries:
