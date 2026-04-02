@@ -1,8 +1,0 @@
-{
-    "yaml.schemas": {
-        "https://www.schemastore.org/publiccode.json": "publiccode.yml"
-    },
-    "[yaml]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    }
-}
