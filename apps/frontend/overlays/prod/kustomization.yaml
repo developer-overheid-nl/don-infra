@@ -11,7 +11,7 @@ commonLabels:
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-site
-    newTag: f047228520cce2b4fb81a2c8866bb68426fdabf0
+    newTag: c14a358f09245fb9bf10ff04c97d7a3def120423
 patches:
   - target:
       kind: Ingress
