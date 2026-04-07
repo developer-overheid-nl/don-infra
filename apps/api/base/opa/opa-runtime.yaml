@@ -14,13 +14,15 @@ spec:
     spec:
       containers:
         - name: opa
-          image: openpolicyagent/opa:1.6.0
+          image: openpolicyagent/opa:1.16.0
           args:
             - run
             - --server
             - --addr=0.0.0.0:8181
             - --log-level=debug
-            - /tmp/apisix.rego
+            - --ignore=.*
+            - /policies
+            - /data
           ports:
             - containerPort: 8181
               name: http
@@ -41,13 +43,19 @@ spec:
               memory: 256Mi
           volumeMounts:
             - name: opa-policy
-              mountPath: /tmp/apisix.rego
-              subPath: apisix.rego
+              mountPath: /policies
+              readOnly: true
+            - name: opa-data
+              mountPath: /data
               readOnly: true
       volumes:
         - name: opa-policy
           configMap:
             name: opa-policy
+        - name: opa-data
+          secret:
+            secretName: opa-auth-config
+            optional: true
 ---
 apiVersion: v1
 kind: Service
