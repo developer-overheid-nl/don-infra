@@ -23,6 +23,79 @@ spec:
             - --ignore=.*
             - /policies
             - /data
+          env:
+            - name: OPA_MODE
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: mode
+                  optional: true
+            - name: OPA_API_KEY_HEADER
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: api_key_header
+                  optional: true
+            - name: OPA_DEFAULT_REQUIRED_SCOPES
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: default_required_scopes
+                  optional: true
+            - name: OPA_ALLOWED_API_KEY_SCOPES
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: allowed_api_key_scopes
+                  optional: true
+            - name: OPA_KEYCLOAK_TOKEN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: token_url
+                  optional: true
+            - name: OPA_KEYCLOAK_INTROSPECTION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: introspection_url
+                  optional: true
+            - name: OPA_KEYCLOAK_ADMIN_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: admin_api_url
+                  optional: true
+            - name: OPA_KEYCLOAK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: client_id
+                  optional: true
+            - name: OPA_KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: client_secret
+                  optional: true
+            - name: OPA_KEYCLOAK_ADMIN_GRANT_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: admin_grant_type
+                  optional: true
+            - name: OPA_KEYCLOAK_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: admin_username
+                  optional: true
+            - name: OPA_KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: admin_password
+                  optional: true
           ports:
             - containerPort: 8181
               name: http
