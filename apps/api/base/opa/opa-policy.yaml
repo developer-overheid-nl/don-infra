@@ -4,52 +4,356 @@ metadata:
   name: opa-policy
 data:
   apisix.rego: |
-    package apisix.test
+    package apisix.authz
 
-    default allow = false
+    policy_name := "apisix.authz"
 
-    # Temporary test policy: allow only GET requests.
-    # Send `x-opa-debug: 1` to force a deny response with debug headers,
-    # so you can visibly verify APISIX -> OPA enforcement on a route.
-    debug_mode if {
-      lower(object.get(input.request.headers, "x-opa-debug", "")) == "1"
+    default result := {
+      "allow": false,
+      "reason": "Missing credentials (Authorization or x-api-key)",
+      "status_code": 401,
+      "headers": {
+        "X-OPA-Checked": "true",
+        "X-OPA-Decision": "deny",
+        "X-OPA-Policy": "apisix.authz",
+      },
     }
 
-    allow if {
-      input.request.method == "GET"
-      not debug_mode
+    default config := {}
+
+    config := data.apisix_auth if {
+      data.apisix_auth
+    }
+    mode := lower(object.get(config, "mode", "static"))
+    api_key_header := lower(object.get(config, "api_key_header", "x-api-key"))
+    default_required_scopes := object.get(config, "default_required_scopes", [])
+    allowed_api_key_scopes := object.get(
+      config,
+      "allowed_api_key_scopes",
+      ["apis:read", "organisations:read", "tools:read", "repositories:read", "gitOrganisations:read"],
+    )
+
+    result := response if {
+      auth_header := object.get(input.request.headers, "authorization", "")
+      auth_header != ""
+      response := bearer_response(auth_header)
     }
 
-    reason := "Denied by OPA debug mode (set x-opa-debug: 1)" if {
-      debug_mode
+    result := response if {
+      auth_header := object.get(input.request.headers, "authorization", "")
+      auth_header == ""
+      api_key := object.get(input.request.headers, api_key_header, "")
+      api_key != ""
+      response := api_key_response(api_key)
     }
 
-    status_code := 418 if {
-      debug_mode
+    bearer_response(auth_header) := deny("Invalid Authorization header format", 401) if {
+      not valid_bearer_header(auth_header)
     }
 
-    reason := "Blocked by OPA test policy (only GET is allowed)" if {
-      not allow
-      not debug_mode
+    bearer_response(auth_header) := deny(object.get(info, "error", "Unauthorized"), object.get(info, "status_code", 401)) if {
+      valid_bearer_header(auth_header)
+      token := bearer_token(auth_header)
+      info := bearer_token_info(token)
+      not object.get(info, "active", false)
     }
 
-    status_code := 429 if {
-      not allow
-      not debug_mode
+    bearer_response(auth_header) := deny("JWT token expired", 401) if {
+      valid_bearer_header(auth_header)
+      token := bearer_token(auth_header)
+      info := bearer_token_info(token)
+      object.get(info, "active", false)
+      not token_not_expired(info)
     }
 
-    headers := {
-      "X-OPA-Checked": "true",
-      "X-OPA-Decision": "allow",
-      "X-OPA-Policy": "apisix.test"
+    bearer_response(auth_header) := deny("JWT does not have required scope", 403) if {
+      valid_bearer_header(auth_header)
+      token := bearer_token(auth_header)
+      info := bearer_token_info(token)
+      object.get(info, "active", false)
+      token_not_expired(info)
+      not all_required_scopes_present(info, required_scopes)
+    }
+
+    bearer_response(auth_header) := allow_response(info) if {
+      valid_bearer_header(auth_header)
+      token := bearer_token(auth_header)
+      info := bearer_token_info(token)
+      object.get(info, "active", false)
+      token_not_expired(info)
+      all_required_scopes_present(info, required_scopes)
+    }
+
+    api_key_response(api_key) := deny(object.get(info, "error", "Invalid API key"), object.get(info, "status_code", 401)) if {
+      info := api_key_info(api_key)
+      not object.get(info, "active", false)
+    }
+
+    api_key_response(api_key) := deny("API key does not have required scope", 403) if {
+      info := api_key_info(api_key)
+      object.get(info, "active", false)
+      not all_required_scopes_present(info, required_scopes)
+    }
+
+    api_key_response(api_key) := allow_response(info) if {
+      info := api_key_info(api_key)
+      object.get(info, "active", false)
+      all_required_scopes_present(info, required_scopes)
+    }
+
+    bearer_token_info(token) := info if {
+      mode == "static"
+      tokens := object.get(object.get(config, "static", {}), "bearer_tokens", {})
+      info := object.get(tokens, token, {"active": false, "error": "Unauthorized", "status_code": 401})
+    }
+
+    bearer_token_info(token) := info if {
+      mode == "keycloak"
+      info := keycloak_bearer_info(token)
+    }
+
+    api_key_info(api_key) := info if {
+      mode == "static"
+      api_keys := object.get(object.get(config, "static", {}), "api_keys", {})
+      info := object.get(api_keys, api_key, {"active": false, "error": "Invalid API key", "status_code": 401})
+    }
+
+    api_key_info(api_key) := info if {
+      mode == "keycloak"
+      info := keycloak_api_key_info(api_key)
+    }
+
+    keycloak_bearer_info(token) := object.get(resp, "body", {"active": false, "error": "Invalid token introspection response", "status_code": 500}) if {
+      resp := keycloak_introspection_response(token)
+      resp.status_code == 200
+    }
+
+    keycloak_bearer_info(token) := {"active": false, "error": object.get(object.get(resp, "error", {}), "message", "Failed to introspect token"), "status_code": 500} if {
+      resp := keycloak_introspection_response(token)
+      resp.status_code == 0
+    }
+
+    keycloak_bearer_info(token) := {"active": false, "error": "Token introspection failed", "status_code": 401} if {
+      resp := keycloak_introspection_response(token)
+      resp.status_code != 0
+      resp.status_code != 200
+    }
+
+    keycloak_api_key_info(api_key) := {
+      "active": true,
+      "client_id": object.get(object.get(resp, "body", {}), "clientId", api_key),
+      "scopes": allowed_api_key_scopes,
     } if {
-      allow
+      resp := keycloak_client_lookup_response(api_key)
+      resp.status_code == 200
+      client_id := object.get(object.get(resp, "body", {}), "clientId", "")
+      client_id != ""
     }
 
-    headers := {
-      "X-OPA-Checked": "true",
-      "X-OPA-Decision": "deny",
-      "X-OPA-Policy": "apisix.test"
-    } if {
-      not allow
+    keycloak_api_key_info(api_key) := {"active": false, "error": object.get(object.get(resp, "error", {}), "message", "Failed to validate API key"), "status_code": 500} if {
+      resp := keycloak_client_lookup_response(api_key)
+      resp.status_code == 0
+    }
+
+    keycloak_api_key_info(api_key) := {"active": false, "error": "Invalid API key", "status_code": 401} if {
+      resp := keycloak_client_lookup_response(api_key)
+      resp.status_code != 0
+      resp.status_code != 200
+    }
+
+    keycloak_client_lookup_response(api_key) := resp if {
+      kc := object.get(config, "keycloak", {})
+      admin_token := keycloak_admin_token
+      admin_token != ""
+      lookup_url := sprintf("%s/%s", [trim_trailing_slash(object.get(kc, "admin_api_url", "")), api_key])
+      resp := http.send({
+        "method": "get",
+        "url": lookup_url,
+        "headers": {"Authorization": sprintf("Bearer %s", [admin_token])},
+        "force_json_decode": true,
+        "raise_error": false,
+        "timeout": "5s",
+        "cache": true,
+      })
+    }
+
+    keycloak_introspection_response(token) := resp if {
+      kc := object.get(config, "keycloak", {})
+      body := urlquery.encode_object({
+        "token": token,
+        "client_id": object.get(kc, "client_id", ""),
+        "client_secret": object.get(kc, "client_secret", ""),
+      })
+      resp := http.send({
+        "method": "post",
+        "url": keycloak_introspection_url(kc),
+        "raw_body": body,
+        "headers": {"Content-Type": "application/x-www-form-urlencoded"},
+        "force_json_decode": true,
+        "raise_error": false,
+        "timeout": "5s",
+        "cache": true,
+      })
+    }
+
+    keycloak_admin_token := access_token if {
+      kc := object.get(config, "keycloak", {})
+      resp := keycloak_admin_token_response
+      resp.status_code == 200
+      access_token := object.get(object.get(resp, "body", {}), "access_token", "")
+      access_token != ""
+      object.get(kc, "token_url", "") != ""
+    }
+
+    keycloak_admin_token := "" if {
+      resp := keycloak_admin_token_response
+      resp.status_code != 200
+    }
+
+    keycloak_admin_token_response := resp if {
+      kc := object.get(config, "keycloak", {})
+      grant_type := lower(object.get(kc, "admin_grant_type", "client_credentials"))
+      grant_type == "password"
+      body := urlquery.encode_object({
+        "grant_type": "password",
+        "client_id": object.get(kc, "client_id", "admin-cli"),
+        "username": object.get(kc, "admin_username", ""),
+        "password": object.get(kc, "admin_password", ""),
+      })
+      resp := http.send({
+        "method": "post",
+        "url": object.get(kc, "token_url", ""),
+        "raw_body": body,
+        "headers": {"Content-Type": "application/x-www-form-urlencoded"},
+        "force_json_decode": true,
+        "raise_error": false,
+        "timeout": "5s",
+      })
+    }
+
+    keycloak_admin_token_response := resp if {
+      kc := object.get(config, "keycloak", {})
+      grant_type := lower(object.get(kc, "admin_grant_type", "client_credentials"))
+      grant_type != "password"
+      body := urlquery.encode_object({
+        "grant_type": "client_credentials",
+        "client_id": object.get(kc, "client_id", ""),
+        "client_secret": object.get(kc, "client_secret", ""),
+      })
+      resp := http.send({
+        "method": "post",
+        "url": object.get(kc, "token_url", ""),
+        "raw_body": body,
+        "headers": {"Content-Type": "application/x-www-form-urlencoded"},
+        "force_json_decode": true,
+        "raise_error": false,
+        "timeout": "5s",
+      })
+    }
+
+    keycloak_introspection_url(kc) := introspection_url if {
+      introspection_url := object.get(kc, "introspection_url", "")
+      introspection_url != ""
+    }
+
+    keycloak_introspection_url(kc) := token_url if {
+      introspection_url := object.get(kc, "introspection_url", "")
+      introspection_url == ""
+      token_url := object.get(kc, "token_url", "")
+      endswith(token_url, "/introspect")
+    }
+
+    keycloak_introspection_url(kc) := concat("", [trim_trailing_slash(object.get(kc, "token_url", "")), "/introspect"]) if {
+      introspection_url := object.get(kc, "introspection_url", "")
+      introspection_url == ""
+      token_url := object.get(kc, "token_url", "")
+      not endswith(token_url, "/introspect")
+    }
+
+    valid_bearer_header(auth_header) if {
+      parts := non_empty_parts(auth_header)
+      count(parts) == 2
+      lower(parts[0]) == "bearer"
+    }
+
+    bearer_token(auth_header) := parts[1] if {
+      parts := non_empty_parts(auth_header)
+      count(parts) == 2
+      lower(parts[0]) == "bearer"
+    }
+
+    non_empty_parts(value) := parts if {
+      raw_parts := split(value, " ")
+      parts := [part | part := raw_parts[_]; part != ""]
+    }
+
+    required_scopes := scopes if {
+      scopes := route_required_scopes
+      count(scopes) > 0
+    }
+
+    required_scopes := default_required_scopes if {
+      count(route_required_scopes) == 0
+    }
+
+    route_required_scopes := scopes if {
+      raw := object.get(object.get(object.get(input, "route", {}), "labels", {}), "required_scopes", "")
+      raw != ""
+      scopes := [trim_space(scope) | scope := split(raw, ",")[_]; trim_space(scope) != ""]
+    }
+
+    route_required_scopes := [] if {
+      raw := object.get(object.get(object.get(input, "route", {}), "labels", {}), "required_scopes", "")
+      raw == ""
+    }
+
+    token_not_expired(info) if {
+      object.get(info, "exp", 0) == 0
+    }
+
+    token_not_expired(info) if {
+      exp := object.get(info, "exp", 0)
+      exp > time.now_ns() / 1000000000
+    }
+
+    all_required_scopes_present(info, scopes) if {
+      every scope in scopes {
+        granted_scope(info, scope)
+      }
+    }
+
+    granted_scope(info, scope) if {
+      scopes := object.get(info, "scopes", [])
+      scope in scopes
+    }
+
+    granted_scope(info, scope) if {
+      scope_string := object.get(info, "scope", "")
+      scope_string != ""
+      scope in split(scope_string, " ")
+    }
+
+    allow_response(info) := {
+      "allow": true,
+      "headers": {
+        "X-OPA-Checked": "true",
+        "X-OPA-Decision": "allow",
+        "X-OPA-Policy": policy_name,
+        "X-OPA-Client-Id": object.get(info, "client_id", object.get(info, "azp", "")),
+      },
+    }
+
+    deny(reason, status_code) := {
+      "allow": false,
+      "reason": reason,
+      "status_code": status_code,
+      "headers": {
+        "X-OPA-Checked": "true",
+        "X-OPA-Decision": "deny",
+        "X-OPA-Policy": policy_name,
+      },
+    }
+
+    trim_trailing_slash(value) := trimmed if {
+      trimmed := trim_right(value, "/")
     }
