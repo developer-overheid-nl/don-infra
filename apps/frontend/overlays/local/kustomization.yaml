@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - piwik-secret.yaml   # kopieer van piwik-secret.example.yaml, nooit committen
 
 namespace: tn-don-frontend
@@ -23,3 +24,10 @@ patches:
         path: /spec/tls
       - op: remove
         path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: don.k8s.orb.local

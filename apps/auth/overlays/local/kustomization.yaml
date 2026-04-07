@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - keycloak-secret.yaml         # kopieer van keycloak-secret.example.yaml, nooit committen
   - keycloak-realm-config.yaml   # kopieer van ../../overlays/test/keycloak-realm-config.yaml
 
@@ -31,3 +32,10 @@ patches:
       - op: replace
         path: /spec/values/extraEnvVars/0/value
         value: "currentSchema=don_auth"
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: auth.k8s.orb.local

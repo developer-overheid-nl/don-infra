@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
   - api-key.yaml           # kopieer van api-key.example.yaml, nooit committen
   - scraper-configmap.yaml # kopieer van ../../overlays/test/scraper-configmap.yaml
 
@@ -24,6 +25,13 @@ patches:
         path: /spec/tls
       - op: remove
         path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: search.k8s.orb.local
   - target:
       kind: Deployment
       name: dpl

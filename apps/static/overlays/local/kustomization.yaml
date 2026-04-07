@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - http-route.yaml
 
 namespace: tn-don-static
 namePrefix: don-static-
@@ -22,3 +23,10 @@ patches:
         path: /spec/tls
       - op: remove
         path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: static.k8s.orb.local

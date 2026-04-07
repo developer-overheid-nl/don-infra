@@ -7,7 +7,6 @@ resources:
   - don-schema-register-http-route.yaml
   - apisix-http-route.yaml
   - apisix.yaml
-  - apisix-keycloak-plugin.yaml
   - register-site.yaml
   - tools-secret.yaml
   - api-register-secret.yaml
@@ -31,7 +30,7 @@ images:
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
     newTag: e7e7b664183df1f82c0cea0f83ad8310cd7687ab
-    
+
 patches:
   - target:
       kind: HelmRelease

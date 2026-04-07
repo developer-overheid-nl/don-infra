@@ -2,7 +2,7 @@ version: "3"
 
 vars:
   CONTEXT: kind-don-local
-  NAMESPACES: tn-don-api tn-don-auth tn-don-frontend tn-don-search tn-don-static tn-don-oss
+  NAMESPACES: istio-gateway tn-don-api tn-don-auth tn-don-frontend tn-don-search tn-don-static tn-don-oss
   APPS: api auth frontend search static oss
 
 tasks:
@@ -10,13 +10,14 @@ tasks:
   # ── Setup ────────────────────────────────────────────────────────────────────
 
   local:setup:
-    desc: "Eerste keer: installeer Flux en maak alle namespaces aan op de lokale cluster"
+    desc: "Eerste keer: installeer Flux, Gateway API CRDs en maak alle namespaces aan op de lokale cluster"
     cmds:
       - kubectl config use-context {{.CONTEXT}}
       - |
         for ns in {{.NAMESPACES}}; do
           kubectl get namespace $ns > /dev/null 2>&1 || kubectl create namespace $ns
         done
+      - kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
       - flux install
 
   # ── Secrets ──────────────────────────────────────────────────────────────────
@@ -86,6 +87,7 @@ tasks:
       - |
         for app in {{.APPS}}; do
           for f in apps/$app/overlays/local/*.example.yaml; do
+            [ -e "$f" ] || continue
             target="${f/.example/}"
             if [ ! -f "$target" ]; then
               cp "$f" "$target"
@@ -189,6 +191,16 @@ tasks:
     cmds:
       - echo "Typesense → http://localhost:8108"
       - kubectl port-forward -n tn-don-search svc/don-search-svc 8108:8108 &
+
+  local:apisix:opa-demo:configure:
+    desc: "Configureer een tijdelijke APISIX route die de built-in opa plugin gebruikt"
+    cmds:
+      - ./scripts/configure-local-opa-demo-route.sh
+
+  local:apisix:opa-demo:delete:
+    desc: "Verwijder de tijdelijke APISIX OPA demo route"
+    cmds:
+      - ./scripts/delete-local-opa-demo-route.sh
 
   # ── Teardown ─────────────────────────────────────────────────────────────────
 
