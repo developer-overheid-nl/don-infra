@@ -30,7 +30,7 @@ data:
     allowed_api_key_scopes := object.get(
       config,
       "allowed_api_key_scopes",
-      ["apis:read", "organisations:read", "tools:read", "repositories:read", "gitOrganisations:read"],
+      ["apis:read", "organisations:read", "tools", "repositories:read", "gitOrganisations:read"],
     )
 
     result := response if {
