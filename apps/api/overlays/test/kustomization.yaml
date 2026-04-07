@@ -36,9 +36,6 @@ patches:
       name: apisix
     patch: |
       - op: replace
-        path: /spec/values/replicaCount
-        value: 1
-      - op: replace
         path: /spec/values/apisix/customPlugins/enabled
         value: false
       - op: remove
