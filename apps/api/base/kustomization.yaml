@@ -7,7 +7,6 @@ configurations:
 resources:
   - api-register/
   - register-site/
-  - apisix/
   - opa/
   - tools/
   - don-schema-register/
