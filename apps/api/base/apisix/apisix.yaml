@@ -38,19 +38,7 @@ spec:
         customLuaSharedDicts:
           - name: limit-count
             size: 50m
-      customPlugins:
-        enabled: true
-        luaPath: "/opt/?.lua"
-        plugins:
-          - name: "keycloak-api-key-auth"
-            attrs: { }
-            configMap:
-              name: "don-api-apisix-keycloak-plugins"
-              mounts:
-                - key: "keycloak-api-key-auth.lua"
-                  path: "/opt/apisix/plugins/keycloak-api-key-auth.lua"
       plugins:
-        - authz-keycloak
         - opa
         - limit-count
         - cors

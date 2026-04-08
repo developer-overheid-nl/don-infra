@@ -8,6 +8,7 @@ data:
 
     policy_name := "apisix.authz"
 
+    # Default: afwijzen tenzij een bearer token of toegestane x-api-key flow slaagt.
     default result := {
       "allow": false,
       "reason": "Missing credentials (Authorization or x-api-key)",
@@ -21,32 +22,75 @@ data:
 
     default config := {}
 
+    default_allowed_api_key_scopes := [
+      "apis:read",
+      "organisations:read",
+      "tools",
+      "repositories:read",
+      "gitOrganisations:read",
+    ]
+
+    # Config komt primair uit data.apisix_auth. Als die ontbreekt, valt OPA terug
+    # op env vars die uit de Kubernetes secret worden ingeladen.
     config := data.apisix_auth if {
       data.apisix_auth
     }
+
+    config := env_config if {
+      not data.apisix_auth
+      object.get(object.get(env_config, "keycloak", {}), "token_url", "") != ""
+    }
+
     mode := lower(object.get(config, "mode", "static"))
     api_key_header := lower(object.get(config, "api_key_header", "x-api-key"))
+    request_method := upper(object.get(input.request, "method", ""))
     default_required_scopes := object.get(config, "default_required_scopes", [])
     allowed_api_key_scopes := object.get(
       config,
       "allowed_api_key_scopes",
-      ["apis:read", "organisations:read", "tools:read", "repositories:read", "gitOrganisations:read"],
+      default_allowed_api_key_scopes,
     )
 
+    env_config := {
+      "mode": "keycloak",
+      "keycloak": {
+        "token_url": object.get(runtime_env, "OPA_KEYCLOAK_TOKEN_URL", ""),
+        "introspection_url": object.get(runtime_env, "OPA_KEYCLOAK_INTROSPECTION_URL", ""),
+        "admin_api_url": object.get(runtime_env, "OPA_KEYCLOAK_ADMIN_API_URL", ""),
+        "client_id": object.get(runtime_env, "OPA_KEYCLOAK_CLIENT_ID", ""),
+        "client_secret": object.get(runtime_env, "OPA_KEYCLOAK_CLIENT_SECRET", ""),
+        "admin_grant_type": object.get(runtime_env, "OPA_KEYCLOAK_ADMIN_GRANT_TYPE", "client_credentials"),
+      },
+    } if {
+      runtime_env := object.get(opa.runtime(), "env", {})
+    }
+
+    # Authorization heeft voorrang. Alleen als die ontbreekt, wordt x-api-key bekeken.
     result := response if {
       auth_header := object.get(input.request.headers, "authorization", "")
       auth_header != ""
       response := bearer_response(auth_header)
     }
 
+    # x-api-key is in deze flow alleen toegestaan op GET endpoints.
     result := response if {
       auth_header := object.get(input.request.headers, "authorization", "")
       auth_header == ""
       api_key := object.get(input.request.headers, api_key_header, "")
       api_key != ""
+      api_key_allowed_for_method
       response := api_key_response(api_key)
     }
 
+    result := deny("x-api-key is only allowed for GET endpoints", 401) if {
+      auth_header := object.get(input.request.headers, "authorization", "")
+      auth_header == ""
+      api_key := object.get(input.request.headers, api_key_header, "")
+      api_key != ""
+      not api_key_allowed_for_method
+    }
+
+    # Bearer tokens gaan via static lookup of Keycloak introspection, afhankelijk van mode.
     bearer_response(auth_header) := deny("Invalid Authorization header format", 401) if {
       not valid_bearer_header(auth_header)
     }
@@ -112,6 +156,7 @@ data:
       info := keycloak_bearer_info(token)
     }
 
+    # API keys worden lokaal of via Keycloak gevalideerd en krijgen daarna scopes toegewezen.
     api_key_info(api_key) := info if {
       mode == "static"
       api_keys := object.get(object.get(config, "static", {}), "api_keys", {})
@@ -161,6 +206,7 @@ data:
       resp.status_code != 200
     }
 
+    # Voor x-api-key wordt gecontroleerd of de client via de Keycloak admin API bestaat.
     keycloak_client_lookup_response(api_key) := resp if {
       kc := object.get(config, "keycloak", {})
       admin_token := keycloak_admin_token
@@ -177,6 +223,7 @@ data:
       })
     }
 
+    # Bearer validatie gebruikt OAuth2 introspection met de admin/client credentials.
     keycloak_introspection_response(token) := resp if {
       kc := object.get(config, "keycloak", {})
       body := urlquery.encode_object({
@@ -287,6 +334,8 @@ data:
       parts := [part | part := raw_parts[_]; part != ""]
     }
 
+    # Vereiste scopes komen per route uit labels.required_scopes.
+    # Alleen als die ontbreken, wordt teruggevallen op een default uit config.
     required_scopes := scopes if {
       scopes := route_required_scopes
       count(scopes) > 0
@@ -331,6 +380,10 @@ data:
       scope_string := object.get(info, "scope", "")
       scope_string != ""
       scope in split(scope_string, " ")
+    }
+
+    api_key_allowed_for_method if {
+      request_method == "GET"
     }
 
     allow_response(info) := {

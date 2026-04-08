@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: opa
-          image: openpolicyagent/opa:1.16.0
+          image: openpolicyagent/opa:1.12.1
           args:
             - run
             - --server
@@ -23,6 +23,43 @@ spec:
             - --ignore=.*
             - /policies
             - /data
+          env:
+            - name: OPA_KEYCLOAK_TOKEN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: token_url
+                  optional: true
+            - name: OPA_KEYCLOAK_INTROSPECTION_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: introspection_url
+                  optional: true
+            - name: OPA_KEYCLOAK_ADMIN_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: admin_api_url
+                  optional: true
+            - name: OPA_KEYCLOAK_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: client_id
+                  optional: true
+            - name: OPA_KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: client_secret
+                  optional: true
+            - name: OPA_KEYCLOAK_ADMIN_GRANT_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: opa-auth-config
+                  key: admin_grant_type
+                  optional: true
           ports:
             - containerPort: 8181
               name: http

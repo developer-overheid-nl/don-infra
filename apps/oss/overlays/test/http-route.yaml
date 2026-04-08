@@ -10,19 +10,7 @@ spec:
   hostnames:
     - set-in-overlay
   rules:
-    - filters:
-        - type: ResponseHeaderModifier
-          responseHeaderModifier:
-            set:
-              - name: Access-Control-Allow-Origin
-                value: "*"
-              - name: Access-Control-Allow-Methods
-                value: "GET, PUT, POST, DELETE, PATCH, OPTIONS"
-              - name: Access-Control-Allow-Headers
-                value: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization"
-              - name: Access-Control-Max-Age
-                value: "1728000"
-      backendRefs:
+    - backendRefs:
         - name: register-oss-site-svc
           kind: Service
           port: 4321

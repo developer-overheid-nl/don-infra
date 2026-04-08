@@ -76,11 +76,11 @@ spec:
               containerPort: 1337
           resources:
             requests:
-              memory: 100Mi
+              memory: 512Mi
               cpu: 100m
             limits:
-              cpu: "2"
-              memory: "2Gi"
+              cpu: "4"
+              memory: "4Gi"
 #          livenessProbe:
 #            httpGet:
 #              path: /
