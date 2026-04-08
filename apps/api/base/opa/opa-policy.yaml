@@ -8,6 +8,7 @@ data:
 
     policy_name := "apisix.authz"
 
+    # Default: afwijzen tenzij een bearer token of toegestane x-api-key flow slaagt.
     default result := {
       "allow": false,
       "reason": "Missing credentials (Authorization or x-api-key)",
@@ -29,6 +30,8 @@ data:
       "gitOrganisations:read",
     ]
 
+    # Config komt primair uit data.apisix_auth. Als die ontbreekt, valt OPA terug
+    # op env vars die uit de Kubernetes secret worden ingeladen.
     config := data.apisix_auth if {
       data.apisix_auth
     }
@@ -62,12 +65,14 @@ data:
       runtime_env := object.get(opa.runtime(), "env", {})
     }
 
+    # Authorization heeft voorrang. Alleen als die ontbreekt, wordt x-api-key bekeken.
     result := response if {
       auth_header := object.get(input.request.headers, "authorization", "")
       auth_header != ""
       response := bearer_response(auth_header)
     }
 
+    # x-api-key is in deze flow alleen toegestaan op GET endpoints.
     result := response if {
       auth_header := object.get(input.request.headers, "authorization", "")
       auth_header == ""
@@ -85,6 +90,7 @@ data:
       not api_key_allowed_for_method
     }
 
+    # Bearer tokens gaan via static lookup of Keycloak introspection, afhankelijk van mode.
     bearer_response(auth_header) := deny("Invalid Authorization header format", 401) if {
       not valid_bearer_header(auth_header)
     }
@@ -150,6 +156,7 @@ data:
       info := keycloak_bearer_info(token)
     }
 
+    # API keys worden lokaal of via Keycloak gevalideerd en krijgen daarna scopes toegewezen.
     api_key_info(api_key) := info if {
       mode == "static"
       api_keys := object.get(object.get(config, "static", {}), "api_keys", {})
@@ -199,6 +206,7 @@ data:
       resp.status_code != 200
     }
 
+    # Voor x-api-key wordt gecontroleerd of de client via de Keycloak admin API bestaat.
     keycloak_client_lookup_response(api_key) := resp if {
       kc := object.get(config, "keycloak", {})
       admin_token := keycloak_admin_token
@@ -215,6 +223,7 @@ data:
       })
     }
 
+    # Bearer validatie gebruikt OAuth2 introspection met de admin/client credentials.
     keycloak_introspection_response(token) := resp if {
       kc := object.get(config, "keycloak", {})
       body := urlquery.encode_object({
@@ -325,6 +334,8 @@ data:
       parts := [part | part := raw_parts[_]; part != ""]
     }
 
+    # Vereiste scopes komen per route uit labels.required_scopes.
+    # Alleen als die ontbreken, wordt teruggevallen op een default uit config.
     required_scopes := scopes if {
       scopes := route_required_scopes
       count(scopes) > 0
