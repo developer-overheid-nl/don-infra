@@ -49,13 +49,7 @@ data:
     )
 
     env_config := {
-      "mode": object.get(runtime_env, "OPA_MODE", "keycloak"),
-      "api_key_header": object.get(runtime_env, "OPA_API_KEY_HEADER", "x-api-key"),
-      "default_required_scopes": csv_or_empty(object.get(runtime_env, "OPA_DEFAULT_REQUIRED_SCOPES", "")),
-      "allowed_api_key_scopes": csv_or_default(
-        object.get(runtime_env, "OPA_ALLOWED_API_KEY_SCOPES", ""),
-        default_allowed_api_key_scopes,
-      ),
+      "mode": "keycloak",
       "keycloak": {
         "token_url": object.get(runtime_env, "OPA_KEYCLOAK_TOKEN_URL", ""),
         "introspection_url": object.get(runtime_env, "OPA_KEYCLOAK_INTROSPECTION_URL", ""),
@@ -63,8 +57,6 @@ data:
         "client_id": object.get(runtime_env, "OPA_KEYCLOAK_CLIENT_ID", ""),
         "client_secret": object.get(runtime_env, "OPA_KEYCLOAK_CLIENT_SECRET", ""),
         "admin_grant_type": object.get(runtime_env, "OPA_KEYCLOAK_ADMIN_GRANT_TYPE", "client_credentials"),
-        "admin_username": object.get(runtime_env, "OPA_KEYCLOAK_ADMIN_USERNAME", ""),
-        "admin_password": object.get(runtime_env, "OPA_KEYCLOAK_ADMIN_PASSWORD", ""),
       },
     } if {
       runtime_env := object.get(opa.runtime(), "env", {})
@@ -381,23 +373,6 @@ data:
 
     api_key_allowed_for_method if {
       request_method == "GET"
-    }
-
-    csv_or_default(raw, fallback) := fallback if {
-      trim_space(raw) == ""
-    }
-
-    csv_or_default(raw, fallback) := csv_or_empty(raw) if {
-      trim_space(raw) != ""
-    }
-
-    csv_or_empty(raw) := values if {
-      trim_space(raw) != ""
-      values := [trim_space(value) | value := split(raw, ",")[_]; trim_space(value) != ""]
-    }
-
-    csv_or_empty(raw) := [] if {
-      trim_space(raw) == ""
     }
 
     allow_response(info) := {
