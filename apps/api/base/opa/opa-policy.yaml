@@ -25,7 +25,6 @@ data:
       "apis:read",
       "organisations:read",
       "tools",
-      "tools:read",
       "repositories:read",
       "gitOrganisations:read",
     ]
@@ -41,6 +40,7 @@ data:
 
     mode := lower(object.get(config, "mode", "static"))
     api_key_header := lower(object.get(config, "api_key_header", "x-api-key"))
+    request_method := upper(object.get(input.request, "method", ""))
     default_required_scopes := object.get(config, "default_required_scopes", [])
     allowed_api_key_scopes := object.get(
       config,
@@ -81,7 +81,16 @@ data:
       auth_header == ""
       api_key := object.get(input.request.headers, api_key_header, "")
       api_key != ""
+      api_key_allowed_for_method
       response := api_key_response(api_key)
+    }
+
+    result := deny("x-api-key is only allowed for GET endpoints", 401) if {
+      auth_header := object.get(input.request.headers, "authorization", "")
+      auth_header == ""
+      api_key := object.get(input.request.headers, api_key_header, "")
+      api_key != ""
+      not api_key_allowed_for_method
     }
 
     bearer_response(auth_header) := deny("Invalid Authorization header format", 401) if {
@@ -368,6 +377,10 @@ data:
       scope_string := object.get(info, "scope", "")
       scope_string != ""
       scope in split(scope_string, " ")
+    }
+
+    api_key_allowed_for_method if {
+      request_method == "GET"
     }
 
     csv_or_default(raw, fallback) := fallback if {
