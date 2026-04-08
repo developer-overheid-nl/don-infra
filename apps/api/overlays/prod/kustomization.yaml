@@ -7,7 +7,6 @@ resources:
   - don-schema-register-http-route.yaml
   - apisix-http-route.yaml
   - apisix.yaml
-  - apisix-keycloak-plugin.yaml
   - register-site.yaml
   - tools-secret.yaml
   - api-register-secret.yaml
