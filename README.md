@@ -37,7 +37,7 @@ Zo draai je alle apps lokaal voor sneller experimenteren, zonder dat je de test-
 kind create cluster --name don-local
 ```
 
-De standaard `CONTEXT` in [Taskfile.yaml](/Users/matthijshovestad/workspace/geonovum/don-infra/Taskfile.yaml) staat al op `kind-don-local`. Alleen als je lokaal een andere clusternnaam gebruikt, moet je die variabele aanpassen:
+De standaard `CONTEXT` in `Taskfile.yaml` staat al op `kind-don-local`. Alleen als je lokaal een andere clusternnaam gebruikt, moet je die variabele aanpassen:
 
 ```yaml
 vars:
