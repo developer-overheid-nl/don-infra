@@ -13,6 +13,79 @@ Het project is opgedeeld in meerdere applicaties:
 - [search](./apps/search/)
 - [static](./apps/static/)
 
+## SOPS publieke sleutels
+
+Alle secrets zijn [versleuteld met SOPS](https://digilab.overheid.nl/docs/digilab-onboarding/#secret-encryption), met gebruik van de volgende publieke sleutels:
+
+### Test
+
+- api: `age17uzpswwz9g0frdfy7md5kvlvkcw6pkd9k3k2cad6mfe0zdvcm9pscyzd7v`
+- auth: `age1jg3eun7lsymd3saszvynys3x8c5dk3q0m55qujyk9tgu4u8dk93ss86qwu`
+- community: `age122ph8qunemp7hz9hughd3nx65dlef4dcqu79c6psyn8se377w5hq486cdw`
+- frontend: `age17n4n96sqw3rx7a5exuqascs69h8d3wux0746xvldae3x7kv4zu8q5m75pe`
+- search: `age1vg75nw5vk2vndzzud8sdvc5w9wtjz0ztejxrsuyg3dzjlpj9n5es94kzzn`
+- static: `age12k87tkhgdr7s309k6rcpss9x8df62tw9v0haxswtzd2mwr6jwacs858ac2`
+- analytics: `age1zy02fydy9s4e5x2lzut7red9rdk4njazet39htmskj63wqzxvuwqjw0jt0`
+- oss: `age1ku5kl8lmkhfe6g0ednujus3tjwn2hc2msjk0dq70u40sc8u0cgzqgp34uy`
+
+### Productie
+
+- api: `age1lt8huh6hzlcjg749dmptaad2wmssct5v99y8jz9yhd5xt62vcyyqg0z5j6`
+- auth: `age13lfhkxpletvsxwz84p8nllgahsp8l350a2n7kdthh3tle78xgerqwhqk27`
+- frontend: `age1gpl0td68sdh0u5q5dpcdh7dh3w5uzj9n0w3j6028hv0f5hqr2ysqq9mns0`
+- search: `age16g3k56fseufjxsh3pmt07cg7llesz2crzaw6nq7l49j9gtrv24jqu4epuk`
+- static: `age10jzjgvj847xvaqhknc2j0dreuutrr9tjmkek9xgse6h7nxlpdshsmf2l8q`
+- analytics: `age1hfarccnhjakg4x8e6dsgmq8x4736f5vegavp3qtyp37xvs7fccvsqa0qsf`
+- oss: `age1g59lru89pjncetzrnlr23cc4vq6rct5npsc9xcf89v26slm6g5msh579ue`
+
+## Secrets aanmaken
+
+Maak een sjabloonbestand voor een secret:
+
+```bash
+kubectl create secret generic <SECRET> \
+--from-literal=<KEY>=<VALUE> \
+--dry-run=client \
+-o yaml > <SECRET>.yaml
+```
+
+Versleutelen:
+
+```
+sops \
+  --encrypt \
+  --encrypted-regex '^(data|stringData)$' \
+  --age <PUBLIC KEY> \
+  --in-place \
+  <SECRET>.yaml
+```
+
+## Nieuw schema aanmaken
+
+Om een nieuw schema in de Postgres-database aan te maken, kan de `digilab` gebruiker het volgende commando gebruiken:
+
+```bash
+CREATE USER don_auth_adm WITH PASSWORD 'psw1';
+CREATE USER don_auth_dml WITH PASSWORD 'psw2';
+GRANT don_auth_adm TO digilab;
+CREATE SCHEMA don_auth AUTHORIZATION don_auth_adm;
+GRANT CONNECT ON DATABASE don TO don_auth_adm;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA don_auth TO don_auth_dml;
+
+ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
+ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
+```
+
+## Verbinden met de Postgres-database
+
+Maak verbinding met het Kubernetes-cluster en start een port-forward voor de pgAdmin-service:
+
+```bash
+kubectl port-forward svc/don-auth-pgadmin-pgadmin4 8888:80 -n tn-don-auth
+```
+
+Open daarna de pgAdmin UI: http://localhost:8888 (inloggen met: `chart@domain.com` / `SuperSecret`)
+
 ## Lokaal draaien
 
 Zo draai je alle apps lokaal voor sneller experimenteren, zonder dat je de test-omgeving nodig hebt.
@@ -154,78 +227,3 @@ k9s                # opent direct in je huidige kubectl context
 ```
 
 In K9s navigeer je met de pijltjestoetsen, `enter` om in te zoomen, `esc` om terug te gaan, `l` voor logs, `d` voor describe en `:` om te wisselen van resource type (bijv. `:pods`, `:namespaces`, `:helmreleases`).
-
-**OrbStack (Mac only):** heeft ook een ingebouwde UI via de menubar-app waar je pods, logs en namespaces kunt bekijken zonder extra tooling.
-
----
-
-## Verbinden met de Postgres-database
-
-Maak verbinding met het Kubernetes-cluster en start een port-forward voor de pgAdmin-service:
-
-```bash
-kubectl port-forward svc/don-auth-pgadmin-pgadmin4 8888:80 -n tn-don-auth
-```
-
-Open daarna de pgAdmin UI: http://localhost:8888 (inloggen met: `chart@domain.com` / `SuperSecret`)
-
-## SOPS publieke sleutels
-
-Alle secrets zijn [versleuteld met SOPS](https://digilab.overheid.nl/docs/digilab-onboarding/#secret-encryption), met gebruik van de volgende publieke sleutels:
-
-### Test
-
-- api: `age17uzpswwz9g0frdfy7md5kvlvkcw6pkd9k3k2cad6mfe0zdvcm9pscyzd7v`
-- auth: `age1jg3eun7lsymd3saszvynys3x8c5dk3q0m55qujyk9tgu4u8dk93ss86qwu`
-- community: `age122ph8qunemp7hz9hughd3nx65dlef4dcqu79c6psyn8se377w5hq486cdw`
-- frontend: `age17n4n96sqw3rx7a5exuqascs69h8d3wux0746xvldae3x7kv4zu8q5m75pe`
-- search: `age1vg75nw5vk2vndzzud8sdvc5w9wtjz0ztejxrsuyg3dzjlpj9n5es94kzzn`
-- static: `age12k87tkhgdr7s309k6rcpss9x8df62tw9v0haxswtzd2mwr6jwacs858ac2`
-- analytics: `age1zy02fydy9s4e5x2lzut7red9rdk4njazet39htmskj63wqzxvuwqjw0jt0`
-- oss: `age1ku5kl8lmkhfe6g0ednujus3tjwn2hc2msjk0dq70u40sc8u0cgzqgp34uy`
-
-### Productie
-
-- api: `age1lt8huh6hzlcjg749dmptaad2wmssct5v99y8jz9yhd5xt62vcyyqg0z5j6`
-- auth: `age13lfhkxpletvsxwz84p8nllgahsp8l350a2n7kdthh3tle78xgerqwhqk27`
-- frontend: `age1gpl0td68sdh0u5q5dpcdh7dh3w5uzj9n0w3j6028hv0f5hqr2ysqq9mns0`
-- search: `age16g3k56fseufjxsh3pmt07cg7llesz2crzaw6nq7l49j9gtrv24jqu4epuk`
-- static: `age10jzjgvj847xvaqhknc2j0dreuutrr9tjmkek9xgse6h7nxlpdshsmf2l8q`
-- analytics: `age1hfarccnhjakg4x8e6dsgmq8x4736f5vegavp3qtyp37xvs7fccvsqa0qsf`
-- oss: `age1g59lru89pjncetzrnlr23cc4vq6rct5npsc9xcf89v26slm6g5msh579ue`
-
-## Secrets aanmaken
-
-Maak een sjabloonbestand voor een secret:
-
-```bash
-kubectl create secret generic <SECRET> \
---from-literal=<KEY>=<VALUE> \
---dry-run=client \
--o yaml > <SECRET>.yaml
-```
-
-Versleutelen:
-
-```
-sops \
-  --encrypt \
-  --encrypted-regex '^(data|stringData)$' \
-  --age <PUBLIC KEY> \
-  --in-place \
-  <SECRET>.yaml
-```
-
-## Nieuw schema aanmaken
-Om een nieuw schema in de Postgres-database aan te maken, kan de `digilab` gebruiker het volgende commando gebruiken:
-```bash
-CREATE USER don_auth_adm WITH PASSWORD 'psw1';
-CREATE USER don_auth_dml WITH PASSWORD 'psw2';
-GRANT don_auth_adm TO digilab;
-CREATE SCHEMA don_auth AUTHORIZATION don_auth_adm;
-GRANT CONNECT ON DATABASE don TO don_auth_adm;
-GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA don_auth TO don_auth_dml;
-
-ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
-ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
-```
