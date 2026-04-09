@@ -81,6 +81,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: ConvertOAS
     description: Converteer OpenAPI 3.0/3.1
     methods:
