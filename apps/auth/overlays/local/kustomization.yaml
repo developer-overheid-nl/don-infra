@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - http-route.yaml
-  - keycloak-secret.yaml       
-  - keycloak-realm-config.yaml 
+  - keycloak-secret.yaml
+  - keycloak-realm-config.yaml
 
 namespace: tn-don-auth
 namePrefix: don-auth-

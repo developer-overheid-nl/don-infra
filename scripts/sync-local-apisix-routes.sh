@@ -7,6 +7,7 @@ ADMIN_PORT="${ADMIN_PORT:-19180}"
 NAMESPACE="${NAMESPACE:-tn-don-api}"
 APISIX_SECRET="${APISIX_SECRET:-don-api-apisix}"
 APISIX_ADMIN_SERVICE="${APISIX_ADMIN_SERVICE:-don-api-apisix-admin}"
+APISIX_HELMRELEASE="${APISIX_HELMRELEASE:-don-api-apisix}"
 ROUTES_FILE="${ROUTES_FILE:-apps/api/base/apisix/routes/adc.yaml}"
 
 slugify() {
@@ -17,7 +18,25 @@ slugify() {
 
 kubectl config use-context "$CONTEXT" >/dev/null
 
-kubectl rollout status -n "$NAMESPACE" deploy/don-api-apisix --timeout=180s >/dev/null
+kubectl wait -n "$NAMESPACE" --for=condition=ready "helmrelease/${APISIX_HELMRELEASE}" --timeout=300s >/dev/null 2>&1 || true
+
+for _ in $(seq 1 60); do
+  if kubectl get secret "$APISIX_SECRET" -n "$NAMESPACE" >/dev/null 2>&1 \
+    && kubectl get svc "$APISIX_ADMIN_SERVICE" -n "$NAMESPACE" >/dev/null 2>&1; then
+    break
+  fi
+  sleep 2
+done
+
+if ! kubectl get secret "$APISIX_SECRET" -n "$NAMESPACE" >/dev/null 2>&1; then
+  echo "APISIX admin secret $APISIX_SECRET is nog niet beschikbaar in namespace $NAMESPACE" >&2
+  exit 1
+fi
+
+if ! kubectl get svc "$APISIX_ADMIN_SERVICE" -n "$NAMESPACE" >/dev/null 2>&1; then
+  echo "APISIX admin service $APISIX_ADMIN_SERVICE is nog niet beschikbaar in namespace $NAMESPACE" >&2
+  exit 1
+fi
 
 admin_key="$(
   kubectl get secret "$APISIX_SECRET" -n "$NAMESPACE" -o json \

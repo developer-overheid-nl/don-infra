@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - http-route.yaml
-  - api-key.yaml           
-  - scraper-configmap.yaml 
+  - api-key.yaml
+  - scraper-configmap.yaml
 
 namespace: tn-don-search
 namePrefix: don-search-

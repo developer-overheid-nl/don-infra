@@ -33,7 +33,7 @@ tasks:
       - task: local:secret:search
       - task: local:secret:oss
       - task: local:configs
-      - echo "Klaar. Controleer de gegenereerde *-secret.yaml bestanden."
+      - echo "Klaar. Controleer de bijgewerkte lokale bestanden in overlays/local/."
 
   local:secret:api:
     desc: "Exporteer api-secrets uit test-cluster"
@@ -107,25 +107,8 @@ tasks:
           -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "don-crawler-secret"' \
           > apps/oss/overlays/local/don-crawler-secret.yaml
 
-  local:secrets:from-examples:
-    desc: "Kopieer alle *.example.yaml naar hun echte naam (handmatig invullen daarna)"
-    cmds:
-      - |
-        for app in {{.APPS}}; do
-          for f in apps/$app/overlays/local/*.example.yaml; do
-            [ -e "$f" ] || continue
-            target="${f/.example/}"
-            if [ ! -f "$target" ]; then
-              cp "$f" "$target"
-              echo "Aangemaakt: $target"
-            fi
-          done
-        done
-      - task: local:configs
-      - echo "Vul de waarden in de gegenereerde bestanden in voor je local:apply draait."
-
   local:configs:
-    desc: "Kopieer plain ConfigMaps vanuit de test-overlay naar overlays/local/ (geen secrets)"
+    desc: "Werk plain ConfigMaps voor local bij vanuit de test-overlay (geen secrets)"
     cmds:
       - |
         cp apps/auth/overlays/test/keycloak-realm-config.yaml \

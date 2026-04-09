@@ -126,11 +126,12 @@ Voer de tasks op Windows uit vanuit Git Bash of WSL; de scripts en commands in d
 # 1. Flux installeren op de lokale cluster + namespaces aanmaken
 task local:setup
 
-# 2. Secrets handmatig aanmaken vanuit de voorbeeldbestanden
-task local:secrets:from-examples
-# → Pas de gegenereerde *-secret.yaml bestanden handmatig aan in elk overlays/local/
+# 2. Pas de lokale *.yaml bestanden in overlays/local/ handmatig aan
 # → Dummy-gegevens zijn prima zolang je alleen de lokale setup wilt starten
 #   en niet alle externe koppelingen echt hoeft te testen
+
+# 3. Optioneel: haal actuele secrets/configs op uit test
+task local:secrets:from-cluster TEST_CONTEXT=<naam-test-context>
 ```
 
 ### Deployen en testen
@@ -202,7 +203,6 @@ Opnieuw lokaal testen vanaf een schone omgeving:
 task local:teardown
 kind create cluster --name don-local
 task local:setup
-task local:secrets:from-examples
 task local:apply
 task local:apisix:routes:sync
 ```

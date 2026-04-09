@@ -6,12 +6,12 @@ resources:
   - apisix-http-route.yaml
   - register-site-http-route.yaml
   - don-schema-register-http-route.yaml
-  - apisix-secret.yaml  
-  - tools-secret.yaml  
-  - api-register-secret.yaml  
-  - api-register-db.yaml  
-  - register-site-secret.yaml 
-  - piwik-secret.yaml 
+  - apisix-secret.yaml
+  - tools-secret.yaml
+  - api-register-secret.yaml
+  - api-register-db.yaml
+  - register-site-secret.yaml
+  - piwik-secret.yaml
   - opa-auth-config.yaml
 
 namespace: tn-don-api
