@@ -1,10 +1,10 @@
 # DON Infra
 
-This repository contains all Kubernetes manifests for [developer.overheid.nl](https://developer.overheid.nl).
+Deze repository bevat alle Kubernetes-manifesten voor [developer.overheid.nl](https://developer.overheid.nl).
 
-## Applications
+## Applicaties
 
-The project is divided into multiple applications:
+Het project is opgedeeld in meerdere applicaties:
 
 - [api](./apps/api/)
 - [auth](./apps/auth/)
@@ -21,41 +21,31 @@ Zo draai je alle apps lokaal voor sneller experimenteren, zonder dat je de test-
 
 | Tool | Installatie |
 | --- | --- |
-| [OrbStack](https://orbstack.dev) (Mac) of [Docker Desktop](https://www.docker.com/products/docker-desktop/) + [Kind](https://kind.sigs.k8s.io/) (Windows) | zie hieronder |
+| [Docker Desktop](https://www.docker.com/products/docker-desktop/) + [Kind](https://kind.sigs.k8s.io/) | zie hieronder |
+| `bash` | macOS Terminal of op Windows via Git Bash / WSL |
 | `kubectl` | `brew install kubectl` / `choco install kubernetes-cli` |
 | `flux` CLI | `brew install fluxcd/tap/flux` / `choco install flux` |
 | `kustomize` | `brew install kustomize` / `choco install kustomize` |
 | `jq` | `brew install jq` / `choco install jq` |
 | [`task`](https://taskfile.dev) | `brew install go-task` / `choco install go-task` |
 
-### Mac (OrbStack)
-
-OrbStack start automatisch een K8s cluster. De Taskfile gebruikt de `orbstack` context.
+### Cluster opzetten
 
 ```bash
-brew install orbstack
-# Start OrbStack via de app, daarna is kubectl automatisch geconfigureerd
-```
-
-### Windows
-
-OrbStack werkt niet op Windows. Gebruik Kind met Docker Desktop:
-
-```bash
-# Docker Desktop installeren en K8s inschakelen via Settings → Kubernetes
-# of Kind gebruiken:
+# 1. Start Docker Desktop
+# 2. Maak daarna een lokale Kind-cluster aan
 kind create cluster --name don-local
 ```
 
-Pas daarna in [Taskfile.yaml](./Taskfile.yaml) de `CONTEXT` var aan:
+De standaard `CONTEXT` in [Taskfile.yaml](/Users/matthijshovestad/workspace/geonovum/don-infra/Taskfile.yaml) staat al op `kind-don-local`. Alleen als je lokaal een andere clusternnaam gebruikt, moet je die variabele aanpassen:
 
 ```yaml
 vars:
-  CONTEXT: kind-don-local   # of: docker-desktop
+  CONTEXT: kind-don-local
 ```
 
-> **Ingress-DNS**: `*.k8s.orb.local` is OrbStack-specifiek en werkt niet op Windows.
-> Gebruik op Windows altijd `task local:forward` (port-forward) in plaats van de ingress-hostnamen.
+Gebruik lokaal standaard port-forwards in plaats van ingress-hostnamen. Dat werkt hetzelfde op Mac en Windows.
+Voer de tasks op Windows uit vanuit Git Bash of WSL; de scripts en commands in deze repository gaan uit van een POSIX-shell.
 
 ### Eerste keer opzetten
 
@@ -63,13 +53,11 @@ vars:
 # 1. Flux installeren op de lokale cluster + namespaces aanmaken
 task local:setup
 
-# 2a. Secrets overnemen uit de test-cluster
-#     Vind je context met: kubectl config get-contexts
-task local:secrets:from-cluster TEST_CONTEXT=<naam-test-context>
-
-# 2b. Of handmatig invullen vanuit de voorbeeldbestanden:
+# 2. Secrets handmatig aanmaken vanuit de voorbeeldbestanden
 task local:secrets:from-examples
-# → Pas de gegenereerde *-secret.yaml bestanden aan in elk overlays/local/
+# → Pas de gegenereerde *-secret.yaml bestanden handmatig aan in elk overlays/local/
+# → Dummy-gegevens zijn prima zolang je alleen de lokale setup wilt starten
+#   en niet alle externe koppelingen echt hoeft te testen
 ```
 
 ### Deployen en testen
@@ -99,25 +87,31 @@ Port-forwards per service:
 task local:forward          # Apisix gateway :9080, admin :9180
 task local:forward:auth     # Keycloak :8080
 task local:forward:frontend # Frontend :3000
+task local:forward:api-register-site # API register site :4321
+task local:forward:schemas  # Schema register :8000
+task local:forward:static   # Static :8081
+task local:forward:oss      # OSS register site :4322
 task local:forward:search   # Typesense :8108
 
 # Optioneel: alleen een minimale OPA demo-route inladen
 task local:apisix:opa-demo:configure
 ```
 
-Lokale endpoints (OrbStack, via Ingress):
+Standaard lokale endpoints (via port-forward):
 
 | Service | URL |
 | --- | --- |
-| Frontend | [don.k8s.orb.local](http://don.k8s.orb.local) |
-| Apisix gateway | [api.k8s.orb.local](http://api.k8s.orb.local) |
-| Apisix admin | [api-admin.k8s.orb.local](http://api-admin.k8s.orb.local) |
-| API register site | [api-register.k8s.orb.local](http://api-register.k8s.orb.local) |
-| Auth (Keycloak) | [auth.k8s.orb.local](http://auth.k8s.orb.local) |
-| Search | [search.k8s.orb.local](http://search.k8s.orb.local) |
-| Schema register | [schemas.k8s.orb.local](http://schemas.k8s.orb.local) |
-| Static | [static.k8s.orb.local](http://static.k8s.orb.local) |
-| OSS register | [oss-register.k8s.orb.local](http://oss-register.k8s.orb.local) |
+| Frontend | [http://localhost:3000](http://localhost:3000) |
+| Apisix gateway | [http://localhost:9080](http://localhost:9080) |
+| Apisix admin | [http://localhost:9180](http://localhost:9180) |
+| API register site | [http://localhost:4321](http://localhost:4321) |
+| Auth (Keycloak) | [http://localhost:8080](http://localhost:8080) |
+| Search | [http://localhost:8108](http://localhost:8108) |
+| Schema register | [http://localhost:8000](http://localhost:8000) |
+| Static | [http://localhost:8081](http://localhost:8081) |
+| OSS register site | [http://localhost:4322](http://localhost:4322) |
+
+Optioneel: de `*.k8s.orb.local` hostnamen in de lokale overlays zijn alleen bruikbaar als je zelf een lokale ingress/DNS-oplossing hebt die die hostnamen resolve't. Dat is geen onderdeel van de standaard lokale setup.
 
 ### Opruimen
 
@@ -165,19 +159,19 @@ In K9s navigeer je met de pijltjestoetsen, `enter` om in te zoomen, `esc` om ter
 
 ---
 
-## Connect to Postgres DB
+## Verbinden met de Postgres-database
 
-Connect to the Kubernetes cluster and start a port-forward for the pgAdmin service:
+Maak verbinding met het Kubernetes-cluster en start een port-forward voor de pgAdmin-service:
 
 ```bash
 kubectl port-forward svc/don-auth-pgadmin-pgadmin4 8888:80 -n tn-don-auth
 ```
 
-Open the pgAdmin UI: http://localhost:8888 (sign in with: `chart@domain.com` / `SuperSecret`)
+Open daarna de pgAdmin UI: http://localhost:8888 (inloggen met: `chart@domain.com` / `SuperSecret`)
 
-## SOPS public keys
+## SOPS publieke sleutels
 
-All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-onboarding/#secret-encryption), using the following public keys:
+Alle secrets zijn [versleuteld met SOPS](https://digilab.overheid.nl/docs/digilab-onboarding/#secret-encryption), met gebruik van de volgende publieke sleutels:
 
 ### Test
 
@@ -190,7 +184,7 @@ All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-o
 - analytics: `age1zy02fydy9s4e5x2lzut7red9rdk4njazet39htmskj63wqzxvuwqjw0jt0`
 - oss: `age1ku5kl8lmkhfe6g0ednujus3tjwn2hc2msjk0dq70u40sc8u0cgzqgp34uy`
 
-### Production
+### Productie
 
 - api: `age1lt8huh6hzlcjg749dmptaad2wmssct5v99y8jz9yhd5xt62vcyyqg0z5j6`
 - auth: `age13lfhkxpletvsxwz84p8nllgahsp8l350a2n7kdthh3tle78xgerqwhqk27`
@@ -200,9 +194,9 @@ All secrets are [encrypted with SOPS](https://digilab.overheid.nl/docs/digilab-o
 - analytics: `age1hfarccnhjakg4x8e6dsgmq8x4736f5vegavp3qtyp37xvs7fccvsqa0qsf`
 - oss: `age1g59lru89pjncetzrnlr23cc4vq6rct5npsc9xcf89v26slm6g5msh579ue`
 
-## Creating secrets
+## Secrets aanmaken
 
-Create a template file for a secret:
+Maak een sjabloonbestand voor een secret:
 
 ```bash
 kubectl create secret generic <SECRET> \
@@ -211,7 +205,7 @@ kubectl create secret generic <SECRET> \
 -o yaml > <SECRET>.yaml
 ```
 
-Encrypt:
+Versleutelen:
 
 ```
 sops \
@@ -222,8 +216,8 @@ sops \
   <SECRET>.yaml
 ```
 
-## create new schema
-To create a new schema in the Postgres database, the digilab user can use the following command:
+## Nieuw schema aanmaken
+Om een nieuw schema in de Postgres-database aan te maken, kan de `digilab` gebruiker het volgende commando gebruiken:
 ```bash
 CREATE USER don_auth_adm WITH PASSWORD 'psw1';
 CREATE USER don_auth_dml WITH PASSWORD 'psw2';

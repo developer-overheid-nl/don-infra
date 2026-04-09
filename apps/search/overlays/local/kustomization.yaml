@@ -40,7 +40,7 @@ patches:
         path: /spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_CORS_DOMAINS
-          value: "http://don.k8s.orb.local"
+          value: "http://localhost:3000"
   - target:
       kind: CronJob
       name: scraper

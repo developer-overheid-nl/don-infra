@@ -31,6 +31,7 @@ tasks:
       - task: local:secret:auth
       - task: local:secret:search
       - task: local:secret:oss
+      - task: local:configs
       - echo "Klaar. Controleer de gegenereerde *-secret.yaml bestanden."
 
   local:secret:api:
@@ -119,6 +120,7 @@ tasks:
             fi
           done
         done
+      - task: local:configs
       - echo "Vul de waarden in de gegenereerde bestanden in voor je local:apply draait."
 
   local:configs:
@@ -183,6 +185,7 @@ tasks:
   local:diff:
     desc: "Preview wat er deployed zou worden (alle apps)"
     cmds:
+      - kubectl config use-context {{.CONTEXT}}
       - for: { var: APPS }
         cmd: |
           echo "=== {{.ITEM}} ==="
@@ -193,6 +196,7 @@ tasks:
   local:forward:
     desc: "Port-forward Apisix gateway (:9080) en admin (:9180)"
     cmds:
+      - kubectl config use-context {{.CONTEXT}}
       - echo "Apisix gateway → http://localhost:9080"
       - echo "Apisix admin   → http://localhost:9180"
       - kubectl port-forward -n tn-don-api svc/don-api-apisix-gateway 9080:80 &
@@ -201,18 +205,49 @@ tasks:
   local:forward:auth:
     desc: "Port-forward Keycloak (:8080)"
     cmds:
+      - kubectl config use-context {{.CONTEXT}}
       - echo "Keycloak → http://localhost:8080"
       - kubectl port-forward -n tn-don-auth svc/don-auth-keycloak 8080:80 &
 
   local:forward:frontend:
     desc: "Port-forward frontend (:3000)"
     cmds:
+      - kubectl config use-context {{.CONTEXT}}
       - echo "Frontend → http://localhost:3000"
       - kubectl port-forward -n tn-don-frontend svc/don-frontend-svc 3000:80 &
+
+  local:forward:api-register-site:
+    desc: "Port-forward API register site (:4321)"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - echo "API register site → http://localhost:4321"
+      - kubectl port-forward -n tn-don-api svc/don-api-register-site-svc 4321:4321 &
+
+  local:forward:schemas:
+    desc: "Port-forward schema register (:8000)"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - echo "Schema register → http://localhost:8000"
+      - kubectl port-forward -n tn-don-api svc/don-api-don-schema-register-svc 8000:8000 &
+
+  local:forward:static:
+    desc: "Port-forward static site (:8081)"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - echo "Static → http://localhost:8081"
+      - kubectl port-forward -n tn-don-static svc/don-static-svc 8081:80 &
+
+  local:forward:oss:
+    desc: "Port-forward OSS register site (:4322)"
+    cmds:
+      - kubectl config use-context {{.CONTEXT}}
+      - echo "OSS register site → http://localhost:4322"
+      - kubectl port-forward -n tn-don-oss svc/don-oss-register-oss-site-svc 4322:4321 &
 
   local:forward:search:
     desc: "Port-forward Typesense (:8108)"
     cmds:
+      - kubectl config use-context {{.CONTEXT}}
       - echo "Typesense → http://localhost:8108"
       - kubectl port-forward -n tn-don-search svc/don-search-svc 8108:8108 &
 
