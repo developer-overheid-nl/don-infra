@@ -189,7 +189,22 @@ Optioneel: de `*.k8s.orb.local` hostnamen in de lokale overlays zijn alleen brui
 ### Opruimen
 
 ```bash
+# Volledige lokale Kind-cluster verwijderen
 task local:teardown
+
+# Alleen de lokale namespaces verwijderen, maar de cluster laten bestaan
+task local:teardown:namespaces
+```
+
+Opnieuw lokaal testen vanaf een schone omgeving:
+
+```bash
+task local:teardown
+kind create cluster --name don-local
+task local:setup
+task local:secrets:from-examples
+task local:apply
+task local:apisix:routes:sync
 ```
 
 ### Alle beschikbare tasks

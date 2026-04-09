@@ -2,6 +2,7 @@ version: "3"
 
 vars:
   CONTEXT: kind-don-local
+  KIND_CLUSTER_NAME: don-local
   NAMESPACES: istio-gateway tn-don-api tn-don-auth tn-don-frontend tn-don-search tn-don-static tn-don-oss
   APPS: api auth frontend search static oss
 
@@ -268,8 +269,8 @@ tasks:
 
   # ── Teardown ─────────────────────────────────────────────────────────────────
 
-  local:teardown:
-    desc: "Verwijder alle lokale namespaces"
+  local:teardown:namespaces:
+    desc: "Verwijder alleen de lokale namespaces, maar laat de Kind-cluster bestaan"
     prompt: "Weet je zeker dat je alle lokale namespaces wil verwijderen?"
     cmds:
       - kubectl config use-context {{.CONTEXT}}
@@ -277,3 +278,17 @@ tasks:
         for ns in {{.NAMESPACES}}; do
           kubectl delete namespace $ns --ignore-not-found
         done
+
+  local:teardown:
+    desc: "Verwijder de volledige lokale Kind-cluster"
+    prompt: "Weet je zeker dat je de volledige lokale Kind-cluster wil verwijderen?"
+    cmds:
+      - |
+        if ! kind delete cluster --name {{.KIND_CLUSTER_NAME}}; then
+          echo "Normale Kind teardown mislukt, forceer verwijdering van overgebleven cluster-containers..."
+          ids="$(docker ps -a -q --filter label=io.x-k8s.kind.cluster={{.KIND_CLUSTER_NAME}})"
+          if [ -n "$ids" ]; then
+            docker rm -f -v $ids
+          fi
+          kind delete cluster --name {{.KIND_CLUSTER_NAME}} || true
+        fi
