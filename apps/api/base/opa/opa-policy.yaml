@@ -72,7 +72,9 @@ data:
       response := bearer_response(auth_header)
     }
 
-    # x-api-key is in deze flow alleen toegestaan op GET endpoints.
+    # x-api-key is standaard alleen toegestaan op GET endpoints.
+    # Per route kan via labels.allow_api_key_methods expliciet een extra methode
+    # worden toegestaan, bijvoorbeeld voor een server-side POST flow.
     result := response if {
       auth_header := object.get(input.request.headers, "authorization", "")
       auth_header == ""
@@ -82,7 +84,7 @@ data:
       response := api_key_response(api_key)
     }
 
-    result := deny("x-api-key is only allowed for GET endpoints", 401) if {
+    result := deny("x-api-key is not allowed for this endpoint", 401) if {
       auth_header := object.get(input.request.headers, "authorization", "")
       auth_header == ""
       api_key := object.get(input.request.headers, api_key_header, "")
@@ -384,6 +386,21 @@ data:
 
     api_key_allowed_for_method if {
       request_method == "GET"
+    }
+
+    api_key_allowed_for_method if {
+      request_method in route_api_key_methods
+    }
+
+    route_api_key_methods := methods if {
+      raw := object.get(object.get(object.get(input, "route", {}), "labels", {}), "allow_api_key_methods", "")
+      raw != ""
+      methods := [upper(trim_space(method)) | method := split(raw, ",")[_]; trim_space(method) != ""]
+    }
+
+    route_api_key_methods := [] if {
+      raw := object.get(object.get(object.get(input, "route", {}), "labels", {}), "allow_api_key_methods", "")
+      raw == ""
     }
 
     allow_response(info) := {
