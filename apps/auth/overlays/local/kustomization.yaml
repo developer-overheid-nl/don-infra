@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - http-route.yaml
-  - keycloak-secret.yaml         # kopieer van keycloak-secret.example.yaml, nooit committen
-  - keycloak-realm-config.yaml   # kopieer van ../../overlays/test/keycloak-realm-config.yaml
+  - keycloak-secret.yaml       
+  - keycloak-realm-config.yaml 
 
 namespace: tn-don-auth
 namePrefix: don-auth-

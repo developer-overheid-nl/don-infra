@@ -6,13 +6,13 @@ resources:
   - apisix-http-route.yaml
   - register-site-http-route.yaml
   - don-schema-register-http-route.yaml
-  - apisix-secret.yaml  # kopieer van apisix-secret.example.yaml, nooit committen
-  - tools-secret.yaml  # kopieer van tools-secret.example.yaml, nooit committen
-  - api-register-secret.yaml  # kopieer van api-register-secret.example.yaml, nooit committen
-  - api-register-db.yaml  # kopieer van api-register-db.example.yaml, nooit committen
-  - register-site-secret.yaml  # kopieer van register-site-secret.example.yaml, nooit committen
-  - piwik-secret.yaml  # kopieer van piwik-secret.example.yaml, nooit committen
-  - opa-auth-config.yaml  # kopieer van opa-auth-config.example.yaml, nooit committen
+  - apisix-secret.yaml  
+  - tools-secret.yaml  
+  - api-register-secret.yaml  
+  - api-register-db.yaml  
+  - register-site-secret.yaml 
+  - piwik-secret.yaml 
+  - opa-auth-config.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-

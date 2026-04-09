@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - http-route.yaml
-  - piwik-secret.yaml   # kopieer van piwik-secret.example.yaml, nooit committen
+  - piwik-secret.yaml  
 
 namespace: tn-don-frontend
 namePrefix: don-frontend-
