@@ -38,6 +38,25 @@ if ! kubectl get svc "$APISIX_ADMIN_SERVICE" -n "$NAMESPACE" >/dev/null 2>&1; th
   exit 1
 fi
 
+for _ in $(seq 1 90); do
+  endpoints="$(
+    kubectl get endpoints "$APISIX_ADMIN_SERVICE" -n "$NAMESPACE" -o jsonpath='{.subsets[*].addresses[*].ip}' 2>/dev/null || true
+  )"
+  if [ -n "$endpoints" ]; then
+    break
+  fi
+  sleep 2
+done
+
+endpoints="$(
+  kubectl get endpoints "$APISIX_ADMIN_SERVICE" -n "$NAMESPACE" -o jsonpath='{.subsets[*].addresses[*].ip}' 2>/dev/null || true
+)"
+
+if [ -z "$endpoints" ]; then
+  echo "APISIX admin service $APISIX_ADMIN_SERVICE heeft nog geen ready endpoints in namespace $NAMESPACE" >&2
+  exit 1
+fi
+
 admin_key="$(
   kubectl get secret "$APISIX_SECRET" -n "$NAMESPACE" -o json \
     | jq -r '.data.admin | @base64d'
@@ -53,6 +72,13 @@ for _ in $(seq 1 20); do
   fi
   sleep 1
 done
+
+if ! curl -fsS "http://127.0.0.1:${ADMIN_PORT}/apisix/admin/routes" -H "X-API-KEY: ${admin_key}" >/dev/null 2>&1; then
+  echo "APISIX admin API op localhost:${ADMIN_PORT} is nog niet bereikbaar" >&2
+  echo "--- port-forward log ---" >&2
+  cat /tmp/don-apisix-admin-port-forward.log >&2 || true
+  exit 1
+fi
 
 config_json="$(
   ruby -rjson -ryaml -e 'puts JSON.generate(YAML.safe_load(File.read(ARGV[0]), aliases: true))' "$ROUTES_FILE"
