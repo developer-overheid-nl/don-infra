@@ -34,7 +34,7 @@ tasks:
       - echo "Klaar. Controleer de gegenereerde *-secret.yaml bestanden."
 
   local:secret:api:
-    desc: "Exporteer apisix-secret uit test-cluster"
+    desc: "Exporteer api-secrets uit test-cluster"
     requires:
       vars: [TEST_CONTEXT]
     cmds:
@@ -42,6 +42,30 @@ tasks:
         kubectl get secret don-api-apisix -n tn-don-api --context={{.TEST_CONTEXT}} \
           -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "apisix"' \
           > apps/api/overlays/local/apisix-secret.yaml
+      - |
+        kubectl get secret don-api-tools-secret -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "tools-secret"' \
+          > apps/api/overlays/local/tools-secret.yaml
+      - |
+        kubectl get secret don-api-api-register-secret -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "api-register-secret"' \
+          > apps/api/overlays/local/api-register-secret.yaml
+      - |
+        kubectl get secret don-api-api-db -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "api-db"' \
+          > apps/api/overlays/local/api-register-db.yaml
+      - |
+        kubectl get secret don-api-register-site-secret -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "register-site-secret"' \
+          > apps/api/overlays/local/register-site-secret.yaml
+      - |
+        kubectl get secret don-api-piwik-secret -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "piwik-secret"' \
+          > apps/api/overlays/local/piwik-secret.yaml
+      - |
+        kubectl get secret don-api-opa-auth-config -n tn-don-api --context={{.TEST_CONTEXT}} \
+          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "opa-auth-config"' \
+          > apps/api/overlays/local/opa-auth-config.yaml
 
   local:secret:auth:
     desc: "Exporteer keycloak-secret uit test-cluster"
@@ -196,6 +220,11 @@ tasks:
     desc: "Configureer een tijdelijke APISIX route die de built-in opa plugin gebruikt"
     cmds:
       - ./scripts/configure-local-opa-demo-route.sh
+
+  local:apisix:routes:sync:
+    desc: "Laad de declaratieve APISIX routes uit apps/api/base/apisix/routes/adc.yaml in de lokale APISIX admin API"
+    cmds:
+      - ./scripts/sync-local-apisix-routes.sh
 
   local:apisix:opa-demo:delete:
     desc: "Verwijder de tijdelijke APISIX OPA demo route"

@@ -81,6 +81,9 @@ task local:diff
 # Alles deployen
 task local:apply
 
+# Laad daarna de declaratieve APISIX routes in de lokale admin API
+task local:apisix:routes:sync
+
 # Of per namespace:
 task local:apply:api
 task local:apply:auth
@@ -97,6 +100,9 @@ task local:forward          # Apisix gateway :9080, admin :9180
 task local:forward:auth     # Keycloak :8080
 task local:forward:frontend # Frontend :3000
 task local:forward:search   # Typesense :8108
+
+# Optioneel: alleen een minimale OPA demo-route inladen
+task local:apisix:opa-demo:configure
 ```
 
 Lokale endpoints (OrbStack, via Ingress):
@@ -106,8 +112,10 @@ Lokale endpoints (OrbStack, via Ingress):
 | Frontend | [don.k8s.orb.local](http://don.k8s.orb.local) |
 | Apisix gateway | [api.k8s.orb.local](http://api.k8s.orb.local) |
 | Apisix admin | [api-admin.k8s.orb.local](http://api-admin.k8s.orb.local) |
+| API register site | [api-register.k8s.orb.local](http://api-register.k8s.orb.local) |
 | Auth (Keycloak) | [auth.k8s.orb.local](http://auth.k8s.orb.local) |
 | Search | [search.k8s.orb.local](http://search.k8s.orb.local) |
+| Schema register | [schemas.k8s.orb.local](http://schemas.k8s.orb.local) |
 | Static | [static.k8s.orb.local](http://static.k8s.orb.local) |
 | OSS register | [oss-register.k8s.orb.local](http://oss-register.k8s.orb.local) |
 

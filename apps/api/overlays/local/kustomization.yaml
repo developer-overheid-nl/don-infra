@@ -2,10 +2,16 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base/apisix
-  - ../../base/opa
+  - ../../base
   - apisix-http-route.yaml
+  - register-site-http-route.yaml
+  - don-schema-register-http-route.yaml
   - apisix-secret.yaml  # kopieer van apisix-secret.example.yaml, nooit committen
+  - tools-secret.yaml  # kopieer van tools-secret.example.yaml, nooit committen
+  - api-register-secret.yaml  # kopieer van api-register-secret.example.yaml, nooit committen
+  - api-register-db.yaml  # kopieer van api-register-db.example.yaml, nooit committen
+  - register-site-secret.yaml  # kopieer van register-site-secret.example.yaml, nooit committen
+  - piwik-secret.yaml  # kopieer van piwik-secret.example.yaml, nooit committen
   - opa-auth-config.yaml  # kopieer van opa-auth-config.example.yaml, nooit committen
 
 namespace: tn-don-api
@@ -16,11 +22,6 @@ patches:
       kind: HelmRelease
       name: apisix
     patch: |
-      - op: replace
-        path: /spec/values/apisix/customPlugins/enabled
-        value: false
-      - op: remove
-        path: /spec/values/apisix/customPlugins
       - op: replace
         path: /spec/values/ingress/annotations
         value: {}
@@ -51,3 +52,39 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: api-admin.k8s.orb.local
+  - target:
+      kind: Ingress
+      name: register-site-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: api-register.k8s.orb.local
+      - op: remove
+        path: /spec/tls
+      - op: remove
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: Ingress
+      name: don-schema-register-ing
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: schemas.k8s.orb.local
+      - op: remove
+        path: /spec/tls
+      - op: remove
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+  - target:
+      kind: HTTPRoute
+      name: register-site-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: api-register.k8s.orb.local
+  - target:
+      kind: HTTPRoute
+      name: don-schema-register-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: schemas.k8s.orb.local
