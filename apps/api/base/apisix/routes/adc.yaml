@@ -30,6 +30,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: Bundle OAS
     description: 'Bundelt een OpenAPI specificatie en lost externe verwijzingen op.
       Body: { oasUrl } of { oasBody }.'
@@ -56,6 +57,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: createAuthClient
     description: Maak een nieuwe Auth Client aan (POST)
     methods:
@@ -107,6 +109,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: convertOpenAPIToPostmanPost
     description: Maak Postman-collectie (POST)
     methods:
@@ -132,6 +135,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: arazzo markdown
     description: 'Genereert alleen de Markdown-uitvoer van een Arazzo specificatie.
       Body: { oasUrl|oasBody }'
@@ -158,6 +162,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: arazzo mermaid
     description: 'Genereert alleen de Mermaid flowchart van een Arazzo specificatie.
       Body: { oasUrl|oasBody }'
@@ -184,6 +189,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: ConvertOAS
     description: 'Converteert OpenAPI naar de laatst ondersteunde versie (standaard
       3.1). Meegegeven targetVersion (3.0 of 3.1) bepaalt het doel. Body: { oasUrl
@@ -211,6 +217,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: Generate OAS
     description: 'Genereert een boilerplate OpenAPI specificatie op basis van JSON-invoer.
       Body: { oasUrl } of { oasBody } (stringified JSON).'
@@ -237,6 +244,7 @@ services:
         with_route: true
     labels:
       required_scopes: tools
+      allow_api_key_methods: POST
   - name: openapiSpec
     description: OpenAPI-specificatie ophalen
     methods:
