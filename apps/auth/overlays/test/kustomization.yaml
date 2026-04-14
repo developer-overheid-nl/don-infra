@@ -7,7 +7,7 @@ resources:
   - keycloak-secret.yaml
   - keycloak-realm-config.yaml
 
-namespace: tn-don-auth
+namespace: tn-don-auth-test
 namePrefix: don-auth-
 
 commonLabels:

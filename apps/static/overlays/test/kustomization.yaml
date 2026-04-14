@@ -5,7 +5,7 @@ resources:
   - ../../base
   - http-route.yaml
 
-namespace: tn-don-static
+namespace: tn-don-static-test
 namePrefix: don-static-
 
 commonLabels:
@@ -17,13 +17,6 @@ images:
     newTag: 8b8602d9fb8959e38a5a29ba1f46a44b65943be8
 
 patches:
-  - target:
-      kind: Ingress
-      name: ing
-    patch: |
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
   - target:
       kind: HTTPRoute
       name: http-route

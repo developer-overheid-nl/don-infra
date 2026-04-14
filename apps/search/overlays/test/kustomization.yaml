@@ -7,7 +7,7 @@ resources:
   - api-key.yaml
   - scraper-configmap.yaml
 
-namespace: tn-don-search
+namespace: tn-don-search-test
 namePrefix: don-search-
 
 commonLabels:
@@ -23,13 +23,6 @@ images:
 
 patches:
   - target:
-      kind: Ingress
-      name: ing
-    patch: |
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
-  - target:
       kind: HTTPRoute
       name: http-route
     patch: |
@@ -44,7 +37,7 @@ patches:
         path: /spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_CORS_DOMAINS
-          value: "https://developer.overheid.nl,https://projects.digilab.network"
+          value: "https://developer.overheid.nl,https://don.projects.digilab.network"
   - target:
       kind: CronJob
       name: scraper

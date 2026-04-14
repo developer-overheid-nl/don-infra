@@ -7,7 +7,7 @@ resources:
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml
-namespace: tn-don-oss
+namespace: tn-don-oss-test
 namePrefix: don-oss-
 labels:
   - pairs:
@@ -33,13 +33,6 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/env/0/value
         value: "168"
-  - target:
-      kind: Ingress
-      name: oss-register-site-ing
-    patch: |
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
   - target:
       kind: HTTPRoute
       name: http-route

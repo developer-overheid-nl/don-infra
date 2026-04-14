@@ -1,0 +1,740 @@
+---
+services:
+- name: Tools API v1
+  description: API van de Tools API
+  routes:
+  - name: validatorOpenAPIPost
+    description: 'Valideert een OpenAPI specificatie met de DON ADR ruleset. Standaard
+      wordt ruleset 2.1 gebruikt; geef targetVersion ''2.0'' of ''2.1'' mee om een
+      versie te kiezen. Body: { oasUrl } of { oasBody } (stringified JSON of YAML).'
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/oas/validate"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: Bundle OAS
+    description: 'Bundelt een OpenAPI specificatie en lost externe verwijzingen op.
+      Body: { oasUrl } of { oasBody }.'
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/oas/bundle"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: createAuthClient
+    description: Maak een nieuwe Auth Client aan (POST)
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/auth/clients"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: ConvertOAS
+    description: Converteer OpenAPI 3.0/3.1
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/oas/convert"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: convertOpenAPIToPostmanPost
+    description: Maak Postman-collectie (POST)
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/oas/postman"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: arazzo markdown
+    description: 'Genereert alleen de Markdown-uitvoer van een Arazzo specificatie.
+      Body: { oasUrl|oasBody }'
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/arazzo/markdown"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: arazzo mermaid
+    description: 'Genereert alleen de Mermaid flowchart van een Arazzo specificatie.
+      Body: { oasUrl|oasBody }'
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/arazzo/mermaid"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: ConvertOAS
+    description: 'Converteert OpenAPI naar de laatst ondersteunde versie (standaard
+      3.1). Meegegeven targetVersion (3.0 of 3.1) bepaalt het doel. Body: { oasUrl
+      } of { oasBody } (stringified JSON of YAML).'
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/oas/convert"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: Generate OAS
+    description: 'Genereert een boilerplate OpenAPI specificatie op basis van JSON-invoer.
+      Body: { oasUrl } of { oasBody } (stringified JSON).'
+    methods:
+    - POST
+    uris:
+    - "/tools/v1/oas/generate"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: tools
+      allow_api_key_methods: POST
+  - name: openapiSpec
+    description: OpenAPI-specificatie ophalen
+    methods:
+    - GET
+    uris:
+    - "/tools/v1/openapi.json"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+  upstream:
+    scheme: http
+    nodes:
+    - host: don-api-tools-svc
+      port: 1338
+      weight: 100
+    timeout:
+      connect: 60
+      send: 60
+      read: 60
+    pass_host: pass
+- name: API register API v1
+  description: API van het API register
+  routes:
+  - name: listApis
+    description: Alle API's ophalen
+    methods:
+    - GET
+    uris:
+    - "/api-register/v1/apis"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: apis:read
+  - name: SearchApis
+    description: Zoeken in alle api's
+    methods:
+    - GET
+    uris:
+    - "/api-register/v1/apis/_search"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: apis:read
+  - name: createApi
+    description: Registreer een nieuwe API met een OpenAPI URL
+    methods:
+    - POST
+    uris:
+    - "/api-register/v1/apis"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: apis:write
+  - name: retreiveApi
+    description: Specifieke API ophalen
+    methods:
+    - GET
+    uris:
+    - "/api-register/v1/apis/*"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: apis:read
+  - name: updateApi
+    description: Specifieke API updaten
+    methods:
+    - PUT
+    uris:
+    - "/api-register/v1/apis/*"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: PUT,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: apis:write
+  - name: listOrganisations
+    description: Alle organisaties ophalen
+    methods:
+    - GET
+    uris:
+    - "/api-register/v1/organisations"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: organisations:read
+  - name: openapiSpec
+    description: OpenAPI-specificatie ophalen
+    methods:
+    - GET
+    uris:
+    - "/api-register/v1/openapi.json"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+  upstream:
+    scheme: http
+    nodes:
+    - host: don-api-api-register-svc
+      port: 1337
+      weight: 100
+    timeout:
+      connect: 60
+      send: 60
+      read: 60
+    pass_host: pass
+- name: OSS register API v1
+  description: API van het OSS register
+  routes:
+  - name: listRepositories
+    description: Alle repositories ophalen
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/repositories"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: repositories:read
+  - name: searchRepositories
+    description: Zoekt geregistreerde repositories
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/repositories/_search"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: repositories:read
+  - name: retrieveRepositorie
+    description: Specifieke repository ophalen
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/repositories/*"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: repositories:read
+  - name: listRepositoryFilters
+    description: Returns all available filter options with counts per option.
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/repositories/filters"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: repositories:read
+  - name: createRepositorie
+    description: Registreer een nieuwe repository
+    methods:
+    - POST
+    uris:
+    - "/oss-register/v1/repositories"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: repositories:write
+  - name: updateRepositorie
+    description: Update een repository
+    methods:
+    - PUT
+    uris:
+    - "/oss-register/v1/repositories/*"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: PUT,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: repositories:write
+  - name: listOrganisations
+    description: Alle organisaties ophalen
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/organisations"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: organisations:read
+  - name: createOrganisation
+    description: Voegt een nieuwe organisatie toe
+    methods:
+    - POST
+    uris:
+    - "/oss-register/v1/organisations"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: organisations:write
+  - name: createGitOrganisation
+    description: Voegt een nieuwe git-organisatie toe
+    methods:
+    - POST
+    uris:
+    - "/oss-register/v1/git-organisations"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: gitOrganisations:write
+  - name: listGitOrganisations
+    description: Alle Gitorganisaties ophalen
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/git-organisations"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+      opa:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    labels:
+      required_scopes: gitOrganisations:read
+  - name: openapiSpec
+    description: OpenAPI-specificatie ophalen
+    methods:
+    - GET
+    uris:
+    - "/oss-register/v1/openapi.json"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+  upstream:
+    scheme: http
+    nodes:
+    - host: don-oss-oss-register-svc.tn-don-oss-prod
+      port: 1337
+      weight: 100
+    timeout:
+      connect: 60
+      send: 60
+      read: 60
+    pass_host: pass
