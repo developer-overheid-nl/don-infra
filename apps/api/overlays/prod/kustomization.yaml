@@ -14,7 +14,7 @@ resources:
   - piwik-secret.yaml
   - opa-auth-config.yaml
 
-namespace: tn-don-api
+namespace: tn-don-api-prod
 namePrefix: don-api-
 
 images:
@@ -40,17 +40,11 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
-        path: /spec/values/ingress/hosts/0/host
-        value: api.developer.overheid.nl
+        path: /spec/values/ingress/enabled
+        value: false
       - op: replace
-        path: /spec/values/ingress/tls/0/hosts/0
-        value: api.developer.overheid.nl
-      - op: replace
-        path: /spec/values/apisix/admin/ingress/hosts/0/host
-        value: api-admin.developer.overheid.nl
-      - op: replace
-        path: /spec/values/apisix/admin/ingress/tls/0/hosts/0
-        value: api-admin.developer.overheid.nl
+        path: /spec/values/apisix/admin/ingress/enabled
+        value: false
   - target:
       kind: HTTPRoute
       name: apisix-http-route
@@ -65,16 +59,6 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: api-admin.developer.overheid.nl
-  - target:
-      kind: Ingress
-      name: register-site-ing
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: apis.developer.overheid.nl
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: apis.developer.overheid.nl
   - target:
       kind: HTTPRoute
       name: register-site-http-route

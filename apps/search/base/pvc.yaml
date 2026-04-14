@@ -5,7 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: azurefile-csi
+  storageClassName: ceph-filesystem
   resources:
     requests:
       storage: 10Gi

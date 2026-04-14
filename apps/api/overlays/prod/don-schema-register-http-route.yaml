@@ -4,9 +4,11 @@ metadata:
   name: don-schema-register-http-route
 spec:
   parentRefs:
-    - name: public-gateway
+    - group: gateway.networking.x-k8s.io
+      kind: XListenerSet
+      name: tn-don
       namespace: istio-gateway
-      sectionName: https
+      sectionName: tn-don-prod-schemas
   hostnames:
     - set-in-overlay
   rules:

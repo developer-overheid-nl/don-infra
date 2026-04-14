@@ -7,6 +7,5 @@ commonLabels:
 resources:
   - oss-register-site-dpl.yaml
   - oss-register-site-svc.yaml
-  - oss-register-site-ing.yaml
   
 

@@ -5,7 +5,7 @@ resources:
   - ../../base
   - http-route.yaml
 
-namespace: tn-don-static
+namespace: tn-don-static-prod
 namePrefix: don-static-
 
 commonLabels:
@@ -17,16 +17,6 @@ images:
     newTag: 8b8602d9fb8959e38a5a29ba1f46a44b65943be8
 
 patches:
-  - target:
-      kind: Ingress
-      name: ing
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: static.developer.overheid.nl
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: static.developer.overheid.nl
   - target:
       kind: HTTPRoute
       name: http-route

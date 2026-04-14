@@ -730,7 +730,7 @@ services:
   upstream:
     scheme: http
     nodes:
-    - host: don-oss-oss-register-svc.tn-don-oss
+    - host: don-oss-oss-register-svc.tn-don-oss-test
       port: 1337
       weight: 100
     timeout:

@@ -12,15 +12,15 @@ resources:
   - api-register-db.yaml
   - piwik-secret.yaml
   - opa-auth-config.yaml
-namespace: tn-don-api
+namespace: tn-don-api-test
 namePrefix: don-api-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
-    newTag: ca86fd16056b15de8ac7d5cdf9647af82fa6f1c1
+    newTag: 73e92eb814727ff7afc44c9621b8b0831e8b6af6
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: 63546e39947cf58704f87ee8234bafdb71b4c67b
+    newTag: 52938fcde1e14581fbad6e07e8534ccc1581dc2c
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 5e9d8483911830902681f84e105e9032db650bc4
@@ -55,32 +55,6 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: api-admin.don.projects.digilab.network
-  - target:
-      kind: Ingress
-      name: register-site-ing
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: api-register.don.projects.digilab.network
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: api-register.don.projects.digilab.network
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
-  - target:
-      kind: Ingress
-      name: don-schema-register-ing
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: schemas.don.projects.digilab.network
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: schemas.don.projects.digilab.network
-      - op: replace
-        path: /spec/ingressClassName
-        value: disabled
   - target:
       kind: HTTPRoute
       name: register-site-http-route
