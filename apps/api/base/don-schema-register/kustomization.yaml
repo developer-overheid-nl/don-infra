@@ -7,4 +7,3 @@ commonLabels:
 resources:
   - don-schema-register-dpl.yaml
   - don-schema-register-svc.yaml
-  - don-schema-register-ing.yaml

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: keycloak-realm-config
-  namespace: tn-don-auth
+  namespace: tn-don-auth-test
 data:
   don-realm.json: |
     {

@@ -7,7 +7,7 @@ resources:
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml
-namespace: tn-don-oss
+namespace: tn-don-oss-prod
 namePrefix: don-oss-
 labels:
   - pairs:
@@ -25,16 +25,6 @@ images:
     newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: cfd6179d45528f6a85eb7800f791acc52974ed9a
 patches:
-  - target:
-      kind: Ingress
-      name: oss-register-site-ing
-    patch: |
-      - op: replace
-        path: /spec/rules/0/host
-        value: oss.developer.overheid.nl
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: oss.developer.overheid.nl
   - target:
       kind: HTTPRoute
       name: http-route

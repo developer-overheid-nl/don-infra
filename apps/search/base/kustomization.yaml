@@ -6,7 +6,6 @@ configurations:
 
 resources:
   - deployment.yaml
-  - ingress.yaml
   - pvc.yaml
   - scraper-cronjob.yaml
   - service.yaml
