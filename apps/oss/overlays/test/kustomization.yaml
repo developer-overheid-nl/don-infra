@@ -23,7 +23,7 @@ images:
     newTag: 52938fcde1e14581fbad6e07e8534ccc1581dc2c
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
-    newTag: c04c484bc360eca8647d4ab7afa9728d530ade98
+    newTag: f65570a39efc0acf19288cb6a36db2648d66c2ef
 patches:
   # Keep in sync with base: CRAWL_STALE_AFTER_HOURS is intentionally env[0].
   - target:
