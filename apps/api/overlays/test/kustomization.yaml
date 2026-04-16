@@ -48,24 +48,24 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: api.projects.digilab.network
+        value: api.don.projects.digilab.network
   - target:
       kind: HTTPRoute
       name: apisix-admin-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: api-admin.projects.digilab.network
+        value: api-admin.don.projects.digilab.network
   - target:
       kind: Ingress
       name: register-site-ing
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: api-register.projects.digilab.network
+        value: api-register.don.projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: api-register.projects.digilab.network
+        value: api-register.don.projects.digilab.network
       - op: replace
         path: /spec/ingressClassName
         value: disabled
@@ -75,10 +75,10 @@ patches:
     patch: |
       - op: replace
         path: /spec/rules/0/host
-        value: schemas.projects.digilab.network
+        value: schemas.don.projects.digilab.network
       - op: replace
         path: /spec/tls/0/hosts/0
-        value: schemas.projects.digilab.network
+        value: schemas.don.projects.digilab.network
       - op: replace
         path: /spec/ingressClassName
         value: disabled
@@ -88,11 +88,11 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: api-register.projects.digilab.network
+        value: api-register.don.projects.digilab.network
   - target:
       kind: HTTPRoute
       name: don-schema-register-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: schemas.projects.digilab.network
+        value: schemas.don.projects.digilab.network

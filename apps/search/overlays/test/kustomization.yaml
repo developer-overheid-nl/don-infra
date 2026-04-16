@@ -35,7 +35,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: search.projects.digilab.network
+        value: search.don.projects.digilab.network
   - target:
       kind: Deployment
       name: dpl
@@ -53,4 +53,4 @@ patches:
         path: /spec/jobTemplate/spec/template/spec/containers/0/env/-
         value:
           name: TYPESENSE_HOST
-          value: "search.projects.digilab.network"
+          value: "search.don.projects.digilab.network"
