@@ -46,7 +46,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: oss-register.projects.digilab.network
+        value: oss-register.don.projects.digilab.network
   - target:
       kind: CronJob
       name: oss-crawler

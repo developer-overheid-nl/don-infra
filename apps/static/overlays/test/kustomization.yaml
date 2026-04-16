@@ -30,4 +30,4 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: static.projects.digilab.network
+        value: static.don.projects.digilab.network
