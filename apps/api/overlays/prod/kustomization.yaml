@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - register-site-http-route.yaml
@@ -13,24 +12,21 @@ resources:
   - api-register-db.yaml
   - piwik-secret.yaml
   - opa-auth-config.yaml
-
 namespace: tn-don-api-prod
 namePrefix: don-api-
-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
     newTag: 397ecbad854d8cac37b7a44da68816dd4f105c6e
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: 996cc0bdc56011174bcf99051d12e9dab0799630
+    newTag: fc277d0a6bbda22bf03b284539d2bd1a7a1a7baf
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: dea9f870f88ac8f5eef77b71af605e520d017a83
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
     newTag: d51738bcd24d7da1df37a52b9cb9686a2fc0bbfb
-    
 patches:
   - target:
       kind: HelmRelease
