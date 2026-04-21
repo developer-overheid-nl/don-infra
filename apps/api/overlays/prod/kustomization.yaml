@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
   - register-site-http-route.yaml
-  - don-schema-register-http-route.yaml
+  # - don-schema-register-http-route.yaml
   - apisix-http-route.yaml
   - apisix.yaml
   - register-site.yaml
@@ -66,10 +66,10 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: apis.developer.overheid.nl
-  - target:
-      kind: HTTPRoute
-      name: don-schema-register-http-route
-    patch: |
-      - op: replace
-        path: /spec/hostnames/0
-        value: schemas.developer.overheid.nl
+  # - target:
+  #     kind: HTTPRoute
+  #     name: don-schema-register-http-route
+  #   patch: |
+  #     - op: replace
+  #       path: /spec/hostnames/0
+  #       value: schemas.developer.overheid.nl
