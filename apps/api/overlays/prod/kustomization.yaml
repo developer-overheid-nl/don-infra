@@ -17,7 +17,7 @@ namePrefix: don-api-
 images:
   - name: don-api-register
     newName: ghcr.io/developer-overheid-nl/don-api-register
-    newTag: 71db202e00cde7db0db36e783100c3fb97b82777
+    newTag: fb578495adbba717bb429c596d03e9667011f8c2
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
     newTag: fc277d0a6bbda22bf03b284539d2bd1a7a1a7baf
@@ -62,10 +62,10 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: apis.developer.overheid.nl
-  # - target:
-  #     kind: HTTPRoute
-  #     name: don-schema-register-http-route
-  #   patch: |
-  #     - op: replace
-  #       path: /spec/hostnames/0
-  #       value: schemas.developer.overheid.nl
+# - target:
+#     kind: HTTPRoute
+#     name: don-schema-register-http-route
+#   patch: |
+#     - op: replace
+#       path: /spec/hostnames/0
+#       value: schemas.developer.overheid.nl
