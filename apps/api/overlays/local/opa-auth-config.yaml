@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opa-auth-config
+type: Opaque
+stringData:
+  apisix-auth-config.json: |
+    {
+      "apisix_auth": {
+        "mode": "static",
+        "api_key_header": "x-api-key",
+        "default_required_scopes": ["apis:read"],
+        "allowed_api_key_scopes": [
+          "apis:read",
+          "organisations:read",
+          "tools:read",
+          "repositories:read",
+          "gitOrganisations:read"
+        ],
+        "static": {
+          "bearer_tokens": {
+            "local-read-token": {
+              "active": true,
+              "client_id": "local-demo-client",
+              "scope": "apis:read organisations:read"
+            },
+            "local-no-scope-token": {
+              "active": true,
+              "client_id": "local-demo-client",
+              "scope": "tools:read"
+            }
+          },
+          "api_keys": {
+            "abc123partnerXkey987zyx": {
+              "active": true,
+              "client_id": "partner-x",
+              "scopes": ["apis:read", "organisations:read"]
+            }
+          }
+        }
+      }
+    }

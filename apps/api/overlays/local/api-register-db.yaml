@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: api-db
+type: Opaque
+stringData:
+  DB_DBNAME: "don_api"
+  DB_HOSTNAME: "localhost"
+  DB_PASSWORD: "changeme-db-password"
+  DB_SCHEMA: "don_api"
+  DB_USERNAME: "don_api"

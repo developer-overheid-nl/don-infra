@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - http-route.yaml
+  - keycloak-secret.yaml
+  - keycloak-realm-config.yaml
+
+namespace: tn-don-auth
+namePrefix: don-auth-
+
+labels:
+  - pairs:
+      app: auth
+    includeSelectors: false
+    includeTemplates: true
+
+patches:
+  - target:
+      kind: HelmRelease
+      name: keycloak
+    patch: |
+      - op: replace
+        path: /spec/values/ingress/annotations
+        value: {}
+      - op: replace
+        path: /spec/values/ingress/hostname
+        value: auth.k8s.orb.local
+      - op: remove
+        path: /spec/values/ingress/extraTls
+      - op: replace
+        path: /spec/values/extraEnvVars/0/value
+        value: "currentSchema=don_auth"
+  - target:
+      kind: HTTPRoute
+      name: http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: auth.k8s.orb.local
