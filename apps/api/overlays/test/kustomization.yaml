@@ -1,6 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
 resources:
   - ../../base
   - register-site-http-route.yaml
@@ -21,7 +20,7 @@ images:
     newTag: 73e92eb814727ff7afc44c9621b8b0831e8b6af6
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: 52938fcde1e14581fbad6e07e8534ccc1581dc2c
+    newTag: 921b19abe85b58c29d1d42fb7f54eed33ee9cf2d
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 5e9d8483911830902681f84e105e9032db650bc4
