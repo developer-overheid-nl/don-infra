@@ -12,7 +12,15 @@ spec:
   hostnames:
     - set-in-overlay
   rules:
-    - backendRefs:
+    - filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Access-Control-Allow-Origin
+                value: "*"
+              - name: Access-Control-Allow-Methods
+                value: "GET, HEAD, OPTIONS"
+      backendRefs:
         - name: svc
           kind: Service
           port: 80
