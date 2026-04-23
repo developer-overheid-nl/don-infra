@@ -221,7 +221,7 @@ data:
         "force_json_decode": true,
         "raise_error": false,
         "timeout": "5s",
-        "cache": true,
+        "cache": false,
       })
     }
 
