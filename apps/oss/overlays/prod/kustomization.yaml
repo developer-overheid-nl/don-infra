@@ -23,7 +23,7 @@ images:
     newTag: fc277d0a6bbda22bf03b284539d2bd1a7a1a7baf
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
-    newTag: 45c7cbc0eae95ee5029ebe7e345b90ec591074e3
+    newTag: 3207fb9644dfcd77b8175ae1a9769878e16f6269
 patches:
   - target:
       kind: HTTPRoute
