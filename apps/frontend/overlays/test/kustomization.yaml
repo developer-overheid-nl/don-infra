@@ -19,4 +19,4 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: don.don.projects.digilab.network
+        value: site.don.projects.digilab.network
