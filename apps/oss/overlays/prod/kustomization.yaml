@@ -4,6 +4,7 @@ resources:
   - ../../base
   - http-route.yaml
   - oss-db.yaml
+  - oss-secret.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml

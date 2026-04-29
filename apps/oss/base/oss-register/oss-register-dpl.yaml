@@ -44,6 +44,26 @@ spec:
                 secretKeyRef:
                   name: oss-db
                   key: DB_SCHEMA
+            - name: TYPESENSE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: oss-secret
+                  key: TYPESENSE_API_KEY
+            - name: TYPESENSE_COLLECTION
+              valueFrom:
+                secretKeyRef:
+                  name: oss-secret
+                  key: TYPESENSE_COLLECTION
+            - name: TYPESENSE_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: oss-secret
+                  key: TYPESENSE_ENDPOINT
+            - name: ENABLE_TYPESENSE
+              valueFrom:
+                secretKeyRef:
+                  name: oss-secret
+                  key: ENABLE_TYPESENSE
           ports:
             - name: http
               containerPort: 1337

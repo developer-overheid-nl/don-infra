@@ -71,6 +71,11 @@ spec:
                 secretKeyRef:
                   name: api-register-secret
                   key: TYPESENSE_ENDPOINT
+            - name: ENABLE_TYPESENSE
+              valueFrom:
+                secretKeyRef:
+                  name: api-register-secret
+                  key: ENABLE_TYPESENSE
           ports:
             - name: http
               containerPort: 1337
