@@ -8,7 +8,7 @@ spec:
       kind: XListenerSet
       name: tn-don
       namespace: istio-gateway
-      sectionName: tn-don-test-landing-page
+      sectionName: tn-don-test
   hostnames:
     - set-in-overlay
   rules:
