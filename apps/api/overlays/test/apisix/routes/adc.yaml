@@ -402,6 +402,24 @@ services:
         with_route: true
     labels:
       required_scopes: apis:read
+  - name: retrieveApiFeed
+    description: Specifieke API feed ophalen
+    methods:
+    - GET
+    uris:
+    - "/api-register/v1/apis/*/feed"
+    plugins:
+      proxy-rewrite:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+      cors:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
   - name: updateApi
     description: Specifieke API updaten
     methods:
