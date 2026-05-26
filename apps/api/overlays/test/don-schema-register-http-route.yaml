@@ -16,3 +16,11 @@ spec:
         - name: don-schema-register-svc
           kind: Service
           port: 8000
+    - filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Access-Control-Allow-Origin
+                value: "*"
+              - name: Access-Control-Allow-Methods
+                value: "GET, HEAD, OPTIONS"
