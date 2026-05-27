@@ -21,6 +21,9 @@ data:
     }
 
     default config := {}
+    default route_auth_rules := []
+    default configured_route_required_scopes := []
+    default configured_route_api_key_methods := []
 
     default_allowed_api_key_scopes := [
       "apis:read",
@@ -41,9 +44,14 @@ data:
       object.get(object.get(env_config, "keycloak", {}), "token_url", "") != ""
     }
 
+    route_auth_rules := data.apisix_route_authz.rules if {
+      data.apisix_route_authz.rules
+    }
+
     mode := lower(object.get(config, "mode", "static"))
     api_key_header := lower(object.get(config, "api_key_header", "x-api-key"))
     request_method := upper(object.get(input.request, "method", ""))
+    request_path := object.get(input.request, "path", object.get(input.request, "uri", ""))
     default_required_scopes := object.get(config, "default_required_scopes", [])
     allowed_api_key_scopes := object.get(
       config,
@@ -336,15 +344,27 @@ data:
       parts := [part | part := raw_parts[_]; part != ""]
     }
 
-    # Vereiste scopes komen per route uit labels.required_scopes.
-    # Alleen als die ontbreken, wordt teruggevallen op een default uit config.
+    # Vereiste scopes komen bij ApisixRoute uit data.apisix_route_authz.
+    # De oude route labels blijven als fallback beschikbaar tijdens migraties.
     required_scopes := scopes if {
+      scopes := configured_route_required_scopes
+      count(scopes) > 0
+    }
+
+    required_scopes := scopes if {
+      count(configured_route_required_scopes) == 0
       scopes := route_required_scopes
       count(scopes) > 0
     }
 
     required_scopes := default_required_scopes if {
+      count(configured_route_required_scopes) == 0
       count(route_required_scopes) == 0
+    }
+
+    configured_route_required_scopes := scopes if {
+      rule := route_auth_rule
+      scopes := object.get(rule, "required_scopes", [])
     }
 
     route_required_scopes := scopes if {
@@ -389,7 +409,17 @@ data:
     }
 
     api_key_allowed_for_method if {
+      request_method in configured_route_api_key_methods
+    }
+
+    api_key_allowed_for_method if {
+      count(configured_route_api_key_methods) == 0
       request_method in route_api_key_methods
+    }
+
+    configured_route_api_key_methods := methods if {
+      rule := route_auth_rule
+      methods := object.get(rule, "allow_api_key_methods", [])
     }
 
     route_api_key_methods := methods if {
@@ -426,4 +456,40 @@ data:
 
     trim_trailing_slash(value) := trimmed if {
       trimmed := trim_right(value, "/")
+    }
+
+    route_auth_rule := rule if {
+      matching := [candidate |
+        candidate := route_auth_rules[_]
+        route_auth_rule_matches(candidate)
+      ]
+      count(matching) > 0
+      max_score := max([route_auth_rule_specificity(candidate) | candidate := matching[_]])
+      rule := matching[_]
+      route_auth_rule_specificity(rule) == max_score
+    }
+
+    route_auth_rule_matches(rule) if {
+      request_method in object.get(rule, "methods", [])
+      some path in object.get(rule, "paths", [])
+      path_matches(path, request_path)
+    }
+
+    route_auth_rule_specificity(rule) := score if {
+      scores := [count(trim_right(path, "*")) |
+        path := object.get(rule, "paths", [])[_]
+        path_matches(path, request_path)
+      ]
+      score := max(scores)
+    }
+
+    path_matches(pattern, path) if {
+      not contains(pattern, "*")
+      pattern == path
+    }
+
+    path_matches(pattern, path) if {
+      endswith(pattern, "*")
+      prefix := trim_right(pattern, "*")
+      startswith(path, prefix)
     }

@@ -3,3 +3,11 @@ nameReference:
     fieldSpecs:
       - kind: HTTPRoute
         path: spec/rules/backendRefs/name
+      - kind: ApisixRoute
+        path: spec/http/backends/serviceName
+      - kind: ApisixUpstream
+        path: spec/externalNodes/name
+  - kind: ApisixUpstream
+    fieldSpecs:
+      - kind: ApisixRoute
+        path: spec/http/upstreams/name

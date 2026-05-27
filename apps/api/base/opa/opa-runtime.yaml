@@ -90,9 +90,14 @@ spec:
           configMap:
             name: opa-policy
         - name: opa-data
-          secret:
-            secretName: opa-auth-config
-            optional: true
+          projected:
+            sources:
+              - secret:
+                  name: opa-auth-config
+                  optional: true
+              - configMap:
+                  name: opa-route-authz
+                  optional: true
 ---
 apiVersion: v1
 kind: Service

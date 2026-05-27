@@ -13,6 +13,7 @@ resources:
   - register-site-secret.yaml
   - piwik-secret.yaml
   - opa-auth-config.yaml
+  - apisix/routes/apisix-routes.yaml
 
 namespace: tn-don-api
 namePrefix: don-api-
