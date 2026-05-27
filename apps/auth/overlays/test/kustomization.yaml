@@ -27,6 +27,9 @@ patches:
       - op: replace
         path: /spec/values/proxyHeaders
         value: xforwarded
+      - op: replace
+        path: /spec/values/extraEnvVars/8/value
+        value: xforwarded
   - target:
       kind: HTTPRoute
       name: http-route
