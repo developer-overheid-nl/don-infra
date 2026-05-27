@@ -30,8 +30,12 @@ patches:
       - op: remove
         path: /spec/values/ingress/extraTls
       - op: replace
-        path: /spec/values/extraEnvVars/0/value
-        value: "currentSchema=don_auth"
+        path: /spec/values/extraEnvVars/1/value
+        value: dev-file
+      - op: remove
+        path: /spec/values/extraEnvVars/10
+      - op: remove
+        path: /spec/values/extraEnvVars/9
   - target:
       kind: HTTPRoute
       name: http-route

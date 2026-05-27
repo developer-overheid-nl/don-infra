@@ -26,12 +26,28 @@ spec:
         allowInsecureImages: true
     image:
       registry: docker.io
-      repository: bitnamilegacy/keycloak
-      tag: 26.3.0-debian-12-r0
+      repository: keycloak/keycloak
+      tag: "26.3.0"
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
       debug: false
+    command:
+      - "/opt/keycloak/bin/kc.sh"
+      - "start"
+    args:
+      - "--import-realm"
+      - "--features=scripts"
+    enableDefaultInitContainers: false
+    podSecurityContext:
+      enabled: true
+      fsGroup: 0
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1000
+      runAsGroup: 0
+      runAsNonRoot: true
+      readOnlyRootFilesystem: false
 
     proxyHeaders: forwarded
     replicaCount: 1
@@ -53,12 +69,43 @@ spec:
       existingSecretPasswordKey: db-password
 
     extraEnvVars:
-      - name: KEYCLOAK_JDBC_PARAMS
-        value: "sslmode=require&currentSchema=don_auth"
+      - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: admin-password
+      - name: KC_DB
+        value: postgres
+      - name: KC_DB_URL_HOST
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: db-host
+      - name: KC_DB_URL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: db-name
+      - name: KC_DB_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: db-user
+      - name: KC_DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: don-auth-keycloak-login-secret
+            key: db-password
+      - name: KC_HTTP_ENABLED
+        value: "true"
+      - name: KC_HOSTNAME_STRICT
+        value: "false"
+      - name: KC_PROXY_HEADERS
+        value: forwarded
+      - name: KC_DB_URL_PROPERTIES
+        value: "sslmode=require"
       - name: KC_DB_SCHEMA
         value: don_auth
-      - name: KEYCLOAK_EXTRA_ARGS
-        value: "--import-realm  --features=scripts"
     ingress:
       enabled: true
       annotations:
@@ -77,6 +124,9 @@ spec:
         configMap:
           name: don-auth-keycloak-realm-config
     extraVolumeMounts:
+      - name: empty-dir
+        mountPath: /opt/keycloak/data
+        subPath: keycloak-data-dir
       - name: realm-config
-        mountPath: /opt/bitnami/keycloak/data/import
+        mountPath: /opt/keycloak/data/import
         readOnly: true
