@@ -25,6 +25,9 @@ patches:
         path: /spec/values/production
         value: true
       - op: replace
+        path: /spec/values/externalDatabase/host
+        value: don-db-postgres-rw.tn-don-db-test
+      - op: replace
         path: /spec/values/ingress/enabled
         value: false
       - op: replace

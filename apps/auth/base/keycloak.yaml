@@ -63,6 +63,10 @@ spec:
         password: ignored-but-required
 
     externalDatabase:
+      host: set-in-overlay
+      database: don
+      schema: don_auth
+      extraParams: sslmode=require
       password: ignored-but-required
       existingSecret: don-auth-keycloak-login-secret
       existingSecretHostKey: db-host
@@ -104,10 +108,6 @@ spec:
         value: "false"
       - name: KC_PROXY_HEADERS
         value: forwarded
-      - name: KC_DB_URL_PROPERTIES
-        value: "?sslmode=require"
-      - name: KC_DB_SCHEMA
-        value: don_auth
     ingress:
       enabled: true
       annotations:
