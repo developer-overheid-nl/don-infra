@@ -38,7 +38,9 @@ spec:
     args:
       - "--import-realm"
       - "--features=scripts"
-    enableDefaultInitContainers: false
+    defaultInitContainers:
+      prepareWriteDirs:
+        enabled: false
     podSecurityContext:
       enabled: true
       fsGroup: 0
