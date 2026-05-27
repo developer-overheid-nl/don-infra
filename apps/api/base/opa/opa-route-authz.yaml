@@ -1,0 +1,388 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opa-route-authz
+data:
+  apisix-route-authz.json: |
+    {
+      "apisix_route_authz": {
+        "rules": [
+          {
+            "name": "tools-api-v1-validatoropenapipost",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/oas/validate"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-bundle-oas",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/oas/bundle"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-createauthclient",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/auth/clients"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-convertoas",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/oas/convert"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-convertopenapitopostmanpost",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/oas/postman"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-arazzo-markdown",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/arazzo/markdown"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-arazzo-mermaid",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/arazzo/mermaid"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "tools-api-v1-generate-oas",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/oas/generate"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "POST"
+            ]
+          },
+          {
+            "name": "api-register-api-v1-listapis",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/api-register/v1/apis"
+            ],
+            "required_scopes": [
+              "apis:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "api-register-api-v1-filter-apis",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/api-register/v1/apis/filters"
+            ],
+            "required_scopes": [
+              "apis:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "api-register-api-v1-searchapis",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/api-register/v1/apis/_search"
+            ],
+            "required_scopes": [
+              "apis:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "api-register-api-v1-createapi",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/api-register/v1/apis"
+            ],
+            "required_scopes": [
+              "apis:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "api-register-api-v1-retreiveapi",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/api-register/v1/apis/*"
+            ],
+            "required_scopes": [
+              "apis:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "api-register-api-v1-updateapi",
+            "methods": [
+              "PUT"
+            ],
+            "paths": [
+              "/api-register/v1/apis/*"
+            ],
+            "required_scopes": [
+              "apis:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "api-register-api-v1-listorganisations",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/api-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-listrepositories",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/oss-register/v1/repositories"
+            ],
+            "required_scopes": [
+              "repositories:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-searchrepositories",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/oss-register/v1/repositories/_search"
+            ],
+            "required_scopes": [
+              "repositories:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-retrieverepositorie",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/oss-register/v1/repositories/*"
+            ],
+            "required_scopes": [
+              "repositories:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-listrepositoryfilters",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/oss-register/v1/repositories/filters"
+            ],
+            "required_scopes": [
+              "repositories:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-createrepositorie",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/oss-register/v1/repositories"
+            ],
+            "required_scopes": [
+              "repositories:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-updaterepositorie",
+            "methods": [
+              "PUT"
+            ],
+            "paths": [
+              "/oss-register/v1/repositories/*"
+            ],
+            "required_scopes": [
+              "repositories:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-listorganisations",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/oss-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-createorganisation",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/oss-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-creategitorganisation",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/oss-register/v1/git-organisations"
+            ],
+            "required_scopes": [
+              "gitOrganisations:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "oss-register-api-v1-listgitorganisations",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/oss-register/v1/git-organisations"
+            ],
+            "required_scopes": [
+              "gitOrganisations:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          }
+        ]
+      }
+    }

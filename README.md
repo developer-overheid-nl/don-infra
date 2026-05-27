@@ -143,9 +143,6 @@ task local:diff
 # Alles deployen
 task local:apply
 
-# Laad daarna de declaratieve APISIX routes in de lokale admin API
-task local:apisix:routes:sync
-
 # Of per namespace:
 task local:apply:api
 task local:apply:auth
@@ -204,7 +201,6 @@ task local:teardown
 kind create cluster --name don-local
 task local:setup
 task local:apply
-task local:apisix:routes:sync
 ```
 
 ### Alle beschikbare tasks

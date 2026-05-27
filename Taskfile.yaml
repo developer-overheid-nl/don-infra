@@ -240,11 +240,6 @@ tasks:
     cmds:
       - ./scripts/configure-local-opa-demo-route.sh
 
-  local:apisix:routes:sync:
-    desc: "Laad de declaratieve APISIX routes uit apps/api/base/apisix/routes/adc.yaml in de lokale APISIX admin API"
-    cmds:
-      - ./scripts/sync-local-apisix-routes.sh
-
   local:apisix:opa-demo:delete:
     desc: "Verwijder de tijdelijke APISIX OPA demo route"
     cmds:

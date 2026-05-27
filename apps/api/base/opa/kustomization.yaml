@@ -6,4 +6,5 @@ commonLabels:
 
 resources:
   - opa-policy.yaml
+  - opa-route-authz.yaml
   - opa-runtime.yaml

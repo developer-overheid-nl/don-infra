@@ -1,0 +1,1035 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oss-register-external
+spec:
+  type: ExternalName
+  externalName: don-oss-oss-register-svc.tn-don-oss.svc.cluster.local
+  ports:
+  - name: http
+    port: 1337
+    targetPort: 1337
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixUpstream
+metadata:
+  name: oss-register-upstream
+spec:
+  ingressClassName: apisix
+  externalNodes:
+  - type: Service
+    name: oss-register-external
+---
+apiVersion: apisix.apache.org/v2
+kind: ApisixRoute
+metadata:
+  name: api-routes
+spec:
+  ingressClassName: apisix
+  http:
+  - name: tools-api-v1-validatoropenapipost
+    match:
+      paths:
+      - "/tools/v1/oas/validate"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-bundle-oas
+    match:
+      paths:
+      - "/tools/v1/oas/bundle"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-createauthclient
+    match:
+      paths:
+      - "/tools/v1/auth/clients"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-convertoas
+    match:
+      paths:
+      - "/tools/v1/oas/convert"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-convertopenapitopostmanpost
+    match:
+      paths:
+      - "/tools/v1/oas/postman"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-arazzo-markdown
+    match:
+      paths:
+      - "/tools/v1/arazzo/markdown"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-arazzo-mermaid
+    match:
+      paths:
+      - "/tools/v1/arazzo/mermaid"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-generate-oas
+    match:
+      paths:
+      - "/tools/v1/oas/generate"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-openapispec
+    match:
+      paths:
+      - "/tools/v1/openapi.json"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: api-register-api-v1-listapis
+    match:
+      paths:
+      - "/api-register/v1/apis"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-filter-apis
+    match:
+      paths:
+      - "/api-register/v1/apis/filters"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-searchapis
+    match:
+      paths:
+      - "/api-register/v1/apis/_search"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-createapi
+    match:
+      paths:
+      - "/api-register/v1/apis"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-retreiveapi
+    match:
+      paths:
+      - "/api-register/v1/apis/*"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-retrieveapifeed
+    match:
+      paths:
+      - "/api-register/v1/apis/*/feed"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-updateapi
+    match:
+      paths:
+      - "/api-register/v1/apis/*"
+      methods:
+      - PUT
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: PUT,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-listorganisations
+    match:
+      paths:
+      - "/api-register/v1/organisations"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: api-register-api-v1-openapispec
+    match:
+      paths:
+      - "/api-register/v1/openapi.json"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/api-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: api-register-svc
+      servicePort: 1337
+  - name: oss-register-api-v1-listrepositories
+    match:
+      paths:
+      - "/oss-register/v1/repositories"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-searchrepositories
+    match:
+      paths:
+      - "/oss-register/v1/repositories/_search"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-retrieverepositorie
+    match:
+      paths:
+      - "/oss-register/v1/repositories/*"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-listrepositoryfilters
+    match:
+      paths:
+      - "/oss-register/v1/repositories/filters"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-createrepositorie
+    match:
+      paths:
+      - "/oss-register/v1/repositories"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-updaterepositorie
+    match:
+      paths:
+      - "/oss-register/v1/repositories/*"
+      methods:
+      - PUT
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: PUT,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-listorganisations
+    match:
+      paths:
+      - "/oss-register/v1/organisations"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-createorganisation
+    match:
+      paths:
+      - "/oss-register/v1/organisations"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-creategitorganisation
+    match:
+      paths:
+      - "/oss-register/v1/git-organisations"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-listgitorganisations
+    match:
+      paths:
+      - "/oss-register/v1/git-organisations"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
+  - name: oss-register-api-v1-openapispec
+    match:
+      paths:
+      - "/oss-register/v1/openapi.json"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        max_age: 5
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
