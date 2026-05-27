@@ -20,6 +20,9 @@ spec:
         kind: HelmRepository
         name: don-api-repo-apisix
   values:
+    image:
+      repository: apache/apisix
+      tag: 3.15.0-ubuntu
     replicaCount: 1
     ingress:
       enabled: true
