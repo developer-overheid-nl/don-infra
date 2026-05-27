@@ -22,6 +22,9 @@ patches:
         path: /spec/values/replicaCount
         value: 1
       - op: replace
+        path: /spec/values/production
+        value: true
+      - op: replace
         path: /spec/values/ingress/hostname
         value: auth.developer.overheid.nl
       - op: replace
