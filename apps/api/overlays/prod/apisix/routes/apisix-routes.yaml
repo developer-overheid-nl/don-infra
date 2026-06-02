@@ -489,10 +489,10 @@ spec:
     backends:
     - serviceName: api-register-svc
       servicePort: 1337
-  - name: api-register-api-v1-retreiveapi
+  - name: api-register-api-v1-retrieveapifeed
     match:
       paths:
-      - "/api-register/v1/apis/*"
+      - "/api-register/v1/apis/*/feed"
       methods:
       - GET
     plugins:
@@ -511,13 +511,6 @@ spec:
         allow_headers: Authorization,x-api-key,Content-Type
         allow_methods: GET,OPTIONS
         max_age: 5
-    - name: opa
-      enable: true
-      config:
-        host: http://don-api-opa:8181
-        policy: apisix/authz/result
-        timeout: 3000
-        with_route: true
     timeout:
       connect: 60s
       send: 60s
@@ -561,10 +554,10 @@ spec:
     backends:
     - serviceName: api-register-svc
       servicePort: 1337
-  - name: api-register-api-v1-retrieveapifeed
+  - name: api-register-api-v1-retreiveapi
     match:
       paths:
-      - "/api-register/v1/apis/*/feed"
+      - "/api-register/v1/apis/*"
       methods:
       - GET
     plugins:
@@ -583,6 +576,13 @@ spec:
         allow_headers: Authorization,x-api-key,Content-Type
         allow_methods: GET,OPTIONS
         max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
     timeout:
       connect: 60s
       send: 60s
