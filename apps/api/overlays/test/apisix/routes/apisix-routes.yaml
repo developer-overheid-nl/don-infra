@@ -492,7 +492,7 @@ spec:
   - name: api-register-api-v1-retrieveapifeed
     match:
       paths:
-      - "/api-register/v1/apis/*/feed"
+      - "/api-register/v1/apis/*/feed.rss"
       methods:
       - GET
     plugins:
