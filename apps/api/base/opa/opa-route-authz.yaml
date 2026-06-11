@@ -234,6 +234,21 @@ data:
             ]
           },
           {
+            "name": "api-register-api-v1-createorganisation",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/api-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
             "name": "oss-register-api-v1-listrepositories",
             "methods": [
               "GET"
