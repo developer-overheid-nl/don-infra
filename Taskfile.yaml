@@ -19,6 +19,7 @@ tasks:
           kubectl get namespace $ns > /dev/null 2>&1 || kubectl create namespace $ns
         done
       - kubectl apply --server-side -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.0/standard-install.yaml
+      - kubectl apply --server-side -f https://raw.githubusercontent.com/apache/apisix-helm-chart/apisix-ingress-controller-1.1.1/charts/apisix-ingress-controller/crds/apisixic-crds.yaml
       - flux install
 
   # ── Secrets ──────────────────────────────────────────────────────────────────
