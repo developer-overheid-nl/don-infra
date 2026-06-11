@@ -32,10 +32,6 @@ patches:
       - op: replace
         path: /spec/values/extraEnvVars/1/value
         value: dev-file
-      - op: remove
-        path: /spec/values/extraEnvVars/10
-      - op: remove
-        path: /spec/values/extraEnvVars/9
   - target:
       kind: HTTPRoute
       name: http-route
