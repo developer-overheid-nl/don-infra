@@ -30,3 +30,8 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: static.k8s.orb.local
+
+images:
+  - name: static
+    newName: ghcr.io/developer-overheid-nl/don-static
+    newTag: 8b8602d9fb8959e38a5a29ba1f46a44b65943be8

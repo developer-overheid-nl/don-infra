@@ -5,7 +5,7 @@ metadata:
 type: Opaque
 stringData:
   DB_DBNAME: "don_api"
-  DB_HOSTNAME: "localhost"
+  DB_HOSTNAME: "don-api-postgres"
   DB_PASSWORD: "changeme-db-password"
   DB_SCHEMA: "don_api"
   DB_USERNAME: "don_api"

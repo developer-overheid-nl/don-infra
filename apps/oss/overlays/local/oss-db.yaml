@@ -5,7 +5,7 @@ metadata:
 type: Opaque
 stringData:
   DB_DBNAME: "don_oss"
-  DB_HOSTNAME: "localhost"
+  DB_HOSTNAME: "don-oss-postgres"
   DB_PASSWORD: "changeme-db-password"
   DB_SCHEMA: "don_oss"
   DB_USERNAME: "don_oss"

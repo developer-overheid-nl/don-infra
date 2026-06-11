@@ -3,8 +3,10 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - postgres.yaml
   - http-route.yaml
   - oss-db.yaml
+  - oss-secret.yaml
   - register-site-secret.yaml
   - don-crawler-secret.yaml
   - piwik-secret.yaml
@@ -44,3 +46,14 @@ patches:
       - op: add
         path: /spec/suspend
         value: true
+
+images:
+  - name: don-oss-register
+    newName: ghcr.io/developer-overheid-nl/don-oss-register
+    newTag: 6ab216dabaefcacad44621d05fcb4009cf2b579c
+  - name: don-register-oss-site
+    newName: ghcr.io/developer-overheid-nl/don-register-oss-site
+    newTag: 79f06d7c30d2c28c6db18fda8d5bdbf223278372
+  - name: don-crawler
+    newName: ghcr.io/developer-overheid-nl/don-crawler
+    newTag: 125f76e0185ef61f3cf387a40841453a36e0444d

@@ -53,3 +53,21 @@ patches:
       - op: add
         path: /spec/suspend
         value: true
+  - target:
+      kind: PersistentVolumeClaim
+      name: pvc
+    patch: |
+      - op: replace
+        path: /spec/storageClassName
+        value: standard
+      - op: replace
+        path: /spec/accessModes/0
+        value: ReadWriteOnce
+
+images:
+  - name: typesense
+    newName: typesense/typesense
+    newTag: "29.0"
+  - name: docsearch-scraper
+    newName: typesense/docsearch-scraper
+    newTag: "0.11.0"
