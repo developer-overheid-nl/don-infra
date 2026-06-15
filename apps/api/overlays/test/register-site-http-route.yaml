@@ -4,8 +4,8 @@ metadata:
   name: register-site-http-route
 spec:
   parentRefs:
-    - group: gateway.networking.x-k8s.io
-      kind: XListenerSet
+    - group: gateway.networking.k8s.io
+      kind: ListenerSet
       name: tn-don
       namespace: istio-gateway
       sectionName: tn-don-test
