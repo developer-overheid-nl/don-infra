@@ -28,11 +28,8 @@ patches:
         path: /spec/values/externalDatabase/host
         value: don-db-postgres-rw.tn-don-db-prod
       - op: replace
-        path: /spec/values/ingress/hostname
-        value: auth.developer.overheid.nl
-      - op: replace
-        path: /spec/values/ingress/extraTls/0/hosts/0
-        value: auth.developer.overheid.nl
+        path: /spec/values/ingress/enabled
+        value: false
       - op: replace
         path: /spec/values/proxyHeaders
         value: xforwarded
