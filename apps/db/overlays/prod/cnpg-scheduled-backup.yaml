@@ -1,0 +1,19 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: postgres
+spec:
+  # Nightly at 04:00, staggered to avoid the digilab-ops tenant slots
+  # (01:00-02:30) and codeplatform's 03:00 slot.
+  schedule: "0 0 4 * * *"
+  immediate: false # the immediate backup fires before the pod finishes restarting with the sidecar
+  backupOwnerReference: self
+  # prod runs 2 instances: back up from a standby to spare the primary.
+  target: prefer-standby
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io
+  cluster:
+    # namePrefix "don-db-" is applied to the Cluster; reference built name.
+    name: don-db-postgres

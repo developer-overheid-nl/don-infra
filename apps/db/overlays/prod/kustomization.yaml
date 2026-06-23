@@ -3,6 +3,9 @@ kind: Kustomization
 
 resources:
   - ../../base
+  - cnpg-object-store.yaml
+  - cnpg-scheduled-backup.yaml
+  - secret-s3-db-backups-creds.yaml
 
 namespace: tn-don-db-prod
 namePrefix: don-db-
@@ -15,3 +18,20 @@ patches:
       - op: replace
         path: /spec/instances
         value: 2
+      # NOTE: do NOT set primaryUpdateMethod: switchover together with this
+      # initial plugin add. On a running cluster the soon-to-be-demoted primary
+      # has no barman sidecar yet, so it cannot archive WAL and the switchover
+      # deadlocks. The default (restart) instead restarts the primary in place
+      # to gain the sidecar (one brief ~30s blip). Switch to switchover in a
+      # follow-up once the plugin is live, for clean future updates.
+      - op: add
+        path: /spec/plugins
+        value:
+          - name: barman-cloud.cloudnative-pg.io
+            isWALArchiver: true
+            parameters:
+              # ObjectStore/Secret get the "don-db-" namePrefix; reference the
+              # built name (kustomize does not rewrite CRD-internal refs).
+              barmanObjectName: don-db-garage
+              # Namespace the shared bucket per tenant/cluster so backups can't collide.
+              serverName: tn-don-db-prod/don-db-postgres
