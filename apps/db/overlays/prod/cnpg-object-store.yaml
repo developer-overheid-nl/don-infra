@@ -1,0 +1,39 @@
+---
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: garage
+spec:
+  # Garage rejects the AWS SDK's newer default checksums and only speaks
+  # path-style addressing; pin both off/on for the in-pod barman sidecar.
+  instanceSidecarConfiguration:
+    env:
+      - name: AWS_REQUEST_CHECKSUM_CALCULATION
+        value: when_required
+      - name: AWS_RESPONSE_CHECKSUM_VALIDATION
+        value: when_required
+      - name: AWS_S3_ADDRESSING_STYLE
+        value: path
+      # Garage's S3 region is "garage"; without this boto defaults to
+      # us-east-1 and Garage 400s the HeadBucket preflight that
+      # barman-cloud-check-wal-archive runs on the first WAL, so continuous
+      # archiving never starts for a freshly bootstrapped cluster.
+      - name: AWS_DEFAULT_REGION
+        value: garage
+  configuration:
+    destinationPath: s3://cnpg-barman-digikluster/
+    endpointURL: https://garage.digikluster.digilab.network
+    s3Credentials:
+      accessKeyId:
+        # namePrefix "don-db-" is applied to the Secret; kustomize does not
+        # rewrite this CRD field, so reference the built name explicitly.
+        name: don-db-s3-db-backups-creds
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: don-db-s3-db-backups-creds
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip
+    data:
+      compression: gzip
+  retentionPolicy: "30d"
