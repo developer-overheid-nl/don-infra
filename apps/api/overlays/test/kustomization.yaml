@@ -24,7 +24,7 @@ images:
     newTag: a1ec22f19bca4ed4298491df4a56294116414bae
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-tools-api
-    newTag: 9870ae93b198cf67134e7d841ddbb32acadae988
+    newTag: 91b26ecc215cd78f3f75149fbded76f8b89b8122
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
     newTag: c90a5285f519fb30733f03e2262a72148e95d20b
