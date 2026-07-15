@@ -14,7 +14,6 @@ resources:
   - opa-auth-config.yaml
   - apisix/routes/apisix-routes.yaml
   - schema-register.yaml
-
 namespace: tn-don-api-test
 namePrefix: don-api-
 images:
@@ -23,10 +22,10 @@ images:
     newTag: a370cbfe1350772c5a96b3d0dad802730f58e4b9
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: 059b87e70b32cc536d1d531e099734a430af1f53
+    newTag: 2d054080bea776ccd31fa473cc038a8b8d1ed6f7
   - name: don-register-schema-site
     newName: ghcr.io/developer-overheid-nl/don-register-schema-site
-    newTag: 23d81a701b23386d0c478fbb31c2be5731c9e910
+    newTag: 2d054080bea776ccd31fa473cc038a8b8d1ed6f7
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-tools-api
     newTag: 2b1a517f1ba0f7ce76da54e1f6f38ae7d086a1cf
