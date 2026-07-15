@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: schema-register-dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    spec:
+      containers:
+        - name: don-schema-register
+          image: don-schema-register
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: DB_PASSWORD
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: DB_HOSTNAME
+            - name: DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: DB_DBNAME
+            - name: DB_SCHEMA
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: DB_SCHEMA
+            - name: TYPESENSE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: TYPESENSE_API_KEY
+            - name: TYPESENSE_COLLECTION
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: TYPESENSE_COLLECTION
+            - name: TYPESENSE_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: TYPESENSE_ENDPOINT
+            - name: ENABLE_TYPESENSE
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: ENABLE_TYPESENSE
+          ports:
+            - name: http
+              containerPort: 1337
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 100m
+            limits:
+              cpu: "4"
+              memory: "4Gi"
+#          livenessProbe:
+#            httpGet:
+#              path: /
+#              port: 1337
+#            initialDelaySeconds: 3
+#            periodSeconds: 30
+#          readinessProbe:
+#            httpGet:
+#              path: /
+#              port: 1337
+#            initialDelaySeconds: 3
+#            periodSeconds: 5

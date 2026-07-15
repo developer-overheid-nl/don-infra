@@ -10,4 +10,5 @@ resources:
   - apisix/
   - opa/
   - tools/
-  - don-schema-register/
+  - schema-register/
+  - schema-register-site/

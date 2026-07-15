@@ -249,6 +249,126 @@ data:
             ]
           },
           {
+            "name": "schema-register-api-v1-listschemas",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/schema-register/v1/schemas"
+            ],
+            "required_scopes": [
+              "schemas:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-listschemafilters",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/schema-register/v1/schemas/filters"
+            ],
+            "required_scopes": [
+              "schemas:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-retrieveschemacontent",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/schema-register/v1/schemas/*/schema.json"
+            ],
+            "required_scopes": [
+              "schemas:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-retrieveschema",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/schema-register/v1/schemas/*"
+            ],
+            "required_scopes": [
+              "schemas:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-createschema",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/schema-register/v1/schemas"
+            ],
+            "required_scopes": [
+              "schemas:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-updateschema",
+            "methods": [
+              "PUT"
+            ],
+            "paths": [
+              "/schema-register/v1/schemas/*"
+            ],
+            "required_scopes": [
+              "schemas:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-listorganisations",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/schema-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "schema-register-api-v1-createorganisation",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/schema-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
             "name": "oss-register-api-v1-listrepositories",
             "methods": [
               "GET"

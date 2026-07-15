@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - ../../base
   - register-site-http-route.yaml
-  - don-schema-register-http-route.yaml
+  - schema-register-site-http-route.yaml
   - apisix-http-route.yaml
   - apisix.yaml
   - register-site.yaml
@@ -13,6 +13,8 @@ resources:
   - piwik-secret.yaml
   - opa-auth-config.yaml
   - apisix/routes/apisix-routes.yaml
+  - schema-register.yaml
+
 namespace: tn-don-api-test
 namePrefix: don-api-
 images:
@@ -22,6 +24,9 @@ images:
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
     newTag: 059b87e70b32cc536d1d531e099734a430af1f53
+  - name: don-register-schema-site
+    newName: ghcr.io/developer-overheid-nl/don-register-schema-site
+    newTag: 23d81a701b23386d0c478fbb31c2be5731c9e910
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-tools-api
     newTag: 2b1a517f1ba0f7ce76da54e1f6f38ae7d086a1cf
@@ -65,7 +70,7 @@ patches:
         value: api-register.don.projects.digilab.network
   - target:
       kind: HTTPRoute
-      name: don-schema-register-http-route
+      name: schema-register-site-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
