@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  app: schema-register
+
+resources:
+  - schema-register-dpl.yaml
+  - schema-register-svc.yaml
