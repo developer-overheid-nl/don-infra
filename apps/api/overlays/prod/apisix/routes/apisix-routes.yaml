@@ -16,7 +16,7 @@ kind: ApisixUpstream
 metadata:
   name: oss-register-upstream
 spec:
-  ingressClassName: apisix
+  ingressClassName: apisix-prod
   externalNodes:
   - type: Service
     name: oss-register-external
@@ -26,7 +26,7 @@ kind: ApisixRoute
 metadata:
   name: api-routes
 spec:
-  ingressClassName: apisix
+  ingressClassName: apisix-prod
   http:
   - name: tools-api-v1-validatoropenapipost
     match:
