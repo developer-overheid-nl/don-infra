@@ -20,6 +20,7 @@ spec:
   externalNodes:
   - type: Service
     name: oss-register-external
+    port: 1337
 ---
 apiVersion: apisix.apache.org/v2
 kind: ApisixRoute
