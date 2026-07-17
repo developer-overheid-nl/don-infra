@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - ../../base
   - register-site-http-route.yaml
-  - don-schema-register-http-route.yaml
   - apisix-http-route.yaml
   - apisix.yaml
   - register-site.yaml
@@ -25,14 +24,24 @@ images:
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: dea9f870f88ac8f5eef77b71af605e520d017a83
-  # - name: don-schema-register
-  #   newName: ghcr.io/developer-overheid-nl/don-schema-register
-  #   newTag: d51738bcd24d7da1df37a52b9cb9686a2fc0bbfb
 patches:
   - target:
       kind: HelmRelease
       name: apisix
     patch: |
+      - op: add
+        path: /spec/releaseName
+        value: don-api-apisix-prod
+      - op: add
+        path: /spec/values/fullnameOverride
+        value: don-api-apisix
+      - op: add
+        path: /spec/values/ingress-controller/config/controllerName
+        value: apisix.apache.org/apisix-ingress-controller-prod
+      - op: add
+        path: /spec/values/ingress-controller/config/kubernetes
+        value:
+          ingressClass: apisix-prod
       - op: replace
         path: /spec/values/replicaCount
         value: 1
@@ -63,10 +72,3 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: apis.developer.overheid.nl
-  - target:
-      kind: HTTPRoute
-      name: don-schema-register-http-route
-    patch: |
-      - op: replace
-        path: /spec/hostnames/0
-        value: schemas.developer.overheid.nl

@@ -2,6 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - ../../base/schema-register
+  - ../../base/schema-register-site
   - register-site-http-route.yaml
   - schema-register-site-http-route.yaml
   - apisix-http-route.yaml
@@ -37,6 +39,19 @@ patches:
       kind: HelmRelease
       name: apisix
     patch: |
+      - op: add
+        path: /spec/releaseName
+        value: don-api-apisix-test
+      - op: add
+        path: /spec/values/fullnameOverride
+        value: don-api-apisix
+      - op: add
+        path: /spec/values/ingress-controller/config/controllerName
+        value: apisix.apache.org/apisix-ingress-controller-test
+      - op: add
+        path: /spec/values/ingress-controller/config/kubernetes
+        value:
+          ingressClass: apisix-test
       - op: replace
         path: /spec/values/replicaCount
         value: 1
