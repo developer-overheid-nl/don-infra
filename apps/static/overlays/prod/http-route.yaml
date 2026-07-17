@@ -12,27 +12,6 @@ spec:
   hostnames:
     - set-in-overlay
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /schemas
-      filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: /
-        - type: ResponseHeaderModifier
-          responseHeaderModifier:
-            set:
-              - name: Access-Control-Allow-Origin
-                value: "*"
-              - name: Access-Control-Allow-Methods
-                value: "GET, HEAD, OPTIONS"
-      backendRefs:
-        - name: source-meta-svc
-          kind: Service
-          port: 8000
     - filters:
         - type: ResponseHeaderModifier
           responseHeaderModifier:
