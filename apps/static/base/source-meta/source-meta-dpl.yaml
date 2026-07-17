@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: source-meta
+  name: source-meta-dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: source-meta
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    metadata:
+      labels:
+        app: source-meta
+    spec:
+      containers:
+        - name: source-meta
+          image: source-meta
+          env:
+            - name: SOURCEMETA_ONE_PORT
+              value: "8000"
+          ports:
+            - name: http
+              containerPort: 8000
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              memory: 1Gi
+              cpu: 1

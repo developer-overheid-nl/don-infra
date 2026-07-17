@@ -1,16 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: static
   name: dpl
 spec:
   replicas: 1
   revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: static
   strategy:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 33%
   template:
+    metadata:
+      labels:
+        app: static
     spec:
       containers:
         - name: static
