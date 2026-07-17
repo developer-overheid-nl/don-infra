@@ -8,6 +8,11 @@ resources:
 namespace: tn-don-static
 namePrefix: don-static-
 
+images:
+  - name: source-meta
+    newName: ghcr.io/developer-overheid-nl/don-schema-register
+    newTag: c90a5285f519fb30733f03e2262a72148e95d20b
+
 patches:
   - target:
       kind: Ingress
