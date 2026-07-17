@@ -61,6 +61,11 @@ spec:
                 secretKeyRef:
                   name: schema-secrets
                   key: ENABLE_TYPESENSE
+            - name: SOURCEMETA_ONE_API_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: schema-secrets
+                  key: SOURCEMETA_ONE_API_BASE
           ports:
             - name: http
               containerPort: 1337
