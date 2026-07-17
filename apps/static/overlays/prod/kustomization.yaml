@@ -13,8 +13,8 @@ images:
     newName: ghcr.io/developer-overheid-nl/don-static
     newTag: b9342c5bc0e61f04742df858ae8eb6d990526485
   - name: source-meta
-    newName: ghcr.io/developer-overheid-nl/don-schema-register
-    newTag: c90a5285f519fb30733f03e2262a72148e95d20b
+    newName: ghcr.io/developer-overheid-nl/source-meta-schemas
+    newTag: 4edd28afc60286b3c4cbd9ff76effc6f8ca1a628
 
 patches:
   - target:
