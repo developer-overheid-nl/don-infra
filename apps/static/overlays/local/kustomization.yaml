@@ -8,9 +8,6 @@ resources:
 namespace: tn-don-static
 namePrefix: don-static-
 
-commonLabels:
-  app: static
-
 patches:
   - target:
       kind: Ingress

@@ -8,9 +8,6 @@ resources:
 namespace: tn-don-static-prod
 namePrefix: don-static-
 
-commonLabels:
-  app: static
-
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-static
