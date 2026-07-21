@@ -89,3 +89,15 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: schemas.don.projects.digilab.network
+  - target:
+      kind: Deployment
+      name: schema-register-dpl
+    patch: |
+      - op: test
+        path: /spec/template/spec/containers/0/env/8/name
+        value: ENABLE_TYPESENSE
+      - op: remove
+        path: /spec/template/spec/containers/0/env/8/valueFrom
+      - op: add
+        path: /spec/template/spec/containers/0/env/8/value
+        value: "false"
