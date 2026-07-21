@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-source-meta-from-schema-register
+spec:
+  podSelector:
+    matchLabels:
+      app: source-meta
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tn-don-api-test
+          podSelector:
+            matchLabels:
+              app: schema-register
+      ports:
+        - protocol: TCP
+          port: 8000
