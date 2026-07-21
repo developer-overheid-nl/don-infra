@@ -31,6 +31,7 @@ data:
       "tools",
       "repositories:read",
       "gitOrganisations:read",
+      "schemas:read",
     ]
 
     # Config komt primair uit data.apisix_auth. Als die ontbreekt, valt OPA terug
