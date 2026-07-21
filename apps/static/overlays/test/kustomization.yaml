@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - http-route.yaml
+  - source-meta-api-http-route.yaml
+  - source-meta-schemas-http-route.yaml
 
 namespace: tn-don-static-test
 namePrefix: don-static-
