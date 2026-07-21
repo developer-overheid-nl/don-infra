@@ -15,7 +15,7 @@ images:
     newTag: 8b8602d9fb8959e38a5a29ba1f46a44b65943be8
   - name: source-meta
     newName: ghcr.io/developer-overheid-nl/source-meta-schemas
-    newTag: 4edd28afc60286b3c4cbd9ff76effc6f8ca1a628
+    newTag: abaa05556f3de533442cfda43a20f8bec2fef0b6
 
 patches:
   - target:
