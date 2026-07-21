@@ -36,20 +36,6 @@ images:
     newTag: ca60f4adff066b9f5ef2c2efc6ec01fb26eb47a3
 patches:
   - target:
-      kind: Deployment
-      name: schema-register-dpl
-    patch: |
-      - op: remove
-        path: /spec/template/spec/containers/0/env/9/valueFrom
-      - op: add
-        path: /spec/template/spec/containers/0/env/9/value
-        value: http://don-static-source-meta-svc.tn-don-static-test.svc.cluster.local:8000/
-      - op: add
-        path: /spec/template/spec/containers/0/env/-
-        value:
-          name: SCHEMA_REGISTER_PUBLIC_BASE_URL
-          value: https://api.don.projects.digilab.network/schema-register
-  - target:
       kind: HelmRelease
       name: apisix
     patch: |
