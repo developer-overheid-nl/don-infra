@@ -7,5 +7,4 @@ configurations:
 resources:
   - deployment.yaml
   - pvc.yaml
-  - scraper-cronjob.yaml
   - service.yaml
