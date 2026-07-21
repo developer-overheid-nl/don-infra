@@ -33,7 +33,7 @@ images:
     newTag: 2b1a517f1ba0f7ce76da54e1f6f38ae7d086a1cf
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
-    newTag: cbf33aa97fc0b837b53bb3ea33dc3f4b76ecb2b8
+    newTag: 516e899309a973cc3b2c56aff8524610300a1e2d
 patches:
   - target:
       kind: HelmRelease
