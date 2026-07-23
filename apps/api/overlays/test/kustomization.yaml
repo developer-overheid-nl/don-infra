@@ -16,6 +16,7 @@ resources:
   - opa-auth-config.yaml
   - apisix/routes/apisix-routes.yaml
   - schema-register.yaml
+  - observability/
 namespace: tn-don-api-test
 namePrefix: don-api-
 images:
