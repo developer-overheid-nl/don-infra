@@ -33,6 +33,11 @@ spec:
             type: PathPrefix
             value: /schemas
       filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: Accept
+                value: "application/schema+json, application/json"
         - type: ResponseHeaderModifier
           responseHeaderModifier:
             set:
