@@ -101,3 +101,8 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/env/8/value
         value: "false"
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: SOURCEMETA_PUBLIC_SCHEMA_BASE_URL
+          value: https://static.don.projects.digilab.network/schemas/
