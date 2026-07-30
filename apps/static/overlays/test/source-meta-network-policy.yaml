@@ -16,6 +16,9 @@ spec:
           podSelector:
             matchLabels:
               app: schema-register
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: istio-gateway
       ports:
         - protocol: TCP
           port: 8000
