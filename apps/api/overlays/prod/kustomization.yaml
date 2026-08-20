@@ -26,7 +26,7 @@ images:
     newTag: f1433831cd7a107e881565db90d8d0477833e473
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
-    newTag: 3df9b86121a090e25da7f3ec92f8c5ce6be734ab
+    newTag: 54696bc80dd08a04c87d919af6878daaf937a850
 patches:
   - target:
       kind: HelmRelease
