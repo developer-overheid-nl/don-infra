@@ -1,0 +1,254 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {"type": "grafana", "uid": "-- Grafana --"},
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "gridPos": {"h": 3, "w": 24, "x": 0, "y": 0},
+      "id": 1,
+      "options": {
+        "content": "# DON Productie\nDit dashboard laat zien of de productieomgeving technisch gezond is. **Groen** is goed, **oranje** vraagt aandacht en **rood** betekent dat een pod niet gereed is of dat metingen ontbreken. Afgeronde nachtelijke taken tellen niet mee als actieve pods.",
+        "mode": "markdown"
+      },
+      "title": "",
+      "type": "text"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Groen vereist dat alle actieve pods gereed zijn en dat metingen voor alle gekozen onderdelen binnenkomen.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "mappings": [
+            {
+              "options": {
+                "0": {"color": "red", "index": 0, "text": "Aandacht nodig"},
+                "1": {"color": "green", "index": 1, "text": "Alles draait goed"}
+              },
+              "type": "value"
+            }
+          ],
+          "noValue": "Geen metingen",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "green", "value": 1}
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 5, "w": 4, "x": 0, "y": 3},
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "min(don_prod_metrics_collection_success{namespace=~\"$namespace\"}) * (sum(don_prod_pod_ready{namespace=~\"$namespace\"}) == bool sum(don_prod_pod_active{namespace=~\"$namespace\"}))",
+          "instant": true,
+          "legendFormat": "Status",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Systeemstatus",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Gereed is het aantal pods dat verkeer kan verwerken; actief omvat ook pods die nog starten of een probleem hebben.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"fixedColor": "green", "mode": "fixed"},
+          "decimals": 0,
+          "mappings": [],
+          "noValue": "Geen metingen",
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 5, "w": 4, "x": 4, "y": 3},
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "horizontal",
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "targets": [
+        {"editorMode": "code", "expr": "sum(don_prod_pod_ready{namespace=~\"$namespace\"})", "instant": true, "legendFormat": "Gereed", "range": false, "refId": "A"},
+        {"editorMode": "code", "expr": "sum(don_prod_pod_active{namespace=~\"$namespace\"})", "instant": true, "legendFormat": "Actief", "range": false, "refId": "B"}
+      ],
+      "title": "Pods",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Aantal containerherstarts dat in de afgelopen 24 uur is waargenomen. Nul is normaal.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "decimals": 0,
+          "mappings": [],
+          "noValue": "Geen metingen",
+          "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}, {"color": "red", "value": 5}]}
+        },
+        "overrides": []
+      },
+      "gridPos": {"h": 5, "w": 4, "x": 8, "y": 3},
+      "id": 4,
+      "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"editorMode": "code", "expr": "sum(increase(don_prod_pod_restarts_total{namespace=~\"$namespace\"}[24h])) or vector(0)", "instant": true, "legendFormat": "Herstarts", "range": false, "refId": "A"}],
+      "title": "Herstarts (24 uur)",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Tijd sinds de nieuwste actieve pod is gestart. Deze waarde daalt na een deployment of herstart.",
+      "fieldConfig": {"defaults": {"color": {"fixedColor": "blue", "mode": "fixed"}, "decimals": 1, "mappings": [], "noValue": "Geen metingen", "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]}, "unit": "s"}, "overrides": []},
+      "gridPos": {"h": 5, "w": 4, "x": 12, "y": 3},
+      "id": 5,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"editorMode": "code", "expr": "min(time() - don_prod_pod_start_time_seconds{namespace=~\"$namespace\"})", "instant": true, "legendFormat": "Uptime", "range": false, "refId": "A"}],
+      "title": "Pod-uptime",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Actueel totaal CPU-gebruik. Eén core staat gelijk aan één volledig gebruikte CPU-kern.",
+      "fieldConfig": {"defaults": {"color": {"fixedColor": "blue", "mode": "fixed"}, "decimals": 2, "mappings": [], "noValue": "Geen metingen", "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]}, "unit": "cores"}, "overrides": []},
+      "gridPos": {"h": 5, "w": 4, "x": 16, "y": 3},
+      "id": 6,
+      "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"editorMode": "code", "expr": "sum(don_prod_pod_cpu_cores{namespace=~\"$namespace\"})", "instant": true, "legendFormat": "CPU", "range": false, "refId": "A"}],
+      "title": "CPU nu",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Actueel totaal geheugengebruik van de actieve productiepods.",
+      "fieldConfig": {"defaults": {"color": {"fixedColor": "purple", "mode": "fixed"}, "decimals": 1, "mappings": [], "noValue": "Geen metingen", "thresholds": {"mode": "absolute", "steps": [{"color": "purple", "value": null}]}, "unit": "bytes"}, "overrides": []},
+      "gridPos": {"h": 5, "w": 4, "x": 20, "y": 3},
+      "id": 7,
+      "options": {"colorMode": "value", "graphMode": "area", "justifyMode": "center", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showPercentChange": false, "textMode": "auto", "wideLayout": true},
+      "targets": [{"editorMode": "code", "expr": "sum(don_prod_pod_memory_bytes{namespace=~\"$namespace\"})", "instant": true, "legendFormat": "RAM", "range": false, "refId": "A"}],
+      "title": "RAM nu",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Percentage actieve pods dat gereed is, uitgesplitst per onderdeel.",
+      "fieldConfig": {"defaults": {"color": {"mode": "thresholds"}, "decimals": 0, "max": 100, "min": 0, "noValue": "Geen metingen", "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "orange", "value": 80}, {"color": "green", "value": 100}]}, "unit": "percent"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 8},
+      "id": 8,
+      "options": {"displayMode": "basic", "maxVizHeight": 300, "minVizHeight": 16, "minVizWidth": 8, "namePlacement": "auto", "orientation": "horizontal", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "showUnfilled": true, "sizing": "auto", "valueMode": "color"},
+      "targets": [{"editorMode": "code", "expr": "100 * sum by (component) (don_prod_pod_ready{namespace=~\"$namespace\"}) / sum by (component) (don_prod_pod_active{namespace=~\"$namespace\"})", "instant": true, "legendFormat": "{{component}}", "range": false, "refId": "A"}],
+      "title": "Beschikbaarheid per onderdeel",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "CPU-gebruik per onderdeel gedurende de geselecteerde periode.",
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "drawStyle": "line", "fillOpacity": 12, "gradientMode": "opacity", "hideFrom": {"legend": false, "tooltip": false, "viz": false}, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 5, "scaleDistribution": {"type": "linear"}, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}}, "unit": "cores"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 8},
+      "id": 9,
+      "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"hideZeros": false, "mode": "multi", "sort": "desc"}},
+      "targets": [{"editorMode": "code", "expr": "sum by (component) (don_prod_pod_cpu_cores{namespace=~\"$namespace\"})", "instant": false, "legendFormat": "{{component}}", "range": true, "refId": "A"}],
+      "title": "CPU per onderdeel",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Geheugengebruik per onderdeel gedurende de geselecteerde periode.",
+      "fieldConfig": {"defaults": {"color": {"mode": "palette-classic"}, "custom": {"axisCenteredZero": false, "axisColorMode": "text", "axisLabel": "", "axisPlacement": "auto", "drawStyle": "line", "fillOpacity": 12, "gradientMode": "opacity", "hideFrom": {"legend": false, "tooltip": false, "viz": false}, "lineInterpolation": "smooth", "lineWidth": 2, "pointSize": 5, "scaleDistribution": {"type": "linear"}, "showPoints": "never", "spanNulls": false, "stacking": {"group": "A", "mode": "none"}}, "unit": "bytes"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 8},
+      "id": 10,
+      "options": {"legend": {"calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom", "showLegend": true}, "tooltip": {"hideZeros": false, "mode": "multi", "sort": "desc"}},
+      "targets": [{"editorMode": "code", "expr": "sum by (component) (don_prod_pod_memory_bytes{namespace=~\"$namespace\"})", "instant": false, "legendFormat": "{{component}}", "range": true, "refId": "A"}],
+      "title": "RAM per onderdeel",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Uptime sinds de laatste start van iedere actieve pod.",
+      "fieldConfig": {"defaults": {"custom": {"align": "auto", "cellOptions": {"type": "auto"}, "inspect": false}, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}, "unit": "s"}, "overrides": []},
+      "gridPos": {"h": 10, "w": 14, "x": 0, "y": 16},
+      "id": 11,
+      "options": {"cellHeight": "sm", "footer": {"countRows": false, "enablePagination": true, "fields": "", "reducer": ["sum"], "show": false}, "showHeader": true, "sortBy": [{"desc": false, "displayName": "Uptime"}]},
+      "targets": [{"editorMode": "code", "expr": "time() - don_prod_pod_start_time_seconds{namespace=~\"$namespace\"}", "format": "table", "instant": true, "legendFormat": "__auto", "range": false, "refId": "A"}],
+      "title": "Uptime per actieve pod",
+      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "container": true, "endpoint": true, "instance": true, "job": true}, "indexByName": {"component": 0, "namespace": 1, "pod": 2, "Value": 3}, "renameByName": {"Value": "Uptime", "component": "Onderdeel", "namespace": "Namespace", "pod": "Pod"}}}],
+      "type": "table"
+    },
+    {
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "description": "Containerherstarts gedurende de levensduur van iedere actieve pod.",
+      "fieldConfig": {"defaults": {"custom": {"align": "auto", "cellOptions": {"type": "color-text"}, "inspect": false}, "decimals": 0, "mappings": [], "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}, {"color": "orange", "value": 1}, {"color": "red", "value": 5}]}, "unit": "none"}, "overrides": []},
+      "gridPos": {"h": 10, "w": 10, "x": 14, "y": 16},
+      "id": 12,
+      "options": {"cellHeight": "sm", "footer": {"countRows": false, "enablePagination": true, "fields": "", "reducer": ["sum"], "show": false}, "showHeader": true, "sortBy": [{"desc": true, "displayName": "Herstarts"}]},
+      "targets": [{"editorMode": "code", "expr": "don_prod_pod_restarts_total{namespace=~\"$namespace\"}", "format": "table", "instant": true, "legendFormat": "__auto", "range": false, "refId": "A"}],
+      "title": "Herstarts per actieve pod",
+      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "__name__": true, "container": true, "endpoint": true, "instance": true, "job": true}, "indexByName": {"component": 0, "namespace": 1, "pod": 2, "Value": 3}, "renameByName": {"Value": "Herstarts", "component": "Onderdeel", "namespace": "Namespace", "pod": "Pod"}}}],
+      "type": "table"
+    }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": ["DON", "productie", "Kubernetes"],
+  "templating": {
+    "list": [
+      {
+        "allValue": "tn-don-(api|auth|db|frontend|oss|search|static)-prod",
+        "current": {"selected": true, "text": ["All"], "value": ["$__all"]},
+        "description": "Toon alle productieonderdelen of kies er één of meer.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Onderdeel",
+        "multi": true,
+        "name": "namespace",
+        "options": [],
+        "query": "API : tn-don-api-prod,Authenticatie : tn-don-auth-prod,Database : tn-don-db-prod,Frontend : tn-don-frontend-prod,Open source : tn-don-oss-prod,Zoeken : tn-don-search-prod,Statische content : tn-don-static-prod",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
+  },
+  "time": {"from": "now-24h", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "DON Productie – Statusoverzicht",
+  "uid": "don-productie-status",
+  "version": 0,
+  "weekStart": "monday"
+}
