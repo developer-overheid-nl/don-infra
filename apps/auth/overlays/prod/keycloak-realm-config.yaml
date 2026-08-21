@@ -1898,12 +1898,13 @@ data:
       "accountTheme": "keycloak.v3",
       "adminTheme": "keycloak.v2",
       "emailTheme": "keycloak",
-      "eventsEnabled": false,
+      "eventsEnabled": true,
+      "eventsExpiration": 7776000,
       "eventsListeners": [
         "jboss-logging"
       ],
       "enabledEventTypes": [],
-      "adminEventsEnabled": false,
+      "adminEventsEnabled": true,
       "adminEventsDetailsEnabled": false,
       "identityProviders": [],
       "identityProviderMappers": [],
