@@ -16,6 +16,8 @@ spec:
         - name: don-api-register
           image: don-api-register
           env:
+            - name: GOMEMLIMIT
+              value: 3GiB
             - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
