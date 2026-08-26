@@ -12,6 +12,8 @@ resources:
   - piwik-secret.yaml
   - opa-auth-config.yaml
   - apisix/routes/apisix-routes.yaml
+  - opa-resilience.yaml
+  - opa-alerting.yaml
 namespace: tn-don-api-prod
 namePrefix: don-api-
 images:
@@ -28,6 +30,7 @@ images:
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 78a27d9a77976c7ac9264dba7cc171fc715c50c7
 patches:
+  - path: opa-runtime-patch.yaml
   - target:
       kind: HelmRelease
       name: apisix

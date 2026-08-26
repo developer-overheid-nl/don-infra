@@ -1,0 +1,367 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: opa-alerts-folder
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  title: DON Productie Alerts
+  uid: don-production-alerts
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaAlertRuleGroup
+metadata:
+  name: opa-alerts
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  folderUID: don-production-alerts
+  interval: 1m
+  name: DON Productie - OPA
+  rules:
+    - uid: don-opa-unavailable
+      title: OPA niet beschikbaar
+      condition: C
+      for: 1m
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: OPA is niet beschikbaar in productie
+        description: Geen enkele OPA-pod is gereed. API-verzoeken die autorisatie nodig hebben kunnen hierdoor mislukken.
+      labels:
+        environment: production
+        namespace: tn-don-api-prod
+        service: opa
+        severity: critical
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              (((sum(don_prod_pod_ready{namespace="tn-don-api-prod",pod=~"don-api-opa-.*"}) or vector(0)) == bool 0)
+              and on() (min(don_prod_metrics_collection_success{namespace="tn-don-api-prod"}) == 1))
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+    - uid: don-opa-degraded
+      title: OPA draait met één replica
+      condition: C
+      for: 5m
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: OPA heeft geen redundantie meer
+        description: Slechts één van de twee OPA-replica's is gereed. De API blijft werken, maar een tweede storing veroorzaakt uitval.
+      labels:
+        environment: production
+        namespace: tn-don-api-prod
+        service: opa
+        severity: warning
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              (((sum(don_prod_pod_ready{namespace="tn-don-api-prod",pod=~"don-api-opa-.*"}) or vector(0)) == bool 1)
+              and on() (min(don_prod_metrics_collection_success{namespace="tn-don-api-prod"}) == 1))
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+    - uid: don-opa-restarted
+      title: OPA is opnieuw gestart
+      condition: C
+      for: 0s
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: Een OPA-container is opnieuw gestart
+        description: Controleer de laatste beëindigingsreden van de OPA-pod. Een OOMKilled of crash kan autorisatieverzoeken kort onderbreken.
+      labels:
+        environment: production
+        namespace: tn-don-api-prod
+        service: opa
+        severity: warning
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              sum(increase(don_prod_pod_restarts_total{namespace="tn-don-api-prod",pod=~"don-api-opa-.*"}[10m])) or vector(0)
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+    - uid: don-opa-memory-high
+      title: OPA-geheugen is hoog
+      condition: C
+      for: 10m
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: Een OPA-pod gebruikt meer dan 80% van zijn geheugenlimiet
+        description: OPA gebruikt langer dan tien minuten meer dan 410 MiB. Onderzoek geheugengroei voordat Kubernetes de container wegens OOM beëindigt.
+      labels:
+        environment: production
+        namespace: tn-don-api-prod
+        service: opa
+        severity: warning
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              max(don_prod_pod_memory_bytes{namespace="tn-don-api-prod",pod=~"don-api-opa-.*"}) or vector(0)
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 429496730
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
