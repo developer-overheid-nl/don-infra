@@ -7,6 +7,7 @@ spec:
   instanceSelector:
     matchLabels:
       dashboards: grafana
+      alerting.developer.overheid.nl/scope: don-production
   title: DON Productie Alerts
   uid: don-production-alerts
 ---
@@ -19,6 +20,7 @@ spec:
   instanceSelector:
     matchLabels:
       dashboards: grafana
+      alerting.developer.overheid.nl/scope: don-production
   folderUID: don-production-alerts
   interval: 1m
   name: DON Productie - OPA
