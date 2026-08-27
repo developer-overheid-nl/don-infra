@@ -21,7 +21,7 @@ images:
     newTag: 8b1aba7dcc001e994766d969cebed93811d23b80
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
-    newTag: df415febf14364bf717e406da089204564eba7b2
+    newTag: c985e3ec8e00f19953551902c97cb567b0922711
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: afb6367ade15157c25c5e8f5fd4c9ecf516b0d23
