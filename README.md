@@ -76,16 +76,6 @@ ALTER USER don_auth_adm SET SEARCH_PATH TO don_auth, public;
 ALTER USER don_auth_dml SET SEARCH_PATH TO don_auth, public;
 ```
 
-## Verbinden met de Postgres-database
-
-Maak verbinding met het Kubernetes-cluster en start een port-forward voor de pgAdmin-service:
-
-```bash
-kubectl port-forward svc/don-auth-pgadmin-pgadmin4 8888:80 -n tn-don-auth
-```
-
-Open daarna de pgAdmin UI: http://localhost:8888 (inloggen met: `chart@domain.com` / `SuperSecret`)
-
 ## Lokaal draaien
 
 Zo draai je alle apps lokaal voor sneller experimenteren, zonder dat je de test-omgeving nodig hebt.
