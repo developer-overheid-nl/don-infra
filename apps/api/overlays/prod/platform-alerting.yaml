@@ -1,0 +1,371 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaAlertRuleGroup
+metadata:
+  name: apisix-alerts
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+      alerting.developer.overheid.nl/scope: don-production
+  folderUID: don-production-alerts
+  interval: 1m
+  name: DON Productie - APISIX
+  rules:
+    - uid: don-apisix-unavailable
+      title: APISIX niet beschikbaar
+      condition: C
+      for: 1m
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: APISIX is niet beschikbaar in productie
+        description: Geen enkele APISIX gateway-pod is gereed. Verzoeken aan api.developer.overheid.nl kunnen hierdoor mislukken.
+      labels:
+        environment: production
+        namespace: tn-don-api-prod
+        service: apisix
+        severity: critical
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              (((sum(don_prod_pod_ready{namespace="tn-don-api-prod",pod=~"don-api-apisix-[a-z0-9]+-[a-z0-9]+"}) or vector(0)) == bool 0)
+              and on() (min(don_prod_metrics_collection_success{namespace="tn-don-api-prod"}) == 1))
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+    - uid: don-apisix-restarted
+      title: APISIX is opnieuw gestart
+      condition: C
+      for: 0s
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: Een APISIX-container is opnieuw gestart
+        description: Controleer de laatste beëindigingsreden van de APISIX gateway-pod. APISIX draait in productie met één replica, waardoor een restart kortstondige uitval kan veroorzaken.
+      labels:
+        environment: production
+        namespace: tn-don-api-prod
+        service: apisix
+        severity: warning
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              sum(increase(don_prod_pod_restarts_total{namespace="tn-don-api-prod",pod=~"don-api-apisix-[a-z0-9]+-[a-z0-9]+"}[10m])) or vector(0)
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaAlertRuleGroup
+metadata:
+  name: keycloak-alerts
+spec:
+  allowCrossNamespaceImport: true
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+      alerting.developer.overheid.nl/scope: don-production
+  folderUID: don-production-alerts
+  interval: 1m
+  name: DON Productie - Keycloak
+  rules:
+    - uid: don-keycloak-unavailable
+      title: Keycloak niet beschikbaar
+      condition: C
+      for: 1m
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: Keycloak is niet beschikbaar in productie
+        description: Geen enkele Keycloak-pod is gereed. Inloggen en tokenvalidatie via auth.developer.overheid.nl kunnen hierdoor mislukken.
+      labels:
+        environment: production
+        namespace: tn-don-auth-prod
+        service: keycloak
+        severity: critical
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              (((sum(don_prod_pod_ready{namespace="tn-don-auth-prod",pod=~"don-auth-keycloak-[0-9]+"}) or vector(0)) == bool 0)
+              and on() (min(don_prod_metrics_collection_success{namespace="tn-don-auth-prod"}) == 1))
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+    - uid: don-keycloak-restarted
+      title: Keycloak is opnieuw gestart
+      condition: C
+      for: 0s
+      noDataState: OK
+      execErrState: Error
+      isPaused: false
+      annotations:
+        summary: Een Keycloak-container is opnieuw gestart
+        description: Controleer de laatste beëindigingsreden van de Keycloak-pod. Keycloak draait in productie met één replica, waardoor een restart inloggen en tokenvalidatie kort kan onderbreken.
+      labels:
+        environment: production
+        namespace: tn-don-auth-prod
+        service: keycloak
+        severity: warning
+        team: operations
+      data:
+        - refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+          datasourceUid: prometheus
+          model:
+            datasource:
+              type: prometheus
+              uid: prometheus
+            editorMode: code
+            expr: >-
+              sum(increase(don_prod_pod_restarts_total{namespace="tn-don-auth-prod",pod=~"don-auth-keycloak-[0-9]+"}[10m])) or vector(0)
+            instant: true
+            intervalMs: 1000
+            legendFormat: __auto
+            maxDataPoints: 43200
+            range: false
+            refId: A
+        - refId: B
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params: []
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - B
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: B
+            type: reduce
+        - refId: C
+          datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: B
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
