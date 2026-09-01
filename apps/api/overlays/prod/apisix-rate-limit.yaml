@@ -1,0 +1,17 @@
+apiVersion: apisix.apache.org/v2
+kind: ApisixPluginConfig
+metadata:
+  name: authenticated-rate-limit
+spec:
+  ingressClassName: apisix-prod
+  plugins:
+    - name: limit-count
+      enable: true
+      config:
+        count: 100
+        time_window: 60
+        key_type: var
+        key: http_x_opa_client_id
+        group: authenticated-api-users
+        policy: local
+        rejected_code: 429

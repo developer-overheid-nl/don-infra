@@ -11,6 +11,7 @@ resources:
   - api-register-db.yaml
   - piwik-secret.yaml
   - opa-auth-config.yaml
+  - apisix-rate-limit.yaml
   - apisix/routes/apisix-routes.yaml
   - opa-resilience.yaml
   - opa-alerting.yaml

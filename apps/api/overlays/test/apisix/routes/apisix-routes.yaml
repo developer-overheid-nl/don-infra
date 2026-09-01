@@ -60,16 +60,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -108,16 +99,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -156,16 +138,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -204,16 +177,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -252,16 +216,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -300,16 +255,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -348,16 +294,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -396,16 +333,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -473,16 +401,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -521,16 +440,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -569,16 +479,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -617,16 +518,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -694,16 +586,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -742,16 +625,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -790,16 +664,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -838,16 +703,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -915,16 +771,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -963,16 +810,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1011,16 +849,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1059,16 +888,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1107,16 +927,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1155,16 +966,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1203,16 +1005,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1251,16 +1044,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1328,16 +1112,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1375,16 +1150,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1422,16 +1188,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1469,16 +1226,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1516,16 +1264,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1563,16 +1302,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1610,16 +1340,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1657,16 +1378,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1704,16 +1416,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1751,16 +1454,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
-    - name: limit-count
-      enable: true
-      config:
-        count: 100
-        time_window: 60
-        key_type: var
-        key: http_x_opa_client_id
-        group: authenticated-api-users
-        policy: local
-        rejected_code: 429
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s

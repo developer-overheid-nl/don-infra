@@ -58,6 +58,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -94,6 +97,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -130,6 +136,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -166,6 +175,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -202,6 +214,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -238,6 +253,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -274,6 +292,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -310,6 +331,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -375,6 +399,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -411,6 +438,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -447,6 +477,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -483,6 +516,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -548,6 +584,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -584,6 +623,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -620,6 +662,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -656,6 +701,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -721,6 +769,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -756,6 +807,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -791,6 +845,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -826,6 +883,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -861,6 +921,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -896,6 +959,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -931,6 +997,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -966,6 +1035,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1001,6 +1073,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
@@ -1036,6 +1111,9 @@ spec:
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+    plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
       send: 60s
