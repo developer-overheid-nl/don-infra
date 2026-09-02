@@ -12,6 +12,7 @@ spec:
         time_window: 60
         key_type: var
         key: http_x_opa_client_id
-        group: authenticated-api-users
+        # APISIX vereist een nieuwe groepsnaam wanneer de limit-count-configuratie wijzigt.
+        group: authenticated-api-users-v2
         policy: local
         rejected_code: 429
