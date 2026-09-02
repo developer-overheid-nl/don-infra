@@ -1,0 +1,120 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-audience-migration-20260902
+spec:
+  activeDeadlineSeconds: 600
+  backoffLimit: 3
+  template:
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: OnFailure
+      containers:
+        - name: configure-keycloak-audience
+          image: docker.io/keycloak/keycloak:26.7.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              kcadm=/opt/keycloak/bin/kcadm.sh
+              kcadm_config=/tmp/kcadm.config
+              mapper_name=don-admin-client-audience
+
+              authenticated=false
+              for ((attempt = 1; attempt <= 60; attempt++)); do
+                if "$kcadm" config credentials \
+                  --config "$kcadm_config" \
+                  --server http://don-auth-keycloak \
+                  --realm master \
+                  --user "$KEYCLOAK_ADMIN_USERNAME" \
+                  --password "$KEYCLOAK_ADMIN_PASSWORD" >/dev/null 2>&1; then
+                  authenticated=true
+                  break
+                fi
+                sleep 5
+              done
+
+              if [[ "$authenticated" != true ]]; then
+                echo "Keycloak admin login did not become available in time" >&2
+                exit 1
+              fi
+
+              mapfile -t client_ids < <(
+                "$kcadm" get clients \
+                  --config "$kcadm_config" \
+                  -r don \
+                  -q clientId=don-admin-client \
+                  --fields id \
+                  --format csv \
+                  --noquotes
+              )
+
+              if (( ${#client_ids[@]} != 1 )); then
+                echo "Expected exactly one don-admin-client," \
+                  "found ${#client_ids[@]}" >&2
+                exit 1
+              fi
+
+              client_uuid=${client_ids[0]}
+              while IFS= read -r existing_mapper; do
+                if [[ "$existing_mapper" == "$mapper_name" ]]; then
+                  echo "Audience mapper already present"
+                  exit 0
+                fi
+              done < <(
+                "$kcadm" get "clients/$client_uuid/protocol-mappers/models" \
+                  --config "$kcadm_config" \
+                  -r don \
+                  --fields name \
+                  --format csv \
+                  --noquotes
+              )
+
+              "$kcadm" create "clients/$client_uuid/protocol-mappers/models" \
+                --config "$kcadm_config" \
+                -r don \
+                -s "name=$mapper_name" \
+                -s protocol=openid-connect \
+                -s protocolMapper=oidc-audience-mapper \
+                -s 'config."included.client.audience"=don-admin-client' \
+                -s 'config."access.token.claim"=true' \
+                -s 'config."id.token.claim"=false' \
+                -s 'config."introspection.token.claim"=true' \
+                -s 'config."lightweight.claim"=false'
+          env:
+            - name: KEYCLOAK_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-login-secret
+                  key: admin-user
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-login-secret
+                  key: admin-password
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 0
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
