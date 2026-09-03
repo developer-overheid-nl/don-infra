@@ -62,6 +62,9 @@ data:
 
     env_config := {
       "mode": "keycloak",
+      "rate_limit": {
+        "default": object.get(runtime_env, "OPA_DEFAULT_RATE_LIMIT", "100"),
+      },
       "keycloak": {
         "token_url": object.get(runtime_env, "OPA_KEYCLOAK_TOKEN_URL", ""),
         "introspection_url": object.get(runtime_env, "OPA_KEYCLOAK_INTROSPECTION_URL", ""),
@@ -195,14 +198,18 @@ data:
       resp.status_code != 200
     }
 
-    keycloak_api_key_info(api_key) := {
+    keycloak_api_key_info_from_body(body, api_key) := {
       "active": true,
-      "client_id": object.get(object.get(resp, "body", {}), "clientId", api_key),
+      "client_id": object.get(body, "clientId", api_key),
+      "attributes": object.get(body, "attributes", {}),
       "scopes": allowed_api_key_scopes,
-    } if {
+    }
+
+    keycloak_api_key_info(api_key) := keycloak_api_key_info_from_body(body, api_key) if {
       resp := keycloak_client_lookup_response(api_key)
+      body := object.get(resp, "body", {})
       resp.status_code == 200
-      client_id := object.get(object.get(resp, "body", {}), "clientId", "")
+      client_id := object.get(body, "clientId", "")
       client_id != ""
     }
 
@@ -441,7 +448,42 @@ data:
         "X-OPA-Decision": "allow",
         "X-OPA-Policy": policy_name,
         "X-OPA-Client-Id": object.get(info, "client_id", object.get(info, "azp", "")),
+        "X-OPA-Rate-Limit": sprintf("%d", [effective_rate_limit(info)]),
       },
+    }
+
+    raw_rate_limit(info) := object.get(
+      info,
+      "rate_limit",
+      object.get(object.get(info, "attributes", {}), "rate-limit", ""),
+    )
+
+    positive_integer(value) := number if {
+      number := to_number(value)
+      number > 0
+      number == round(number)
+    }
+
+    configured_default_rate_limit := object.get(
+      object.get(config, "rate_limit", {}),
+      "default",
+      100,
+    )
+
+    default_rate_limit := number if {
+      number := positive_integer(configured_default_rate_limit)
+    }
+
+    default_rate_limit := 100 if {
+      not positive_integer(configured_default_rate_limit)
+    }
+
+    effective_rate_limit(info) := number if {
+      number := positive_integer(raw_rate_limit(info))
+    }
+
+    effective_rate_limit(info) := default_rate_limit if {
+      not positive_integer(raw_rate_limit(info))
     }
 
     deny(reason, status_code) := {

@@ -393,6 +393,7 @@ data:
           "attributes": {
             "realm_client": "false",
             "backchannel.logout.session.required": "true",
+            "rate-limit": "4000",
             "x-api-key": "abc123partnerXkey987zyx",
             "backchannel.logout.revoke.offline.tokens": "false"
           },

@@ -60,6 +60,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -99,6 +100,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -138,6 +140,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -177,6 +180,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -216,6 +220,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -255,6 +260,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -294,6 +300,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -333,6 +340,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -401,6 +409,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -440,6 +449,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -479,6 +489,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -518,6 +529,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -586,6 +598,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -625,6 +638,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -664,6 +678,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -703,6 +718,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -771,6 +787,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -810,6 +827,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -849,6 +867,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -888,6 +907,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -927,6 +947,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -966,6 +987,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1005,6 +1027,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1044,6 +1067,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1112,6 +1136,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1150,6 +1175,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1188,6 +1214,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1226,6 +1253,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1264,6 +1292,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1302,6 +1331,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1340,6 +1370,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1378,6 +1409,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1416,6 +1448,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s
@@ -1454,6 +1487,7 @@ spec:
         with_route: true
         send_headers_upstream:
         - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
     plugin_config_name: don-api-authenticated-rate-limit
     timeout:
       connect: 60s

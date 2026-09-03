@@ -37,6 +37,15 @@ images:
     newTag: cd7fba312049039dd76e5e8ca6f2f13e78a4fd39
 patches:
   - target:
+      kind: Deployment
+      name: opa
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: OPA_DEFAULT_RATE_LIMIT
+          value: "100"
+  - target:
       kind: HelmRelease
       name: apisix
     patch: |
