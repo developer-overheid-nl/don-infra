@@ -8,10 +8,13 @@ spec:
     - name: limit-count
       enable: true
       config:
-        count: 100
+        count: "$http_x_opa_rate_limit"
         time_window: 60
         key_type: var
         key: http_x_opa_client_id
-        group: authenticated-api-users
+        # APISIX vereist een nieuwe groepsnaam wanneer de limit-count-configuratie wijzigt.
+        group: authenticated-api-users-dynamic-v1
         policy: local
+        # Houd requests beschikbaar als de dynamische variabele tijdens een rollout kort ontbreekt.
+        allow_degradation: true
         rejected_code: 429

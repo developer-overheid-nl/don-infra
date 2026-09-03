@@ -1,0 +1,29 @@
+name: Validate OPA policy
+
+on:
+  pull_request:
+    paths:
+      - apps/api/base/opa/opa-policy.yaml
+      - apps/api/base/opa/opa-policy_test.rego
+      - scripts/test-opa-policy.sh
+      - .github/workflows/validate-opa-policy.yml
+  push:
+    branches:
+      - main
+    paths:
+      - apps/api/base/opa/opa-policy.yaml
+      - apps/api/base/opa/opa-policy_test.rego
+      - scripts/test-opa-policy.sh
+      - .github/workflows/validate-opa-policy.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run OPA policy tests
+        run: ./scripts/test-opa-policy.sh
