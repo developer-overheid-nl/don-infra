@@ -6,6 +6,7 @@ policy_yaml="$repository_root/apps/api/base/opa/opa-policy.yaml"
 policy_tests="$repository_root/apps/api/base/opa/opa-policy_test.rego"
 required_opa_version="1.18.2"
 temporary_directory=$(mktemp -d)
+chmod 755 "$temporary_directory"
 
 cleanup() {
   rm -rf "$temporary_directory"
