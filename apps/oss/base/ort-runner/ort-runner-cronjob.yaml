@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ort-runner
+spec:
+  schedule: "0 2 */2 * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          securityContext:
+            fsGroup: 1000
+          initContainers:
+            - name: ort-config
+              image: ort-config
+              volumeMounts:
+                - name: config
+                  mountPath: /target
+          containers:
+            - name: ort-runner
+              image: ort-runner
+              env:
+                - name: ORT_REPOSITORIES_URL
+                  value: http://don-oss-oss-register-svc:1337/v1/repositories
+                - name: ORT_RESULTS_URL
+                  value: ""
+                - name: ORT_REGISTER_API_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: API_X_API_KEY
+                - name: AUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: AUTH_CLIENT_ID
+                - name: AUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: AUTH_CLIENT_SECRET
+                - name: KEYCLOAK_BASE_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: KEYCLOAK_BASE_URL
+                - name: KEYCLOAK_REALM
+                  valueFrom:
+                    secretKeyRef:
+                      name: don-crawler-secret
+                      key: KEYCLOAK_REALM
+                - name: AUTH_TOKEN_URL
+                  value: "$(KEYCLOAK_BASE_URL)/realms/$(KEYCLOAK_REALM)/\
+                    protocol/openid-connect/token"
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 1Gi
+                limits:
+                  cpu: 2000m
+                  memory: 8Gi
+              volumeMounts:
+                - name: config
+                  mountPath: /config
+                  readOnly: true
+                - name: output
+                  mountPath: /output
+          restartPolicy: OnFailure
+          volumes:
+            - name: config
+              emptyDir: {}
+            - name: output
+              emptyDir: {}
