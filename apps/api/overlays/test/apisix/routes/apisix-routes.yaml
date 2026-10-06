@@ -384,6 +384,8 @@ spec:
       - "/tools/v1/events"
       methods:
       - GET
+      # Browser preflight with X-Api-Key; answered by the cors plugin before OPA runs.
+      - OPTIONS
     plugins:
     - name: proxy-rewrite
       enable: true
@@ -466,6 +468,8 @@ spec:
       - "/tools/v1/events/*"
       methods:
       - GET
+      # Browser preflight with X-Api-Key; answered by the cors plugin before OPA runs.
+      - OPTIONS
     plugins:
     - name: proxy-rewrite
       enable: true
