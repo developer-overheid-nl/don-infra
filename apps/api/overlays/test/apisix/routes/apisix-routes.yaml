@@ -378,6 +378,211 @@ spec:
     backends:
     - serviceName: tools-svc
       servicePort: 1338
+  - name: tools-api-v1-listevents
+    match:
+      paths:
+      - "/tools/v1/events"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        expose_headers: Link,Total-Count,Current-Page,Per-Page,Total-Pages,API-Version
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
+    plugin_config_name: don-api-authenticated-rate-limit
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-createevent
+    match:
+      paths:
+      - "/tools/v1/events"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        expose_headers: Location,API-Version
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
+    plugin_config_name: don-api-authenticated-rate-limit
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-getevent
+    match:
+      paths:
+      - "/tools/v1/events/*"
+      methods:
+      - GET
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: GET,OPTIONS
+        expose_headers: API-Version
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
+    plugin_config_name: don-api-authenticated-rate-limit
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-updateevent
+    match:
+      paths:
+      - "/tools/v1/events/*"
+      methods:
+      - PUT
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: PUT,OPTIONS
+        expose_headers: API-Version
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
+    plugin_config_name: don-api-authenticated-rate-limit
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
+  - name: tools-api-v1-deleteevent
+    match:
+      paths:
+      - "/tools/v1/events/*"
+      methods:
+      - DELETE
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/tools/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: DELETE,OPTIONS
+        expose_headers: API-Version
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
+    plugin_config_name: don-api-authenticated-rate-limit
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: tools-svc
+      servicePort: 1338
   - name: api-register-api-v1-listapis
     match:
       paths:

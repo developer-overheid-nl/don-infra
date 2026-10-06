@@ -129,6 +129,81 @@ data:
             ]
           },
           {
+            "name": "tools-api-v1-listevents",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/tools/v1/events"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "GET"
+            ]
+          },
+          {
+            "name": "tools-api-v1-createevent",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/tools/v1/events"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "tools-api-v1-getevent",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/tools/v1/events/*"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+              "GET"
+            ]
+          },
+          {
+            "name": "tools-api-v1-updateevent",
+            "methods": [
+              "PUT"
+            ],
+            "paths": [
+              "/tools/v1/events/*"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "tools-api-v1-deleteevent",
+            "methods": [
+              "DELETE"
+            ],
+            "paths": [
+              "/tools/v1/events/*"
+            ],
+            "required_scopes": [
+              "tools"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
             "name": "api-register-api-v1-listapis",
             "methods": [
               "GET"

@@ -101,6 +101,15 @@ patches:
         value: schemas.don.projects.digilab.network
   - target:
       kind: Deployment
+      name: tools-dpl
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: PUBLIC_BASE_URL
+          value: https://api.don.projects.digilab.network/tools
+  - target:
+      kind: Deployment
       name: schema-register-dpl
     patch: |
       - op: test

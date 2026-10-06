@@ -63,3 +63,28 @@ spec:
                 secretKeyRef:
                   name: tools-secret
                   key: AUTH_CLIENT_SECRET
+            # Events-agenda: dezelfde database en gebruiker als api-register (secret api-db), eigen schema.
+            # De tabel events wordt per omgeving met de hand aangemaakt; zonder tabel geven de
+            # events-endpoints 503 en logt de harvest een fout, de tools-endpoints werken gewoon.
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_HOSTNAME
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_PASSWORD
+            - name: DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-db
+                  key: DB_DBNAME
+            - name: DB_SCHEMA
+              value: don_tools
