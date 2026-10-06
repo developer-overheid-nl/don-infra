@@ -137,7 +137,7 @@ data:
               "/tools/v1/events"
             ],
             "required_scopes": [
-              "tools"
+              "events:read"
             ],
             "allow_api_key_methods": [
               "GET"
@@ -152,7 +152,7 @@ data:
               "/tools/v1/events"
             ],
             "required_scopes": [
-              "tools"
+              "events:write"
             ],
             "allow_api_key_methods": [
 
@@ -167,7 +167,7 @@ data:
               "/tools/v1/events/*"
             ],
             "required_scopes": [
-              "tools"
+              "events:read"
             ],
             "allow_api_key_methods": [
               "GET"
@@ -182,7 +182,7 @@ data:
               "/tools/v1/events/*"
             ],
             "required_scopes": [
-              "tools"
+              "events:write"
             ],
             "allow_api_key_methods": [
 
@@ -197,7 +197,7 @@ data:
               "/tools/v1/events/*"
             ],
             "required_scopes": [
-              "tools"
+              "events:write"
             ],
             "allow_api_key_methods": [
 
