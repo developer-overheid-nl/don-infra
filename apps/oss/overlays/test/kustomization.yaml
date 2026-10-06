@@ -29,7 +29,7 @@ images:
     newTag: afb6367ade15157c25c5e8f5fd4c9ecf516b0d23
   - name: ort-runner
     newName: ghcr.io/developer-overheid-nl/ort-runner
-    newTag: 42b12d66795b5a2ace32a483370538f4183e7ccf
+    newTag: 132bab882e15b3c268ef094322fc62f066d5865b
   - name: ort-config
     newName: ghcr.io/developer-overheid-nl/ort-config
     newTag: v0.0.1
