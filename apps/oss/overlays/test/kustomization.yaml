@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - ../../base
   - ../../base/ort-runner
+  - ort-runner-network-policy.yaml
   - http-route.yaml
   - oss-db.yaml
   - oss-secret.yaml

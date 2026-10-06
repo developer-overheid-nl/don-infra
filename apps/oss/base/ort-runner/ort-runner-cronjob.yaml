@@ -5,10 +5,17 @@ metadata:
 spec:
   schedule: "0 2 */2 * *"
   concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      backoffLimit: 2
+      # Just above ORT_BATCH_DEADLINE: room to report unfinished repositories.
+      activeDeadlineSeconds: 169200
+      ttlSecondsAfterFinished: 86400
       template:
         spec:
+          serviceAccountName: ort-runner
           securityContext:
             fsGroup: 1000
           initContainers:
@@ -20,11 +27,44 @@ spec:
           containers:
             - name: ort-runner
               image: ort-runner
+              args: ["controller"]
               env:
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                - name: POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: ORT_BATCH_ID
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.labels['batch.kubernetes.io/job-name']
+                - name: ORT_CONFIG_DIR
+                  value: /config
                 - name: ORT_REPOSITORIES_URL
                   value: http://don-oss-oss-register-svc:1337/v1/repositories
                 - name: ORT_RESULTS_URL
                   value: ""
+                - name: ORT_PARALLELISM
+                  value: "10"
+                - name: ORT_BATCH_DEADLINE
+                  value: 46h
+                - name: ORT_REPOSITORY_TIMEOUT
+                  value: 10m
+                - name: ORT_WORKER_MEMORY_REQUEST
+                  value: 4Gi
+                - name: ORT_WORKER_MEMORY_LIMIT
+                  value: 8Gi
+                - name: ORT_WORKER_CPU_REQUEST
+                  value: 200m
+                - name: ORT_WORKER_CPU_LIMIT
+                  value: 2000m
+                - name: ORT_WORKER_EPHEMERAL_STORAGE_REQUEST
+                  value: 10Gi
+                - name: ORT_WORKER_EPHEMERAL_STORAGE_LIMIT
+                  value: 30Gi
                 - name: ORT_REGISTER_API_KEY
                   valueFrom:
                     secretKeyRef:
@@ -55,20 +95,16 @@ spec:
                     protocol/openid-connect/token"
               resources:
                 requests:
-                  cpu: 200m
-                  memory: 1Gi
+                  cpu: 100m
+                  memory: 128Mi
                 limits:
-                  cpu: 2000m
-                  memory: 8Gi
+                  cpu: 500m
+                  memory: 512Mi
               volumeMounts:
                 - name: config
                   mountPath: /config
                   readOnly: true
-                - name: output
-                  mountPath: /output
-          restartPolicy: OnFailure
+          restartPolicy: Never
           volumes:
             - name: config
-              emptyDir: {}
-            - name: output
               emptyDir: {}

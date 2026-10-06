@@ -3,3 +3,6 @@ kind: Kustomization
 
 resources:
   - ort-runner-cronjob.yaml
+  - ort-runner-service-account.yaml
+  - ort-runner-role.yaml
+  - ort-runner-role-binding.yaml

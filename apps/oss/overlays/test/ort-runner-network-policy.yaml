@@ -1,0 +1,41 @@
+# ORT worker Pods run code from scanned repositories. They may reach DNS, the
+# public internet (Git hosts, package registries, OSV), the OSS register for
+# result delivery and Keycloak, but no other cluster-internal service.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ort-runner-worker
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: ort-runner
+      app.kubernetes.io/component: worker
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 100.64.0.0/10
+              - 169.254.0.0/16
+    - to:
+        - podSelector:
+            matchLabels:
+              app: oss-register
+      ports:
+        - protocol: TCP
+          port: 1337
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tn-don-auth-test
