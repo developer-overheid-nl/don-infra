@@ -25,10 +25,10 @@ images:
     newTag: f4ce19a8351cae12713c3a60a5e9368887b6cb7e
   - name: don-register-site
     newName: ghcr.io/developer-overheid-nl/don-register-site
-    newTag: d3b3ff4d38f88021294d07928190762046f1db60
+    newTag: 48f40f103964931eca16140918fc46b29bb8e923
   - name: don-register-schema-site
     newName: ghcr.io/developer-overheid-nl/don-register-schema-site
-    newTag: d3b3ff4d38f88021294d07928190762046f1db60
+    newTag: 48f40f103964931eca16140918fc46b29bb8e923
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-tools-api
     newTag: 157dba8747b7a0c4e09daf1950981e3b9a59f765
