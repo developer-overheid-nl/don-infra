@@ -71,6 +71,12 @@ patches:
       - op: replace
         path: /spec/values/apisix/admin/ingress/enabled
         value: false
+      # Moet groter zijn dan de syncPeriod (1m) van de ingress-controller,
+      # anders hergebruikt ADC een keep-alive verbinding die APISIX net sluit
+      # ("socket hang up" bij sync).
+      - op: add
+        path: /spec/values/apisix/nginx/keepaliveTimeout
+        value: 75s
   - target:
       kind: HTTPRoute
       name: apisix-http-route
