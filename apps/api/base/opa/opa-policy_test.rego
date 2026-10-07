@@ -11,6 +11,22 @@ test_allow_response_uses_numeric_client_rate_limit if {
   object.get(response.headers, "X-OPA-Rate-Limit", "") == "4000"
 }
 
+test_allow_response_uses_trusted_bearer_profile_claim if {
+  info := {
+    "active": true,
+    "client_id": "trusted-bearer-client",
+    "rate_limit_profile": "trusted",
+    "scope": "apis:read",
+  }
+  response := allow_response(info) with data.apisix_auth as {
+    "rate_limit": {"default": 100},
+  }
+
+  object.get(response.headers, "X-OPA-Rate-Limit", "") == "500"
+  all_required_scopes_present(info, ["apis:read"])
+  not all_required_scopes_present(info, ["apis:write"])
+}
+
 test_keycloak_untrusted_profile_is_read_only_at_100 if {
   info := keycloak_api_key_info_from_body({
     "clientId": "readonly-client",

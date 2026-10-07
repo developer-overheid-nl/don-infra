@@ -498,11 +498,43 @@ data:
       },
     }
 
-    raw_rate_limit(info) := object.get(
-      info,
-      "rate_limit",
-      object.get(object.get(info, "attributes", {}), "rate-limit", ""),
-    )
+    normalized_rate_limit_profile_claim(info) := lower(trim_space(raw_profile)) if {
+      raw_profile := object.get(
+        info,
+        "rate_limit_profile",
+        object.get(info, "rate-limit-profile", ""),
+      )
+      is_string(raw_profile)
+    }
+
+    normalized_rate_limit_profile_claim(info) := "" if {
+      raw_profile := object.get(
+        info,
+        "rate_limit_profile",
+        object.get(info, "rate-limit-profile", ""),
+      )
+      not is_string(raw_profile)
+    }
+
+    raw_rate_limit(info) := api_key_profile_rate_limit(profile) if {
+      profile := normalized_rate_limit_profile_claim(info)
+      profile in valid_api_key_profiles
+    }
+
+    raw_rate_limit(info) := value if {
+      normalized_rate_limit_profile_claim(info) == ""
+      value := object.get(
+        info,
+        "rate_limit",
+        object.get(object.get(info, "attributes", {}), "rate-limit", ""),
+      )
+    }
+
+    raw_rate_limit(info) := "" if {
+      profile := normalized_rate_limit_profile_claim(info)
+      profile != ""
+      not profile in valid_api_key_profiles
+    }
 
     positive_integer(value) := number if {
       number := to_number(value)
