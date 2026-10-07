@@ -65,6 +65,10 @@ spec:
           secretName: api-tls
     apisix:
       nginx:
+        # Moet groter zijn dan de syncPeriod (1m) van de ingress-controller,
+        # anders hergebruikt ADC een keep-alive verbinding die APISIX net sluit
+        # ("socket hang up" bij sync).
+        keepaliveTimeout: 75s
         customLuaSharedDicts:
           - name: limit-count
             size: 50m
