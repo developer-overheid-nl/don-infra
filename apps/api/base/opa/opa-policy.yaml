@@ -28,12 +28,23 @@ data:
     default_allowed_api_key_scopes := [
       "apis:read",
       "organisations:read",
-      "tools",
       "repositories:read",
       "gitOrganisations:read",
       "schemas:read",
       "events:read",
     ]
+
+    trusted_api_key_scopes := array.concat(default_allowed_api_key_scopes, [
+      "apis:write",
+      "organisations:write",
+      "tools",
+      "repositories:write",
+      "gitOrganisations:write",
+      "schemas:write",
+      "events:write",
+    ])
+
+    valid_api_key_profiles := {"untrusted", "trusted", "admin"}
 
     # Config komt primair uit data.apisix_auth. Als die ontbreekt, valt OPA terug
     # op env vars die uit de Kubernetes secret worden ingeladen.
@@ -199,12 +210,46 @@ data:
       resp.status_code != 200
     }
 
-    keycloak_api_key_info_from_body(body, api_key) := {
-      "active": true,
-      "client_id": object.get(body, "clientId", api_key),
-      "attributes": object.get(body, "attributes", {}),
-      "scopes": allowed_api_key_scopes,
+    keycloak_api_key_info_from_body(body, api_key) := info if {
+      attributes := object.get(body, "attributes", {})
+      profile := api_key_profile(attributes)
+      info := {
+        "active": true,
+        "client_id": object.get(body, "clientId", api_key),
+        "attributes": attributes,
+        "profile": profile,
+        "rate_limit": api_key_profile_rate_limit(profile),
+        "scopes": api_key_profile_scopes(profile),
+      }
     }
+
+    normalized_api_key_profile(attributes) := lower(trim_space(raw_profile)) if {
+      raw_profile := object.get(attributes, "rate-limit-profile", "")
+      is_string(raw_profile)
+    }
+
+    normalized_api_key_profile(attributes) := "" if {
+      raw_profile := object.get(attributes, "rate-limit-profile", "")
+      not is_string(raw_profile)
+    }
+
+    api_key_profile(attributes) := profile if {
+      profile := normalized_api_key_profile(attributes)
+      profile in valid_api_key_profiles
+    }
+
+    api_key_profile(attributes) := "untrusted" if {
+      profile := normalized_api_key_profile(attributes)
+      not profile in valid_api_key_profiles
+    }
+
+    api_key_profile_rate_limit("untrusted") := 100
+    api_key_profile_rate_limit("trusted") := 500
+    api_key_profile_rate_limit("admin") := 4000
+
+    api_key_profile_scopes("untrusted") := default_allowed_api_key_scopes
+    api_key_profile_scopes("trusted") := trusted_api_key_scopes
+    api_key_profile_scopes("admin") := trusted_api_key_scopes
 
     keycloak_api_key_info(api_key) := keycloak_api_key_info_from_body(body, api_key) if {
       resp := keycloak_client_lookup_response(api_key)
