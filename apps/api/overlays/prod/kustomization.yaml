@@ -34,6 +34,15 @@ images:
 patches:
   - path: opa-runtime-patch.yaml
   - target:
+      kind: Deployment
+      name: tools-dpl
+    patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: PUBLIC_BASE_URL
+          value: https://api.developer.overheid.nl/tools
+  - target:
       kind: HelmRelease
       name: apisix
     patch: |
