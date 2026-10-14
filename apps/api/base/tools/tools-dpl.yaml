@@ -88,3 +88,6 @@ spec:
                   key: DB_DBNAME
             - name: DB_SCHEMA
               value: don_tools
+            # Pleio-sites waarvan de aankomende events worden geharvest (kommagescheiden).
+            - name: PLEIO_SOURCES
+              value: https://digilab.pleio.nl,https://opensourcewerken.nl
