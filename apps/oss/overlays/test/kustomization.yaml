@@ -26,7 +26,7 @@ images:
     newTag: 48f40f103964931eca16140918fc46b29bb8e923
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
-    newTag: afb6367ade15157c25c5e8f5fd4c9ecf516b0d23
+    newTag: 49163742a75491e83c7217ac06b4d7ac7846cca2
   - name: ort-runner
     newName: ghcr.io/developer-overheid-nl/ort-runner
     newTag: 272f986f88e821e09496e9a1569ea217fe8aee2b
