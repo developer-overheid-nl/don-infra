@@ -11,10 +11,10 @@ namePrefix: don-static-
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-static
-    newTag: b9342c5bc0e61f04742df858ae8eb6d990526485
+    newTag: 11849888aed62dc6fde0b42f9aea15926c394a77
   - name: source-meta
     newName: ghcr.io/developer-overheid-nl/source-meta-schemas
-    newTag: 4edd28afc60286b3c4cbd9ff76effc6f8ca1a628
+    newTag: 11849888aed62dc6fde0b42f9aea15926c394a77
 
 patches:
   - target:
