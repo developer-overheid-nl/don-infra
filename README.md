@@ -4,14 +4,95 @@ Deze repository bevat alle Kubernetes-manifesten voor [developer.overheid.nl](ht
 
 ## Applicaties
 
-Het project is opgedeeld in meerdere applicaties:
+Het project is opgedeeld in meerdere applicaties. Elke applicatie heeft een eigen namespace per omgeving (`tn-don-<app>-test` / `tn-don-<app>-prod`):
 
-- [api](./apps/api/)
-- [auth](./apps/auth/)
-- [community](./apps/community/)
-- [frontend](./apps/frontend/)
-- [search](./apps/search/)
-- [static](./apps/static/)
+| Applicatie | Componenten | Hostnamen (prod) |
+| --- | --- | --- |
+| [api](./apps/api/) | APISIX, OPA, api-register, register-site, tools; schema-register en schema-register-site (alleen test) | `api`, `api-admin`, `apis` |
+| [auth](./apps/auth/) | Keycloak | `auth` |
+| [db](./apps/db/) | Postgres (CloudNativePG) | — |
+| [frontend](./apps/frontend/) | developer.overheid.nl | `developer.overheid.nl` |
+| [oss](./apps/oss/) | oss-register, oss-register-site, oss-crawler; ort-runner (alleen test) | `oss` |
+| [search](./apps/search/) | Typesense | `search` |
+| [static](./apps/static/) | static, source-meta | `static` |
+| [monitoring](./apps/monitoring/) | Grafana-dashboards (alerting staat in `api/overlays/prod`) | — |
+
+### Huidige indeling
+
+```mermaid
+flowchart LR
+  user([Gebruiker / client]) --> istio[istio-gateway<br/>ListenerSet tn-don]
+
+  subgraph api [tn-don-api]
+    apisix[APISIX]
+    opa[OPA]
+    apireg[api-register]
+    regsite[register-site]
+    tools[tools]
+    schemareg[schema-register<br/><i>alleen test</i>]
+    schemasite[schema-register-site<br/><i>alleen test</i>]
+  end
+
+  subgraph oss [tn-don-oss]
+    ossreg[oss-register]
+    osssite[oss-register-site]
+    crawler[oss-crawler]
+    ort[ort-runner<br/><i>alleen test</i>]
+  end
+
+  subgraph auth [tn-don-auth]
+    keycloak[Keycloak]
+  end
+
+  subgraph db [tn-don-db]
+    postgres[(Postgres)]
+  end
+
+  subgraph search [tn-don-search]
+    typesense[Typesense]
+  end
+
+  subgraph static [tn-don-static]
+    staticsvc[static]
+    sourcemeta[source-meta]
+  end
+
+  subgraph frontend [tn-don-frontend]
+    site[developer.overheid.nl]
+  end
+
+  istio --> apisix
+  istio --> regsite
+  istio --> schemasite
+  istio --> osssite
+  istio --> keycloak
+  istio --> typesense
+  istio --> staticsvc
+  istio --> site
+
+  apisix --> opa
+  opa --> keycloak
+  apisix --> apireg
+  apisix --> tools
+  apisix --> ossreg
+
+  regsite --> apisix
+  apireg --> tools
+  apireg --> typesense
+  tools --> keycloak
+
+  schemareg --> sourcemeta
+
+  osssite --> ossreg
+  crawler --> ossreg
+  ort --> ossreg
+  ort --> keycloak
+
+  keycloak --> postgres
+  apireg --> postgres
+  ossreg --> postgres
+  schemareg --> postgres
+```
 
 ## SOPS publieke sleutels
 
