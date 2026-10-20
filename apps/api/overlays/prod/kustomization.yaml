@@ -2,7 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - ../../base/schema-register
+  - ../../base/schema-register-site
   - register-site-http-route.yaml
+  - schema-register-site-http-route.yaml
   - apisix-http-route.yaml
   - apisix.yaml
   - register-site.yaml
@@ -16,6 +19,7 @@ resources:
   - opa-resilience.yaml
   - opa-alerting.yaml
   - platform-alerting.yaml
+  - schema-register.yaml
 namespace: tn-don-api-prod
 namePrefix: don-api-
 images:
@@ -31,6 +35,9 @@ images:
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: 5b0758e699ffa2584e7ae7498d6aa262d999a6f0
+  - name: don-schema-register
+    newName: ghcr.io/developer-overheid-nl/don-schema-register
+    newTag: cd7fba312049039dd76e5e8ca6f2f13e78a4fd39
 patches:
   - path: opa-runtime-patch.yaml
   - target:
@@ -89,3 +96,35 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: apis.developer.overheid.nl
+  - target:
+      kind: HTTPRoute
+      name: schema-register-site-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: schemas.developer.overheid.nl
+  - target:
+      kind: Deployment
+      name: schema-register-dpl
+    patch: |
+      - op: test
+        path: /spec/template/spec/containers/0/env/8/name
+        value: ENABLE_TYPESENSE
+      - op: replace
+        path: /spec/template/spec/containers/0/env/8
+        value:
+          name: ENABLE_TYPESENSE
+          value: "false"
+      - op: test
+        path: /spec/template/spec/containers/0/env/9/name
+        value: SOURCEMETA_ONE_API_BASE
+      - op: replace
+        path: /spec/template/spec/containers/0/env/9
+        value:
+          name: SOURCEMETA_ONE_API_BASE
+          value: http://don-static-source-meta-svc.tn-don-static-prod.svc.cluster.local:8000/schemas/
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: SOURCEMETA_PUBLIC_SCHEMA_BASE_URL
+          value: https://static.developer.overheid.nl/schemas/

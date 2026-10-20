@@ -1,0 +1,29 @@
+# SourceMeta One accepts traffic only from the schema register (harvesting via
+# the internal /schemas/self API) and from the Istio gateway (public schemas on
+# static.developer.overheid.nl/schemas). Every other Pod in the cluster is denied.
+# The /schemas/self API itself is kept off the public internet by the
+# HTTPRoute, not by this policy.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-source-meta-from-schema-register
+spec:
+  podSelector:
+    matchLabels:
+      app: source-meta
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: tn-don-api-prod
+          podSelector:
+            matchLabels:
+              app: schema-register
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: istio-gateway
+      ports:
+        - protocol: TCP
+          port: 8000

@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: don-schema-register-http-route
+  name: schema-register-site-http-route
 spec:
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -21,6 +21,6 @@ spec:
               - name: Access-Control-Allow-Methods
                 value: "GET, HEAD, OPTIONS"
       backendRefs:
-        - name: don-schema-register-svc
+        - name: schema-register-site-svc
           kind: Service
-          port: 8000
+          port: 4321

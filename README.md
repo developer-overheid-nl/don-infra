@@ -8,7 +8,7 @@ Het project is opgedeeld in meerdere applicaties. Elke applicatie heeft een eige
 
 | Applicatie | Componenten | Hostnamen (prod) |
 | --- | --- | --- |
-| [api](./apps/api/) | APISIX, OPA, api-register, register-site, tools; schema-register en schema-register-site (alleen test) | `api`, `api-admin`, `apis` |
+| [api](./apps/api/) | APISIX, OPA, api-register, register-site, tools, schema-register, schema-register-site | `api`, `api-admin`, `apis`, `schemas` |
 | [auth](./apps/auth/) | Keycloak | `auth` |
 | [db](./apps/db/) | Postgres (CloudNativePG) | — |
 | [frontend](./apps/frontend/) | developer.overheid.nl | `developer.overheid.nl` |
@@ -29,8 +29,8 @@ flowchart LR
     apireg[api-register]
     regsite[register-site]
     tools[tools]
-    schemareg[schema-register<br/><i>alleen test</i>]
-    schemasite[schema-register-site<br/><i>alleen test</i>]
+    schemareg[schema-register]
+    schemasite[schema-register-site]
   end
 
   subgraph oss [tn-don-oss]
@@ -68,6 +68,7 @@ flowchart LR
   istio --> keycloak
   istio --> typesense
   istio --> staticsvc
+  istio -->|/schemas, niet /schemas/self| sourcemeta
   istio --> site
 
   apisix --> opa
