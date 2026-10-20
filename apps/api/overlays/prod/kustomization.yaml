@@ -30,7 +30,7 @@ images:
     newTag: 22f26bdabce397bcadafc558c67d268d31e57d6d
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
-    newTag: 5b0758e699ffa2584e7ae7498d6aa262d999a6f0
+    newTag: 8447ba6b2a36768dabe3ed415041c0a4bb99d109
 patches:
   - path: opa-runtime-patch.yaml
   - target:
