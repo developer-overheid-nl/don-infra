@@ -48,15 +48,15 @@ spec:
                 - name: ORT_RESULTS_URL
                   value: ""
                 - name: ORT_PARALLELISM
-                  value: "10"
+                  value: "4"
                 - name: ORT_BATCH_DEADLINE
                   value: 46h
                 - name: ORT_REPOSITORY_TIMEOUT
                   value: 10m
                 - name: ORT_WORKER_MEMORY_REQUEST
-                  value: 4Gi
+                  value: 6Gi
                 - name: ORT_WORKER_MEMORY_LIMIT
-                  value: 8Gi
+                  value: 6Gi
                 - name: ORT_WORKER_CPU_REQUEST
                   value: 200m
                 - name: ORT_WORKER_CPU_LIMIT
@@ -64,7 +64,7 @@ spec:
                 - name: ORT_WORKER_EPHEMERAL_STORAGE_REQUEST
                   value: 10Gi
                 - name: ORT_WORKER_EPHEMERAL_STORAGE_LIMIT
-                  value: 30Gi
+                  value: 20Gi
                 - name: ORT_REGISTER_API_KEY
                   valueFrom:
                     secretKeyRef:
