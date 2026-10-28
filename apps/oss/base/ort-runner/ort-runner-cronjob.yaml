@@ -44,7 +44,7 @@ spec:
                 - name: ORT_CONFIG_DIR
                   value: /config
                 - name: ORT_REPOSITORIES_URL
-                  value: http://don-oss-oss-register-svc:1337/v1/repositories
+                  value: ""
                 - name: ORT_RESULTS_URL
                   value: ""
                 - name: ORT_PARALLELISM
