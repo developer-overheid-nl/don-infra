@@ -519,6 +519,21 @@ data:
             ]
           },
           {
+            "name": "oss-register-api-v1-submitscan",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/oss-register/v1/scans"
+            ],
+            "required_scopes": [
+              "repositories:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
             "name": "oss-register-api-v1-updaterepositorie",
             "methods": [
               "PUT"

@@ -867,6 +867,41 @@ spec:
       read: 60s
     upstreams:
     - name: oss-register-upstream
+  - name: oss-register-api-v1-submitscan
+    match:
+      paths:
+      - "/oss-register/v1/scans"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/oss-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,Content-Type
+        allow_methods: POST,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    upstreams:
+    - name: oss-register-upstream
   - name: oss-register-api-v1-updaterepositorie
     match:
       paths:

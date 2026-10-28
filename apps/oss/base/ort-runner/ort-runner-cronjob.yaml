@@ -46,7 +46,7 @@ spec:
                 - name: ORT_REPOSITORIES_URL
                   value: http://don-oss-oss-register-svc:1337/v1/repositories
                 - name: ORT_RESULTS_URL
-                  value: http://don-oss-oss-register-svc:1337/v1/scans
+                  value: ""
                 - name: ORT_PARALLELISM
                   value: "4"
                 - name: ORT_BATCH_DEADLINE

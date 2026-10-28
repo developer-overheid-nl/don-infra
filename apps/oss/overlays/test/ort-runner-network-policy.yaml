@@ -1,6 +1,6 @@
 # ORT worker Pods run code from scanned repositories. They may reach DNS, the
-# public internet (Git hosts, package registries, OSV), the OSS register for
-# result delivery and Keycloak, but no other cluster-internal service.
+# public internet (Git hosts, package registries, OSV, and the API gateway for
+# result delivery) and Keycloak, but no cluster-internal service directly.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -28,13 +28,6 @@ spec:
               - 192.168.0.0/16
               - 100.64.0.0/10
               - 169.254.0.0/16
-    - to:
-        - podSelector:
-            matchLabels:
-              app: oss-register
-      ports:
-        - protocol: TCP
-          port: 1337
     - to:
         - namespaceSelector:
             matchLabels:
