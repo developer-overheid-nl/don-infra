@@ -41,7 +41,7 @@ patches:
     patch: |-
       - op: replace
         path: /spec/template/spec/containers/0/env/0/value
-        value: "168"
+        value: "720"
   - target:
       kind: HTTPRoute
       name: http-route
