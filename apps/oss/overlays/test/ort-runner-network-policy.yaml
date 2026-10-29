@@ -1,6 +1,8 @@
 # ORT worker Pods run code from scanned repositories. They may reach DNS, the
 # public internet (Git hosts, package registries, OSV, and the API gateway for
 # result delivery) and Keycloak, but no cluster-internal service directly.
+# Traffic to the cluster's own public hostnames is routed straight to the
+# Istio gateway Pods, so those need an explicit rule next to the ipBlock.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -32,3 +34,7 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: tn-don-auth-test
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: istio-gateway
