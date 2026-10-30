@@ -68,7 +68,7 @@ flowchart LR
   istio --> keycloak
   istio --> typesense
   istio --> staticsvc
-  istio -->|/schemas, alleen test| sourcemeta
+  istio -->|/schemas, behalve /schemas/self en *.schema.json| sourcemeta
   istio --> site
 
   apisix --> opa

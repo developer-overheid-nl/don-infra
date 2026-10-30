@@ -12,6 +12,77 @@ spec:
   hostnames:
     - set-in-overlay
   rules:
+    # De *.schema.json-bestanden (o.a. gelinkt vanuit de ADR) komen uit nginx;
+    # SourceMeta One kent alleen de lowercase paden zonder extensie. Exact
+    # matches gaan bij Istio voor op PathPrefix, regex niet.
+    - matches:
+        - path:
+            type: Exact
+            value: /schemas/adr/2.2/ProblemDetails.schema.json
+        - path:
+            type: Exact
+            value: /schemas/don/Api.schema.json
+        - path:
+            type: Exact
+            value: /schemas/don/ApiLifecycle.schema.json
+        - path:
+            type: Exact
+            value: /schemas/don/Organisation.schema.json
+        - path:
+            type: Exact
+            value: /schemas/don/ProblemDetailsBadRequest.schema.json
+        - path:
+            type: Exact
+            value: /schemas/don/Repository.schema.json
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Access-Control-Allow-Origin
+                value: "*"
+              - name: Access-Control-Allow-Methods
+                value: "GET, HEAD, OPTIONS"
+      backendRefs:
+        - name: svc
+          kind: Service
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /schemas/self
+      filters:
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Access-Control-Allow-Origin
+                value: "*"
+              - name: Access-Control-Allow-Methods
+                value: "GET, HEAD, OPTIONS"
+      backendRefs:
+        - name: svc
+          kind: Service
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /schemas
+      filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+              - name: Accept
+                value: "application/schema+json, application/json"
+        - type: ResponseHeaderModifier
+          responseHeaderModifier:
+            set:
+              - name: Access-Control-Allow-Origin
+                value: "*"
+              - name: Access-Control-Allow-Methods
+                value: "GET, HEAD, OPTIONS"
+      backendRefs:
+        - name: source-meta-svc
+          kind: Service
+          port: 8000
     - filters:
         - type: ResponseHeaderModifier
           responseHeaderModifier:
