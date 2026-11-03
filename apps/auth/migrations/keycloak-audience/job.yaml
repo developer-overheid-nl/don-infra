@@ -12,7 +12,7 @@ spec:
       restartPolicy: OnFailure
       containers:
         - name: configure-keycloak-audience
-          image: docker.io/keycloak/keycloak:26.7.1
+          image: docker.io/keycloak/keycloak:26.7.5
           imagePullPolicy: IfNotPresent
           command:
             - /bin/bash
