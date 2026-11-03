@@ -66,9 +66,40 @@ patches:
         path: /spec/values/ingress-controller/config/kubernetes
         value:
           ingressClass: apisix-prod
+      # Two gateway pods on different nodes, so that one pod can restart
+      # while the other pod serves traffic.
       - op: replace
         path: /spec/values/replicaCount
-        value: 1
+        value: 2
+      - op: add
+        path: /spec/values/podDisruptionBudget
+        value:
+          enabled: true
+          minAvailable: 1
+      - op: add
+        path: /spec/values/topologySpreadConstraints
+        value:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: ScheduleAnyway
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: apisix
+                app.kubernetes.io/instance: don-api-apisix-prod
+      # Two ingress controller pods. Leader election makes one pod active.
+      # The other pod takes over when the active pod stops.
+      - op: add
+        path: /spec/values/ingress-controller/deployment
+        value:
+          replicas: 2
+          topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: kubernetes.io/hostname
+              whenUnsatisfiable: ScheduleAnyway
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: ingress-controller
+                  app.kubernetes.io/instance: don-api-apisix-prod
       - op: replace
         path: /spec/values/ingress/enabled
         value: false
