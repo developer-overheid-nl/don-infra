@@ -26,7 +26,7 @@ spec:
   values:
     image:
       repository: apache/apisix
-      tag: 3.17.0-ubuntu
+      tag: 3.19.0-ubuntu
     ingress-controller:
       enabled: true
       deployment:
