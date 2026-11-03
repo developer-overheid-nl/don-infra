@@ -4,7 +4,7 @@ set -eu
 repository_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 policy_yaml="$repository_root/apps/api/base/opa/opa-policy.yaml"
 policy_tests="$repository_root/apps/api/base/opa/opa-policy_test.rego"
-required_opa_version="1.18.2"
+required_opa_version="1.22.0"
 temporary_directory=$(mktemp -d)
 chmod 755 "$temporary_directory"
 

@@ -5,6 +5,7 @@ on:
     paths:
       - apps/api/base/opa/opa-policy.yaml
       - apps/api/base/opa/opa-policy_test.rego
+      - apps/api/base/opa/opa-runtime.yaml
       - scripts/test-opa-policy.sh
       - .github/workflows/validate-opa-policy.yml
   push:
@@ -13,6 +14,7 @@ on:
     paths:
       - apps/api/base/opa/opa-policy.yaml
       - apps/api/base/opa/opa-policy_test.rego
+      - apps/api/base/opa/opa-runtime.yaml
       - scripts/test-opa-policy.sh
       - .github/workflows/validate-opa-policy.yml
 
