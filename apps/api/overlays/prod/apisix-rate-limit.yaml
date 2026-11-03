@@ -12,8 +12,8 @@ spec:
         time_window: 60
         key_type: var
         key: http_x_opa_client_id
-        # APISIX vereist een nieuwe groepsnaam wanneer de limit-count-configuratie wijzigt.
-        group: authenticated-api-users-dynamic-v1
+        # Geen group: APISIX 3.19 lost een dynamische count met group niet op en
+        # geeft dan 500. Zonder group telt elke route per client apart.
         policy: local
         # Houd requests beschikbaar als de dynamische variabele tijdens een rollout kort ontbreekt.
         allow_degradation: true
