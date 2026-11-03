@@ -19,7 +19,7 @@ spec:
   chart:
     spec:
       chart: apisix
-      version: 2.13.0
+      version: 2.18.2
       sourceRef:
         kind: HelmRepository
         name: don-api-repo-apisix
@@ -29,6 +29,11 @@ spec:
       tag: 3.19.0-ubuntu
     ingress-controller:
       enabled: true
+      deployment:
+        adcContainer:
+          image:
+            # The chart default is 0.27.1. Version 0.31.0 has no known CVEs.
+            tag: "0.31.0"
       config:
         disableGatewayAPI: true
         provider:
