@@ -71,6 +71,21 @@ patches:
       - op: replace
         path: /spec/values/apisix/admin/ingress/enabled
         value: false
+      # API-driven standalone mode: APISIX keeps its config in memory and
+      # the ingress controller pushes the config to each APISIX pod.
+      # This removes etcd.
+      - op: add
+        path: /spec/values/apisix/deployment
+        value:
+          role: traditional
+          role_traditional:
+            config_provider: yaml
+      - op: add
+        path: /spec/values/etcd/enabled
+        value: false
+      - op: add
+        path: /spec/values/ingress-controller/config/provider/type
+        value: apisix-standalone
   - target:
       kind: HTTPRoute
       name: apisix-http-route
