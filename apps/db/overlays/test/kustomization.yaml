@@ -6,3 +6,20 @@ resources:
 
 namespace: tn-don-db-test
 namePrefix: don-db-
+
+patches:
+  # Use the platform ClusterImageCatalog. The catalog pins the image by
+  # digest and platform Renovate updates it.
+  - target:
+      kind: Cluster
+      name: postgres
+    patch: |
+      - op: remove
+        path: /spec/imageName
+      - op: add
+        path: /spec/imageCatalogRef
+        value:
+          apiGroup: postgresql.cnpg.io
+          kind: ClusterImageCatalog
+          name: postgresql-standard-trixie-test
+          major: 17
