@@ -21,12 +21,14 @@ patches:
       - op: replace
         path: /spec/storage/size
         value: 4Gi
-      # NOTE: do NOT set primaryUpdateMethod: switchover together with this
-      # initial plugin add. On a running cluster the soon-to-be-demoted primary
-      # has no barman sidecar yet, so it cannot archive WAL and the switchover
-      # deadlocks. The default (restart) instead restarts the primary in place
-      # to gain the sidecar (one brief ~30s blip). Switch to switchover in a
-      # follow-up once the plugin is live, for clean future updates.
+      # During a rolling update, promote the updated replica instead of a
+      # restart of the primary. A restart waits for smartShutdownTimeout
+      # (180s) and stops the database for about 3.5 minutes. A switchover
+      # stops it for some seconds. The switchover needs the barman sidecar
+      # on the primary to archive the last WAL. All instances have it.
+      - op: add
+        path: /spec/primaryUpdateMethod
+        value: switchover
       - op: add
         path: /spec/plugins
         value:
