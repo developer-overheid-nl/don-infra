@@ -88,18 +88,21 @@ patches:
                 app.kubernetes.io/instance: don-api-apisix-prod
       # Two ingress controller pods. Leader election makes one pod active.
       # The other pod takes over when the active pod stops.
+      # Add each key on its own. An add of the whole deployment map replaces
+      # the adcContainer image from the base.
       - op: add
-        path: /spec/values/ingress-controller/deployment
+        path: /spec/values/ingress-controller/deployment/replicas
+        value: 2
+      - op: add
+        path: /spec/values/ingress-controller/deployment/topologySpreadConstraints
         value:
-          replicas: 2
-          topologySpreadConstraints:
-            - maxSkew: 1
-              topologyKey: kubernetes.io/hostname
-              whenUnsatisfiable: ScheduleAnyway
-              labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: ingress-controller
-                  app.kubernetes.io/instance: don-api-apisix-prod
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: ScheduleAnyway
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/name: ingress-controller
+                app.kubernetes.io/instance: don-api-apisix-prod
       - op: replace
         path: /spec/values/ingress/enabled
         value: false
