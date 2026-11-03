@@ -27,7 +27,7 @@ spec:
     image:
       registry: docker.io
       repository: keycloak/keycloak
-      tag: "26.7.5"
+      tag: "26.8.1"
       digest: ""
       pullPolicy: IfNotPresent
       pullSecrets: []
