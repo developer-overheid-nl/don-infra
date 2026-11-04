@@ -37,6 +37,7 @@ spec:
       config:
         disableGatewayAPI: true
         provider:
+          type: apisix-standalone
           initSyncDelay: 0s
       gatewayProxy:
         createDefault: true
@@ -52,9 +53,11 @@ spec:
                   secretKeyRef:
                     name: don-api-apisix
                     key: admin
+    # API-driven standalone mode: APISIX keeps its config in memory and
+    # the ingress controller pushes the config to each APISIX pod.
+    # This removes etcd.
     etcd:
-      preUpgradeJob:
-        enabled: false
+      enabled: false
     replicaCount: 1
     ingress:
       enabled: true
@@ -103,3 +106,7 @@ spec:
             - hosts:
                 - set-in-overlay
               secretName: api-admin-tls
+      deployment:
+        role: traditional
+        role_traditional:
+          config_provider: yaml
