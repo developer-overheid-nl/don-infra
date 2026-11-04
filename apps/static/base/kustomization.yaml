@@ -7,4 +7,3 @@ configurations:
 resources:
   - deployment.yaml
   - service.yaml
-  - source-meta/

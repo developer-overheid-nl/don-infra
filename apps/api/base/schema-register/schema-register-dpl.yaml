@@ -61,11 +61,12 @@ spec:
                 secretKeyRef:
                   name: schema-secrets
                   key: ENABLE_TYPESENSE
-            - name: SOURCEMETA_ONE_API_BASE
-              valueFrom:
-                secretKeyRef:
-                  name: schema-secrets
-                  key: SOURCEMETA_ONE_API_BASE
+            # De harvester leest de schema-bestanden via de JSON directory-listing
+            # van static. schemaUrl wordt de publieke URL van het bestand.
+            - name: SCHEMA_STATIC_BASE_URL
+              value: https://static.developer.overheid.nl/schemas/
+            - name: SCHEMA_BUNDLE_URL_TEMPLATE
+              value: https://schemas.developer.overheid.nl/schemas/download/{id}/bundle.json
           ports:
             - name: http
               containerPort: 1337

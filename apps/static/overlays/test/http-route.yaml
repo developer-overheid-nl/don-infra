@@ -12,43 +12,10 @@ spec:
   hostnames:
     - set-in-overlay
   rules:
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /schemas/self
-      filters:
-        - type: ResponseHeaderModifier
-          responseHeaderModifier:
-            set:
-              - name: Access-Control-Allow-Origin
-                value: "*"
-              - name: Access-Control-Allow-Methods
-                value: "GET, HEAD, OPTIONS"
-      backendRefs:
-        - name: svc
-          kind: Service
-          port: 80
-    - matches:
-        - path:
-            type: PathPrefix
-            value: /schemas
-      filters:
-        - type: RequestHeaderModifier
-          requestHeaderModifier:
-            set:
-              - name: Accept
-                value: "application/schema+json, application/json"
-        - type: ResponseHeaderModifier
-          responseHeaderModifier:
-            set:
-              - name: Access-Control-Allow-Origin
-                value: "*"
-              - name: Access-Control-Allow-Methods
-                value: "GET, HEAD, OPTIONS"
-      backendRefs:
-        - name: source-meta-svc
-          kind: Service
-          port: 8000
+    # Alles, ook /schemas, komt uit nginx. De schema-bestanden staan daar onder
+    # hun eigen naam (bv. /schemas/don/Api.schema.json), en de mappen onder
+    # /schemas/ geven een JSON directory-listing voor de harvester van het
+    # schema-register.
     - filters:
         - type: ResponseHeaderModifier
           responseHeaderModifier:
