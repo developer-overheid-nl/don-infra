@@ -15,3 +15,8 @@ patches:
       - op: replace
         path: /spec/imageCatalogRef/name
         value: postgresql-standard-trixie-test
+      # With 1 instance the primary cannot move, so the PodDisruptionBudget
+      # blocks every node drain. Test accepts the interruption instead.
+      - op: add
+        path: /spec/enablePDB
+        value: false
