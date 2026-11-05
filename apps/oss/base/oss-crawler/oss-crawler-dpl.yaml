@@ -6,6 +6,9 @@ spec:
   schedule: "0 2 * * *"
   jobTemplate:
     spec:
+      # Stop a crawl that runs longer than 3 days. Crawls took 2.5 to 3.6 days
+      # when they ran in parallel. Make this shorter when a crawl is faster.
+      activeDeadlineSeconds: 259200
       template:
         spec:
           containers:
