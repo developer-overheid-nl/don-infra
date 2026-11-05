@@ -8,8 +8,19 @@ spec:
     spec:
       template:
         spec:
+          # The crawler does not use the Kubernetes API.
+          automountServiceAccountToken: false
+          # The image has no USER and runs as root. runAsNonRoot needs a USER in
+          # the image first.
+          securityContext:
+            seccompProfile:
+              type: RuntimeDefault
           containers:
             - name: don-crawler
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: ["ALL"]
               image: don-crawler
               env:
                 - name: API_BASEURL
