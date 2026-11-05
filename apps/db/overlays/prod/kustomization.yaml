@@ -29,6 +29,12 @@ patches:
       - op: add
         path: /spec/primaryUpdateMethod
         value: switchover
+      # Keep the primary available during a node drain. CNPG does a
+      # switchover before it drains the node of the primary. true is the
+      # CNPG default; set it explicitly so the manifest shows the policy.
+      - op: add
+        path: /spec/enablePDB
+        value: true
       - op: add
         path: /spec/plugins
         value:
