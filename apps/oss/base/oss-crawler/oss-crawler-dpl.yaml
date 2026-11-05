@@ -65,7 +65,19 @@ spec:
                 requests:
                   cpu: 200m
                   memory: 1Gi
+                  ephemeral-storage: 512Mi
                 limits:
                   cpu: 2000m
                   memory: 8Gi
+                  # The data volume (5Gi) and the writable layer of the container.
+                  ephemeral-storage: 6Gi
+              volumeMounts:
+                # The crawler clones each repository into /app/data/repos and
+                # removes the clone after the scan.
+                - name: data
+                  mountPath: /app/data
+          volumes:
+            - name: data
+              emptyDir:
+                sizeLimit: 5Gi
           restartPolicy: OnFailure
