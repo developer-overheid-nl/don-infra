@@ -74,7 +74,9 @@ patches:
   - target:
       kind: CronJob
       name: oss-crawler
+    # Crawl once a week on test. The crawls on test and prod use the same
+    # gitlab.com rate limit, because they leave the cluster from the same IP.
     patch: |-
-      - op: add
-        path: /spec/suspend
-        value: true
+      - op: replace
+        path: /spec/schedule
+        value: "0 2 * * 6"
