@@ -66,3 +66,6 @@ spec:
                   cpu: 2000m
                   memory: 8Gi
           restartPolicy: OnFailure
+      # A failure restarts the full crawl. Try 2 times, then let the job fail
+      # so that the failure shows in the alerts.
+      backoffLimit: 2
