@@ -120,8 +120,15 @@ patches:
       - op: add
         path: /spec/template/spec/containers/0/env/8/value
         value: "false"
-      - op: add
-        path: /spec/template/spec/containers/0/env/-
-        value:
-          name: SOURCEMETA_PUBLIC_SCHEMA_BASE_URL
-          value: https://static.don.projects.digilab.network/schemas/
+      - op: test
+        path: /spec/template/spec/containers/0/env/9/name
+        value: SCHEMA_STATIC_BASE_URL
+      - op: replace
+        path: /spec/template/spec/containers/0/env/9/value
+        value: https://static.don.projects.digilab.network/schemas/
+      - op: test
+        path: /spec/template/spec/containers/0/env/10/name
+        value: SCHEMA_BUNDLE_URL_TEMPLATE
+      - op: replace
+        path: /spec/template/spec/containers/0/env/10/value
+        value: https://schemas.don.projects.digilab.network/schemas/download/{id}/bundle.json
