@@ -4,6 +4,11 @@ metadata:
   name: oss-crawler
 spec:
   schedule: "0 2 * * *"
+  # A crawl can take more than one day. Do not start a second crawl while one
+  # runs: parallel crawls share the gitlab.com rate limit and slow each other down.
+  concurrencyPolicy: Forbid
+  # Start a missed crawl within one hour, or skip it until the next schedule.
+  startingDeadlineSeconds: 3600
   jobTemplate:
     spec:
       # Stop a crawl that runs longer than 3 days. Crawls took 2.5 to 3.6 days
