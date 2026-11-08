@@ -20,7 +20,7 @@ patches:
         value: 2
       - op: replace
         path: /spec/storage/size
-        value: 4Gi
+        value: 8Gi
       # During a rolling update, promote the updated replica instead of a
       # restart of the primary. A restart waits for smartShutdownTimeout
       # (180s) and stops the database for about 3.5 minutes. A switchover
