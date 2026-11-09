@@ -15,3 +15,8 @@ patches:
       - op: replace
         path: /spec/imageCatalogRef/name
         value: postgresql-standard-trixie-test
+      # Test runs PostgreSQL 18 before prod. CNPG does an in-place major
+      # upgrade (pg_upgrade). Move this to the base after prod is upgraded.
+      - op: replace
+        path: /spec/imageCatalogRef/major
+        value: 18
