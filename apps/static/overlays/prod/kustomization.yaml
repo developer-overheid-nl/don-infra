@@ -12,7 +12,7 @@ namePrefix: don-static-
 images:
   - name: static
     newName: ghcr.io/developer-overheid-nl/don-static
-    newTag: 113e2b9192f7a457c10e11f7b1bac2db40eb919f
+    newTag: d1a6bb6dfcbdcb21e86c286db52b3302addd20ca
   - name: source-meta
     newName: ghcr.io/developer-overheid-nl/source-meta-schemas
     newTag: 113e2b9192f7a457c10e11f7b1bac2db40eb919f
