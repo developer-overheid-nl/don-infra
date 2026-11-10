@@ -1,0 +1,157 @@
+# Sets the event retention on the running "don" realm. --import-realm skips a
+# realm that exists, so a change in keycloak-realm-config.yaml alone does not
+# reach the realm. Remove this migration from the overlays after it ran.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: keycloak-events-retention-migration-20261110
+spec:
+  # 11 steps of 18 minutes from 85 to 30 days, plus margin.
+  activeDeadlineSeconds: 18000
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 86400
+  template:
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: OnFailure
+      containers:
+        - name: configure-keycloak-events-retention
+          image: docker.io/keycloak/keycloak:26.8.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -ec
+          args:
+            - |
+              kcadm=/opt/keycloak/bin/kcadm.sh
+              kcadm_config=/tmp/kcadm.config
+
+              # Log in again before each step: the job runs for hours and the
+              # admin session would expire.
+              login() {
+                local attempt
+                for ((attempt = 1; attempt <= 60; attempt++)); do
+                  if "$kcadm" config credentials \
+                    --config "$kcadm_config" \
+                    --server http://don-auth-keycloak \
+                    --realm master \
+                    --user "$KEYCLOAK_ADMIN_USERNAME" \
+                    --password "$KEYCLOAK_ADMIN_PASSWORD" >/dev/null 2>&1; then
+                    return 0
+                  fi
+                  sleep 5
+                done
+                echo "Keycloak admin login did not become available in time" >&2
+                exit 1
+              }
+
+              login
+
+              # Admin events: a few rows a day, nothing is older than the new
+              # limit, so set it at once. update merges into the current realm.
+              "$kcadm" update realms/don \
+                --config "$kcadm_config" \
+                -s "attributes.adminEventsExpiration=$ADMIN_EVENTS_EXPIRATION"
+
+              # User events: lower the limit in steps. Keycloak deletes all
+              # expired events in one DELETE every 15 minutes. One big DELETE
+              # writes a lot of WAL, and the prod database volume ran out of
+              # space for WAL before. Each step deletes about STEP_DAYS days.
+              day=86400
+              current=$("$kcadm" get realms/don --config "$kcadm_config" --fields eventsExpiration)
+              current_days=0
+              if [[ "$current" =~ \"eventsExpiration\"\ :\ ([0-9]+) ]]; then
+                current_days=$(( BASH_REMATCH[1] / day ))
+              fi
+              # No limit (0), or a limit above the age of the oldest event:
+              # start at the age of the oldest event.
+              if (( current_days == 0 || current_days > START_DAYS )); then
+                current_days=$START_DAYS
+              fi
+              target_days=$(( EVENTS_EXPIRATION / day ))
+              echo "eventsExpiration starts at ${current_days} days, target ${target_days} days"
+
+              days=$current_days
+              while (( days > target_days )); do
+                days=$(( days - STEP_DAYS ))
+                if (( days < target_days )); then
+                  days=$target_days
+                fi
+                login
+                "$kcadm" update realms/don \
+                  --config "$kcadm_config" \
+                  -s "eventsExpiration=$(( days * day ))"
+                echo "$(date -u +%FT%TZ) eventsExpiration set to ${days} days"
+                # Wait for one cleanup run (15 minutes) before the next step.
+                if (( days > target_days )); then
+                  sleep "$STEP_WAIT_SECONDS"
+                fi
+              done
+
+              # Also when the limit was already at or below the target. A
+              # longer limit deletes nothing.
+              login
+              "$kcadm" update realms/don \
+                --config "$kcadm_config" \
+                -s "eventsExpiration=$EVENTS_EXPIRATION"
+
+              # The image has no grep; check the result with bash only.
+              realm=$("$kcadm" get realms/don --config "$kcadm_config")
+              if [[ ! "$realm" =~ \"eventsExpiration\"\ :\ $EVENTS_EXPIRATION[^0-9] ]]; then
+                echo "eventsExpiration was not set" >&2
+                exit 1
+              fi
+              if [[ ! "$realm" =~ \"adminEventsExpiration\"\ :\ \"$ADMIN_EVENTS_EXPIRATION\" ]]; then
+                echo "adminEventsExpiration was not set" >&2
+                exit 1
+              fi
+              echo "Event retention set"
+          env:
+            # 30 days.
+            - name: EVENTS_EXPIRATION
+              value: "2592000"
+            # 365 days.
+            - name: ADMIN_EVENTS_EXPIRATION
+              value: "31536000"
+            # Age of the oldest event: events are stored since 2026-08-21.
+            - name: START_DAYS
+              value: "85"
+            - name: STEP_DAYS
+              value: "5"
+            # Longer than the 15-minute cleanup interval of Keycloak.
+            - name: STEP_WAIT_SECONDS
+              value: "1080"
+            - name: KEYCLOAK_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-login-secret
+                  key: admin-user
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-login-secret
+                  key: admin-password
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 0
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

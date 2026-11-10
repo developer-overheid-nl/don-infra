@@ -1899,7 +1899,7 @@ data:
       "adminTheme": "keycloak.v2",
       "emailTheme": "keycloak",
       "eventsEnabled": true,
-      "eventsExpiration": 7776000,
+      "eventsExpiration": 2592000,
       "eventsListeners": [
         "jboss-logging"
       ],
@@ -2863,7 +2863,8 @@ data:
         "oauth2DeviceCodeLifespan": "600",
         "parRequestUriLifespan": "60",
         "clientSessionMaxLifespan": "0",
-        "darkMode": "true"
+        "darkMode": "true",
+        "adminEventsExpiration": "31536000"
       },
       "keycloakVersion": "26.3.0",
       "userManagedAccessAllowed": false,
