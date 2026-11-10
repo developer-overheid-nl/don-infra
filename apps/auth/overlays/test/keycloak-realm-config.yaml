@@ -1482,6 +1482,7 @@ data:
       },
       "smtpServer": { },
       "eventsEnabled": false,
+      "eventsExpiration": 2592000,
       "eventsListeners": [
         "jboss-logging"
       ],
@@ -2407,7 +2408,8 @@ data:
         "clientSessionMaxLifespan": "0",
         "clientOfflineSessionIdleTimeout": "0",
         "cibaInterval": "5",
-        "realmReusableOtpCode": "false"
+        "realmReusableOtpCode": "false",
+        "adminEventsExpiration": "31536000"
       },
       "keycloakVersion": "26.2.5",
       "userManagedAccessAllowed": false,
