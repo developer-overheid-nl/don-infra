@@ -149,16 +149,3 @@ patches:
         value:
           name: ENABLE_TYPESENSE
           value: "false"
-      - op: test
-        path: /spec/template/spec/containers/0/env/9/name
-        value: SOURCEMETA_ONE_API_BASE
-      - op: replace
-        path: /spec/template/spec/containers/0/env/9
-        value:
-          name: SOURCEMETA_ONE_API_BASE
-          value: http://don-static-source-meta-svc.tn-don-static-prod.svc.cluster.local:8000/schemas/
-      - op: add
-        path: /spec/template/spec/containers/0/env/-
-        value:
-          name: SOURCEMETA_PUBLIC_SCHEMA_BASE_URL
-          value: https://static.developer.overheid.nl/schemas/
