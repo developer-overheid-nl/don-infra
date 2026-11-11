@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
   - ../../base
   - ../../base/ort-runner
-  - ort-runner-network-policy.yaml
   - http-route.yaml
   - oss-db.yaml
   - oss-secret.yaml
@@ -34,6 +33,18 @@ images:
     newName: ghcr.io/developer-overheid-nl/ort-config
     newTag: v0.0.2
 patches:
+  # ORT workers deliver results with a Keycloak token from this environment.
+  - target:
+      kind: NetworkPolicy
+      name: ort-runner-worker
+    patch: |-
+      - op: add
+        path: /spec/egress/-
+        value:
+          to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: tn-don-auth-test
   # Keep in sync with base: CRAWL_STALE_AFTER_HOURS is intentionally env[0].
   - target:
       kind: Deployment
