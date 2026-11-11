@@ -37,7 +37,7 @@ images:
     newTag: e16a67c10e0465e64fbddcf24bd5b84e7fe14c68
   - name: don-schema-register
     newName: ghcr.io/developer-overheid-nl/don-schema-register
-    newTag: 4afb4b4979a14f97f2344a2b5e0b83aeac80bf2f
+    newTag: 1a696bfac6c8df7e2c75041706a9760e24a9c77a
 patches:
   - path: opa-runtime-patch.yaml
   - target:
