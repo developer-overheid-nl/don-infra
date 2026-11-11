@@ -3,6 +3,10 @@
 # result delivery) and Keycloak, but no cluster-internal service directly.
 # Traffic to the cluster's own public hostnames is routed straight to the
 # Istio gateway Pods, so those need an explicit rule next to the ipBlock.
+#
+# This policy lives in the base, so every environment that runs the ORT runner
+# gets it. The Keycloak namespace differs per environment: each overlay adds
+# that egress rule with a patch.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -30,10 +34,6 @@ spec:
               - 192.168.0.0/16
               - 100.64.0.0/10
               - 169.254.0.0/16
-    - to:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: tn-don-auth-test
     - to:
         - namespaceSelector:
             matchLabels:
