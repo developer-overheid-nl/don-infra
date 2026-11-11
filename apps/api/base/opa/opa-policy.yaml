@@ -339,6 +339,12 @@ data:
         "force_json_decode": true,
         "raise_error": false,
         "timeout": "5s",
+        # Hergebruik het admin-token (300s geldig) in plaats van per request
+        # een nieuw token op te halen; elke login is een Keycloak-event.
+        # OPA cachet alleen cachebare statuscodes, dus geen 401 of 5xx.
+        "cache": true,
+        "force_cache": true,
+        "force_cache_duration_seconds": 240,
       })
     }
 
@@ -359,6 +365,12 @@ data:
         "force_json_decode": true,
         "raise_error": false,
         "timeout": "5s",
+        # Hergebruik het admin-token (300s geldig) in plaats van per request
+        # een nieuw token op te halen; elke login is een Keycloak-event.
+        # OPA cachet alleen cachebare statuscodes, dus geen 401 of 5xx.
+        "cache": true,
+        "force_cache": true,
+        "force_cache_duration_seconds": 240,
       })
     }
 

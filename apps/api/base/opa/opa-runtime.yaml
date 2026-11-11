@@ -9,6 +9,10 @@ spec:
       app.kubernetes.io/name: opa
   template:
     metadata:
+      # OPA leest de policy alleen bij het starten. Pas deze waarde aan bij
+      # een wijziging in opa-policy.yaml, zodat OPA opnieuw uitrolt.
+      annotations:
+        don.developer.overheid.nl/policy-revision: "2026-11-11-admin-token-cache"
       labels:
         app.kubernetes.io/name: opa
     spec:
