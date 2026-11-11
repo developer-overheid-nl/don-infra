@@ -1,28 +1,18 @@
 version: 2
 updates:
   - package-ecosystem: "docker"
-    directory: "/apps/api/base/apisix"
+    directories:
+      - "/apps/api/base/apisix"
+      - "/apps/api/base/opa"
+      - "/apps/auth/base"
     schedule:
       interval: "weekly"
     labels:
       - "dependencies"
       - "docker"
     open-pull-requests-limit: 5
-
-  - package-ecosystem: "docker"
-    directory: "/apps/api/base/opa"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "docker"
-    open-pull-requests-limit: 5
-
-  - package-ecosystem: "docker"
-    directory: "/apps/auth/base"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "dependencies"
-      - "docker"
-    open-pull-requests-limit: 5
+    groups:
+      docker-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
