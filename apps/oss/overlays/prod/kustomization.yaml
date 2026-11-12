@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
+  - ../../base/ort-runner
   - http-route.yaml
   - oss-db.yaml
   - oss-secret.yaml
@@ -22,6 +23,12 @@ images:
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
     newTag: 45108394339a00f0c0c894839a9cb12791c8aeb4
+  - name: ort-runner
+    newName: ghcr.io/developer-overheid-nl/ort-runner
+    newTag: dc6a82b38d958f2fd602a2da555faa753a408dc6
+  - name: ort-config
+    newName: ghcr.io/developer-overheid-nl/ort-config
+    newTag: v0.0.2
   - name: don-crawler
     newName: ghcr.io/developer-overheid-nl/don-crawler
     newTag: 902152045b7bc862e0ac6972f002f8de5d0ab2e2
@@ -33,3 +40,37 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: oss.developer.overheid.nl
+  # ORT workers deliver results with a Keycloak token from this environment.
+  - target:
+      kind: NetworkPolicy
+      name: ort-runner-worker
+    patch: |-
+      - op: add
+        path: /spec/egress/-
+        value:
+          to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: tn-don-auth-prod
+  # The runner talks to the register through the API gateway only, so OPA
+  # checks its token for both reading repositories and delivering results.
+  - target:
+      kind: CronJob
+      name: ort-runner
+    patch: |-
+      apiVersion: batch/v1
+      kind: CronJob
+      metadata:
+        name: ort-runner
+      spec:
+        jobTemplate:
+          spec:
+            template:
+              spec:
+                containers:
+                  - name: ort-runner
+                    env:
+                      - name: ORT_REPOSITORIES_URL
+                        value: https://api.developer.overheid.nl/oss-register/v1/repositories
+                      - name: ORT_RESULTS_URL
+                        value: https://api.developer.overheid.nl/oss-register/v1/scans
