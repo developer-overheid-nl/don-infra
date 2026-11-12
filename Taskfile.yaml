@@ -41,10 +41,6 @@ tasks:
       vars: [TEST_CONTEXT]
     cmds:
       - |
-        kubectl get secret don-api-apisix -n tn-don-api --context={{.TEST_CONTEXT}} \
-          -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "apisix"' \
-          > apps/api/overlays/local/apisix-secret.yaml
-      - |
         kubectl get secret don-api-tools-secret -n tn-don-api --context={{.TEST_CONTEXT}} \
           -o json | jq 'del(.metadata.annotations, .metadata.creationTimestamp, .metadata.resourceVersion, .metadata.uid, .metadata.namespace) | .metadata.name = "tools-secret"' \
           > apps/api/overlays/local/tools-secret.yaml
