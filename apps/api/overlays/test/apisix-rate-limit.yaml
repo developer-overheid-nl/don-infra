@@ -3,7 +3,7 @@ kind: ApisixPluginConfig
 metadata:
   name: authenticated-rate-limit
 spec:
-  ingressClassName: apisix-test
+  ingressClassName: apisix-don-test
   plugins:
     - name: limit-count
       enable: true
