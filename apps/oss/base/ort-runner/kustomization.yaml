@@ -7,3 +7,4 @@ resources:
   - ort-runner-role.yaml
   - ort-runner-role-binding.yaml
   - ort-runner-network-policy.yaml
+  - ort-runner-results-pvc.yaml
