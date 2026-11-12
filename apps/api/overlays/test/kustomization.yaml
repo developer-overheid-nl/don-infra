@@ -7,7 +7,6 @@ resources:
   - register-site-http-route.yaml
   - schema-register-site-http-route.yaml
   - apisix-http-route.yaml
-  - apisix.yaml
   - register-site.yaml
   - tools-secret.yaml
   - api-register-secret.yaml
@@ -46,45 +45,12 @@ patches:
           name: OPA_DEFAULT_RATE_LIMIT
           value: "100"
   - target:
-      kind: HelmRelease
-      name: apisix
-    patch: |
-      - op: add
-        path: /spec/releaseName
-        value: don-api-apisix-test
-      - op: add
-        path: /spec/values/fullnameOverride
-        value: don-api-apisix
-      - op: add
-        path: /spec/values/ingress-controller/config/controllerName
-        value: apisix.apache.org/apisix-ingress-controller-test
-      - op: add
-        path: /spec/values/ingress-controller/config/kubernetes
-        value:
-          ingressClass: apisix-test
-      - op: replace
-        path: /spec/values/replicaCount
-        value: 1
-      - op: replace
-        path: /spec/values/ingress/enabled
-        value: false
-      - op: replace
-        path: /spec/values/apisix/admin/ingress/enabled
-        value: false
-  - target:
       kind: HTTPRoute
       name: apisix-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
         value: api.don.projects.digilab.network
-  - target:
-      kind: HTTPRoute
-      name: apisix-admin-http-route
-    patch: |
-      - op: replace
-        path: /spec/hostnames/0
-        value: api-admin.don.projects.digilab.network
   - target:
       kind: HTTPRoute
       name: register-site-http-route
