@@ -8,7 +8,7 @@ Het project is opgedeeld in meerdere applicaties. Elke applicatie heeft een eige
 
 | Applicatie | Componenten | Hostnamen (prod) |
 | --- | --- | --- |
-| [api](./apps/api/) | APISIX, OPA, api-register, register-site, tools, schema-register, schema-register-site | `api`, `api-admin`, `apis`, `schemas` |
+| [api](./apps/api/) | APISIX-routes (`ApisixRoute`), OPA, api-register, register-site, tools, schema-register, schema-register-site | `api`, `apis`, `schemas` |
 | [auth](./apps/auth/) | Keycloak | `auth` |
 | [db](./apps/db/) | Postgres (CloudNativePG) | — |
 | [frontend](./apps/frontend/) | developer.overheid.nl | `developer.overheid.nl` |
@@ -17,14 +17,19 @@ Het project is opgedeeld in meerdere applicaties. Elke applicatie heeft een eige
 | [static](./apps/static/) | static, source-meta | `static` |
 | [monitoring](./apps/monitoring/) | Grafana-dashboards (alerting staat in `api/overlays/prod`) | — |
 
+De APISIX-gateway draait in de namespace `apisix` en wordt beheerd door Digilab. DON beheert de `ApisixRoute`-, `ApisixUpstream`- en `ApisixPluginConfig`-objecten in `tn-don-api-<omgeving>`, met de IngressClass `apisix-don-<omgeving>`. Lokaal draait APISIX nog in het eigen cluster (`apps/api/overlays/local`).
+
 ### Huidige indeling
 
 ```mermaid
 flowchart LR
   user([Gebruiker / client]) --> istio[istio-gateway<br/>ListenerSet tn-don]
 
-  subgraph api [tn-don-api]
+  subgraph gw [apisix — beheerd door Digilab]
     apisix[APISIX]
+  end
+
+  subgraph api [tn-don-api]
     opa[OPA]
     apireg[api-register]
     regsite[register-site]
