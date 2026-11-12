@@ -43,6 +43,9 @@ spec:
                       fieldPath: metadata.labels['batch.kubernetes.io/job-name']
                 - name: ORT_CONFIG_DIR
                   value: /config
+                # The controller passes the claim mounted here on to the workers.
+                - name: ORT_RESULTS_DIR
+                  value: /results
                 - name: ORT_REPOSITORIES_URL
                   value: ""
                 - name: ORT_RESULTS_URL
@@ -104,7 +107,12 @@ spec:
                 - name: config
                   mountPath: /config
                   readOnly: true
+                - name: results
+                  mountPath: /results
           restartPolicy: Never
           volumes:
             - name: config
               emptyDir: {}
+            - name: results
+              persistentVolumeClaim:
+                claimName: ort-runner-results

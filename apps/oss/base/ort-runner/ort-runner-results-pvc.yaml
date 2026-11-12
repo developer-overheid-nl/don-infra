@@ -1,0 +1,15 @@
+# Shared results volume of the ORT runner. Worker Pods write their result to
+# their own directory on it (subPathExpr per completion index) without any
+# credentials; the controller mounts the whole volume and delivers the results.
+# ReadWriteMany: workers run in parallel on different nodes.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ort-runner-results
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ceph-filesystem
+  resources:
+    requests:
+      storage: 5Gi
