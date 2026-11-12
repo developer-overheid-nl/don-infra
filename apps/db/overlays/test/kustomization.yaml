@@ -15,6 +15,12 @@ patches:
       - op: replace
         path: /spec/imageCatalogRef/name
         value: postgresql-standard-trixie-test
+      # Postgres 18 first on test (#432). CNPG upgrades in place (pg_upgrade)
+      # when the major changes; a major cannot go back. Prod follows via the
+      # base once test runs well.
+      - op: replace
+        path: /spec/imageCatalogRef/major
+        value: 18
       # With 1 instance the primary cannot move, so the PodDisruptionBudget
       # blocks every node drain. Test accepts the interruption instead.
       - op: add
