@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - ../../base
+  # APISIX for local development. On test and prod, Digilab runs the gateway.
+  - ../../base/apisix
   - apisix-http-route.yaml
   - register-site-http-route.yaml
   - don-schema-register-http-route.yaml
