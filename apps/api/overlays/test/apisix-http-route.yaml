@@ -12,8 +12,11 @@ spec:
   hostnames:
     - set-in-overlay
   rules:
+    # The APISIX gateway of Digilab in the namespace apisix. A ReferenceGrant
+    # in that namespace allows this reference.
     - backendRefs:
-        - name: don-api-apisix-gateway
+        - name: apisix-test-gateway
+          namespace: apisix
           kind: Service
           port: 80
 ---
