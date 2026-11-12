@@ -2,13 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ../../base
-  - ../../base/apisix
   - ../../base/schema-register
   - ../../base/schema-register-site
   - register-site-http-route.yaml
   - schema-register-site-http-route.yaml
   - apisix-http-route.yaml
-  - apisix.yaml
   - register-site.yaml
   - tools-secret.yaml
   - api-register-secret.yaml
@@ -51,79 +49,12 @@ patches:
           name: PUBLIC_BASE_URL
           value: https://api.developer.overheid.nl/tools
   - target:
-      kind: HelmRelease
-      name: apisix
-    patch: |
-      - op: add
-        path: /spec/releaseName
-        value: don-api-apisix-prod
-      - op: add
-        path: /spec/values/fullnameOverride
-        value: don-api-apisix
-      - op: add
-        path: /spec/values/ingress-controller/config/controllerName
-        value: apisix.apache.org/apisix-ingress-controller-prod
-      - op: add
-        path: /spec/values/ingress-controller/config/kubernetes
-        value:
-          ingressClass: apisix-prod
-      # Two gateway pods on different nodes, so that one pod can restart
-      # while the other pod serves traffic.
-      - op: replace
-        path: /spec/values/replicaCount
-        value: 2
-      - op: add
-        path: /spec/values/podDisruptionBudget
-        value:
-          enabled: true
-          minAvailable: 1
-      - op: add
-        path: /spec/values/topologySpreadConstraints
-        value:
-          - maxSkew: 1
-            topologyKey: kubernetes.io/hostname
-            whenUnsatisfiable: ScheduleAnyway
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: apisix
-                app.kubernetes.io/instance: don-api-apisix-prod
-      # Two ingress controller pods. Leader election makes one pod active.
-      # The other pod takes over when the active pod stops.
-      # Add each key on its own. An add of the whole deployment map replaces
-      # the adcContainer image from the base.
-      - op: add
-        path: /spec/values/ingress-controller/deployment/replicas
-        value: 2
-      - op: add
-        path: /spec/values/ingress-controller/deployment/topologySpreadConstraints
-        value:
-          - maxSkew: 1
-            topologyKey: kubernetes.io/hostname
-            whenUnsatisfiable: ScheduleAnyway
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: ingress-controller
-                app.kubernetes.io/instance: don-api-apisix-prod
-      - op: replace
-        path: /spec/values/ingress/enabled
-        value: false
-      - op: replace
-        path: /spec/values/apisix/admin/ingress/enabled
-        value: false
-  - target:
       kind: HTTPRoute
       name: apisix-http-route
     patch: |
       - op: replace
         path: /spec/hostnames/0
         value: api.developer.overheid.nl
-  - target:
-      kind: HTTPRoute
-      name: apisix-admin-http-route
-    patch: |
-      - op: replace
-        path: /spec/hostnames/0
-        value: api-admin.developer.overheid.nl
   - target:
       kind: HTTPRoute
       name: register-site-http-route
