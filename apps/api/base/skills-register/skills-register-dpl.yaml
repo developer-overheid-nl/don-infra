@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skills-register-dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    spec:
+      containers:
+        - name: don-skills-register
+          image: don-skills-register
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: DB_PASSWORD
+            - name: DB_HOSTNAME
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: DB_HOSTNAME
+            - name: DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: DB_DBNAME
+            - name: DB_SCHEMA
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: DB_SCHEMA
+            - name: GITHUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: skills-secrets
+                  key: GITHUB_TOKEN
+            # Typesense staat uit tot er een collectie voor skills is.
+            - name: ENABLE_TYPESENSE
+              value: "false"
+          ports:
+            - name: http
+              containerPort: 1337
+          resources:
+            requests:
+              memory: 256Mi
+              cpu: 100m
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /v1/openapi.json
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 10
