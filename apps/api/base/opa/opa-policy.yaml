@@ -32,6 +32,8 @@ data:
       "gitOrganisations:read",
       "schemas:read",
       "events:read",
+      "skills:read",
+      "sources:read",
     ]
 
     trusted_api_key_scopes := array.concat(default_allowed_api_key_scopes, [

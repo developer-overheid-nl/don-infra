@@ -444,6 +444,156 @@ data:
             ]
           },
           {
+            "name": "skills-register-api-v1-listskills",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/skills"
+            ],
+            "required_scopes": [
+              "skills:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-listskillfilters",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/skills/filters"
+            ],
+            "required_scopes": [
+              "skills:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-getskillcontent",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/skills/*/skill.md"
+            ],
+            "required_scopes": [
+              "skills:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-getskillbyid",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/skills/*"
+            ],
+            "required_scopes": [
+              "skills:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-listplugins",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/plugins"
+            ],
+            "required_scopes": [
+              "skills:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-getpluginbyid",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/plugins/*"
+            ],
+            "required_scopes": [
+              "skills:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-listsources",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/sources"
+            ],
+            "required_scopes": [
+              "sources:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-getsourcebyid",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/sources/*"
+            ],
+            "required_scopes": [
+              "sources:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-listorganisations",
+            "methods": [
+              "GET"
+            ],
+            "paths": [
+              "/skills-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:read"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
+            "name": "skills-register-api-v1-createorganisation",
+            "methods": [
+              "POST"
+            ],
+            "paths": [
+              "/skills-register/v1/organisations"
+            ],
+            "required_scopes": [
+              "organisations:write"
+            ],
+            "allow_api_key_methods": [
+
+            ]
+          },
+          {
             "name": "oss-register-api-v1-listrepositories",
             "methods": [
               "GET"
