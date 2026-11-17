@@ -137,3 +137,16 @@ test_allow_response_falls_back_when_rate_limit_is_negative if {
 
   object.get(response.headers, "X-OPA-Rate-Limit", "") == "100"
 }
+
+test_untrusted_api_key_can_read_skills_register if {
+  info := keycloak_api_key_info_from_body({
+    "clientId": "readonly-client",
+    "attributes": {"rate-limit-profile": "untrusted"},
+  }, "api-key") with data.apisix_auth as {
+    "rate_limit": {"default": 100},
+  }
+
+  all_required_scopes_present(info, ["skills:read"])
+  all_required_scopes_present(info, ["sources:read"])
+  not all_required_scopes_present(info, ["organisations:write"])
+}

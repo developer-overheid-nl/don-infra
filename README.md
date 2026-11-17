@@ -8,7 +8,7 @@ Het project is opgedeeld in meerdere applicaties. Elke applicatie heeft een eige
 
 | Applicatie | Componenten | Hostnamen (prod) |
 | --- | --- | --- |
-| [api](./apps/api/) | APISIX, OPA, api-register, register-site, tools, schema-register, schema-register-site | `api`, `api-admin`, `apis`, `schemas` |
+| [api](./apps/api/) | APISIX, OPA, api-register, register-site, tools, schema-register, schema-register-site, skills-register (alleen test) | `api`, `api-admin`, `apis`, `schemas` |
 | [auth](./apps/auth/) | Keycloak | `auth` |
 | [db](./apps/db/) | Postgres (CloudNativePG) | — |
 | [frontend](./apps/frontend/) | developer.overheid.nl | `developer.overheid.nl` |
@@ -31,6 +31,7 @@ flowchart LR
     tools[tools]
     schemareg[schema-register]
     schemasite[schema-register-site]
+    skillsreg[skills-register<br/><i>alleen test</i>]
   end
 
   subgraph oss [tn-don-oss]
@@ -76,6 +77,7 @@ flowchart LR
   apisix --> apireg
   apisix --> tools
   apisix --> ossreg
+  apisix --> skillsreg
 
   regsite --> apisix
   apireg --> tools
@@ -93,6 +95,8 @@ flowchart LR
   apireg --> postgres
   ossreg --> postgres
   schemareg --> postgres
+  skillsreg --> postgres
+  skillsreg -->|harvest| github[(GitHub)]
 ```
 
 ## SOPS publieke sleutels
