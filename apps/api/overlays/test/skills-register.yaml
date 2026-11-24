@@ -1,0 +1,30 @@
+apiVersion: v1
+data:
+    DB_DBNAME: ENC[AES256_GCM,data:y+6mBw==,iv:MQA2Y63leIHUOGxM5BNwA7zOrQI5wOwi5RO2sajdenM=,tag:Mo0T3V66gl+Mf9Oh2+jgDQ==,type:str]
+    DB_HOSTNAME: ENC[AES256_GCM,data:Xg8So7OVZhDG0iuuTJb2DR+X6CfvNsHSHRXy08cD9qV/rICU3KZYKqsYep6NcGkGAMqdf7n7vbko+0T3pAesz/Q1oHA=,iv:yR6HjolnhwHFl0x8eSnEqx+VA4lIVBajFLj3wNx9nq8=,tag:UbOcQ6PF758qDG99STFJ/A==,type:str]
+    DB_PASSWORD: ENC[AES256_GCM,data:eI+MjdTE5x9WRHkv7jsi2HEaeDuxYfo3JPqztqVUG9CXzb7bt8fvhOts3wP2Hk8ALrHcIEdVbDjZTV9DyF9DWfOeNwAyt24fKC6F0N0KkbE7Amek9mDRiA==,iv:3JhcV5cuB77lSs0hVQR3wfh/LlIj9AqArfi3sBPpVvs=,tag:88bmE5zTsyuVT9VSfRZiig==,type:str]
+    DB_SCHEMA: ENC[AES256_GCM,data:d80fnyL1hj6q9v50TiIHmw==,iv:G/7k1JIOiqX4HAwQQMtLfUvVi12MNrs4ApQk0cIyMM0=,tag:dhYArX9M1JiBXP6ejap+rg==,type:str]
+    DB_USERNAME: ENC[AES256_GCM,data:cqHIB/dOytCl42jcDHNg5tMCwIQ=,iv:nkdATuv7FcaW688HGbEpaMBunt2tr80nWRVoDEErjuA=,tag:Jk0Y7hKycy3osbegqXDiUg==,type:str]
+kind: Secret
+metadata:
+    name: skills-secrets
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age17uzpswwz9g0frdfy7md5kvlvkcw6pkd9k3k2cad6mfe0zdvcm9pscyzd7v
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXNmo1UDFaVXZaa29sNzB3
+            TEs4QVNGdmZnamNWUHRRK2NORHdISzMyQ21NCjlMd2NGdm0vbklRdUM2V2VyM0JL
+            aDBJNGQ1aUJ4b1VFcVV6T2lOUEg0SVEKLS0tIEYzVEFHYjE4aElrc3V1Z2tKL2gx
+            Z3ZYOWtMQlFEbm4yN0ZlVjAyZXoybGcKCybroZTFrfrDaoiNKmD8dksI8bZQH3M0
+            t3q+1gJrkPdkFdpolocW0nTBjdN7lkhyU79BWGSy77GggQnB1Z4seg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-11-24T13:39:43Z"
+    mac: ENC[AES256_GCM,data:7b/JhsGnQtLjwuu5q0r+dIjh3KukRile4cQxblQYUZ6u5zA6yu5lMA3CviuVxLlALks2Kb8CrXHkLsIQu9rrTCB6VUTFxjMOBIQvO8/Mn282tK3gKxE2HccPomR2l+BE5gCq237t7BuodowWiRdZx2dzoRbmpiyiP3SMgxQacP0=,iv:jZMDDI2897+95UzYM+bNAbB8JjKotCXbFZ5h4IU1C1k=,tag:aO1HXil0H38gSbCrEN00Rw==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.9.4
