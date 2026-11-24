@@ -38,7 +38,7 @@ images:
     newTag: cd7fba312049039dd76e5e8ca6f2f13e78a4fd39
   - name: don-skills-register
     newName: ghcr.io/developer-overheid-nl/don-skills-register
-    newTag: test-ba2de7d2a950f2183267800e7705fb317670ddbb
+    newTag: test-204f9164d48eb6f1e1f054d9ca0ff7f1d4a37060
 patches:
   - target:
       kind: Deployment
