@@ -1339,7 +1339,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1379,7 +1379,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1419,7 +1419,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1459,7 +1459,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1499,7 +1499,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1539,7 +1539,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1579,7 +1579,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1619,7 +1619,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
@@ -1659,7 +1659,7 @@ spec:
     - name: opa
       enable: true
       config:
-        host: http://don-api-opa:8181
+        host: http://don-api-opa.tn-don-api-test.svc.cluster.local:8181
         policy: apisix/authz/result
         timeout: 3000
         with_route: true
