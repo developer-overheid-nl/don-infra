@@ -148,5 +148,6 @@ test_untrusted_api_key_can_read_skills_register if {
 
   all_required_scopes_present(info, ["skills:read"])
   all_required_scopes_present(info, ["sources:read"])
+  not all_required_scopes_present(info, ["sources:write"])
   not all_required_scopes_present(info, ["organisations:write"])
 }

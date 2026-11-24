@@ -1474,86 +1474,6 @@ spec:
     backends:
     - serviceName: skills-register-svc
       servicePort: 1337
-  - name: skills-register-api-v1-listplugins
-    match:
-      paths:
-      - "/skills-register/v1/plugins"
-      methods:
-      - GET
-    plugins:
-    - name: proxy-rewrite
-      enable: true
-      config:
-        regex_uri:
-        - "^/skills-register/(.*)"
-        - "/$1"
-        use_real_request_uri_unsafe: false
-    - name: cors
-      enable: true
-      config:
-        allow_origins: "*"
-        allow_credential: false
-        allow_headers: Authorization,x-api-key,Content-Type
-        allow_methods: GET,OPTIONS
-        max_age: 5
-    - name: opa
-      enable: true
-      config:
-        host: http://don-api-opa:8181
-        policy: apisix/authz/result
-        timeout: 3000
-        with_route: true
-        send_headers_upstream:
-        - X-OPA-Client-Id
-        - X-OPA-Rate-Limit
-    plugin_config_name: don-api-authenticated-rate-limit
-    timeout:
-      connect: 60s
-      send: 60s
-      read: 60s
-    backends:
-    - serviceName: skills-register-svc
-      servicePort: 1337
-  - name: skills-register-api-v1-getpluginbyid
-    match:
-      paths:
-      - "/skills-register/v1/plugins/*"
-      methods:
-      - GET
-    plugins:
-    - name: proxy-rewrite
-      enable: true
-      config:
-        regex_uri:
-        - "^/skills-register/(.*)"
-        - "/$1"
-        use_real_request_uri_unsafe: false
-    - name: cors
-      enable: true
-      config:
-        allow_origins: "*"
-        allow_credential: false
-        allow_headers: Authorization,x-api-key,Content-Type
-        allow_methods: GET,OPTIONS
-        max_age: 5
-    - name: opa
-      enable: true
-      config:
-        host: http://don-api-opa:8181
-        policy: apisix/authz/result
-        timeout: 3000
-        with_route: true
-        send_headers_upstream:
-        - X-OPA-Client-Id
-        - X-OPA-Rate-Limit
-    plugin_config_name: don-api-authenticated-rate-limit
-    timeout:
-      connect: 60s
-      send: 60s
-      read: 60s
-    backends:
-    - serviceName: skills-register-svc
-      servicePort: 1337
   - name: skills-register-api-v1-listsources
     match:
       paths:
@@ -1615,6 +1535,46 @@ spec:
         allow_credential: false
         allow_headers: Authorization,x-api-key,Content-Type
         allow_methods: GET,OPTIONS
+        max_age: 5
+    - name: opa
+      enable: true
+      config:
+        host: http://don-api-opa:8181
+        policy: apisix/authz/result
+        timeout: 3000
+        with_route: true
+        send_headers_upstream:
+        - X-OPA-Client-Id
+        - X-OPA-Rate-Limit
+    plugin_config_name: don-api-authenticated-rate-limit
+    timeout:
+      connect: 60s
+      send: 60s
+      read: 60s
+    backends:
+    - serviceName: skills-register-svc
+      servicePort: 1337
+  - name: skills-register-api-v1-createsource
+    match:
+      paths:
+      - "/skills-register/v1/sources"
+      methods:
+      - POST
+    plugins:
+    - name: proxy-rewrite
+      enable: true
+      config:
+        regex_uri:
+        - "^/skills-register/(.*)"
+        - "/$1"
+        use_real_request_uri_unsafe: false
+    - name: cors
+      enable: true
+      config:
+        allow_origins: "*"
+        allow_credential: false
+        allow_headers: Authorization,x-api-key,Content-Type
+        allow_methods: POST,OPTIONS
         max_age: 5
     - name: opa
       enable: true
