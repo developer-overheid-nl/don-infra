@@ -45,4 +45,7 @@ patches:
               # built name (kustomize does not rewrite CRD-internal refs).
               barmanObjectName: don-db-garage
               # Namespace the shared bucket per tenant/cluster so backups can't collide.
-              serverName: tn-don-db-prod/don-db-postgres
+              # pg_upgrade makes a new system ID and starts at timeline 1 again,
+              # so each PostgreSQL major gets its own archive path. The PostgreSQL
+              # 17 backups stay under tn-don-db-prod/don-db-postgres.
+              serverName: tn-don-db-prod/don-db-postgres-pg18
