@@ -17,10 +17,22 @@ spec:
         spec:
           serviceAccountName: ort-runner
           securityContext:
+            runAsNonRoot: true
+            # ort-config is busybox and has no user of its own; the ORT image
+            # uses uid 1000 (ort).
+            runAsUser: 1000
+            runAsGroup: 1000
             fsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
           initContainers:
             - name: ort-config
               image: ort-config
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
               volumeMounts:
                 - name: config
                   mountPath: /target
@@ -28,6 +40,11 @@ spec:
             - name: ort-runner
               image: ort-runner
               args: ["controller"]
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
               env:
                 - name: POD_NAME
                   valueFrom:
