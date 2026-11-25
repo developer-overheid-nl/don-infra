@@ -19,7 +19,7 @@ labels:
 images:
   - name: don-oss-register
     newName: ghcr.io/developer-overheid-nl/don-oss-register
-    newTag: test-97b6d49913818177f70ef47450e71972932fc31d
+    newTag: test-d2bb07f8c3ac14ed9b06f0e1faf7607484e319fa
   - name: don-register-oss-site
     newName: ghcr.io/developer-overheid-nl/don-register-oss-site
     newTag: test-d033a3673dd5691139cdf153b16ec19f71556d85
