@@ -5,8 +5,10 @@ resources:
   - ../../base/schema-register
   - ../../base/schema-register-site
   - ../../base/skills-register
+  - ../../base/skills-register-site
   - register-site-http-route.yaml
   - schema-register-site-http-route.yaml
+  - skills-register-site-http-route.yaml
   - apisix-http-route.yaml
   - register-site.yaml
   - tools-secret.yaml
@@ -30,6 +32,9 @@ images:
   - name: don-register-schema-site
     newName: ghcr.io/developer-overheid-nl/don-register-schema-site
     newTag: test-1a2903f197bef9a72fcf436775103b38614834d5
+  - name: don-register-skills-site
+    newName: ghcr.io/developer-overheid-nl/don-register-skills-site
+    newTag: test-a7e6ccdca2058f02ecce13c82cca230f0dcc577d
   - name: don-tools-api
     newName: ghcr.io/developer-overheid-nl/don-api-tools
     newTag: test-60f6f9b3b67fd8fcb999e555ccb2d0a05389beda
@@ -70,6 +75,13 @@ patches:
       - op: replace
         path: /spec/hostnames/0
         value: schemas.don.projects.digilab.network
+  - target:
+      kind: HTTPRoute
+      name: skills-register-site-http-route
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: skills.don.projects.digilab.network
   - target:
       kind: Deployment
       name: tools-dpl

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: skills-register-site-dpl
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    spec:
+      containers:
+        - name: don-register-skills-site
+          image: don-register-skills-site
+          env:
+            - name: API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: register-site-secret
+                  key: API_URL
+            - name: API_ENDPOINT
+              value: "skills-register"
+            - name: API_X_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: register-site-secret
+                  key: API_X_API_KEY
+            - name: API_VERSION
+              value: "v1"
+            - name: PIWIK_PRO_ACCOUNT_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: piwik-secret
+                  key: PIWIK_PRO_ACCOUNT_ADDRESS
+            - name: PIWIK_PRO_SITE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: piwik-secret
+                  key: PIWIK_PRO_SITE_ID
+          ports:
+            - name: http
+              containerPort: 4321
+          resources:
+            requests:
+              memory: 100Mi
+              cpu: 100m
+            limits:
+              memory: 256Mi
+              cpu: 1
