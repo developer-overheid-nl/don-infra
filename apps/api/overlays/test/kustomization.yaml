@@ -81,7 +81,7 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: skills.don.projects.digilab.network
+        value: skills-register.don.projects.digilab.network
   - target:
       kind: Deployment
       name: tools-dpl
